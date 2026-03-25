@@ -1,21 +1,28 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class SnowPlowPlayer extends Player {
     
-    private SnowPlow snowPlow;
+    private List<SnowPlow> snowPlows;
 
     public SnowPlowPlayer(RoadNetwork roads) {
         super(roads);
+        snowPlows = new ArrayList<>();
+        snowPlows.add(new SnowPlow());
     }
 
     @Override
     public void takeTurn() {
         System.out.println("SnowPlow:TakeTurn");
-        if (!roads.canMoveVehicle(snowPlow))
+        if (!roads.tryMoveTowardsNode(snowPlows.get(0), null))
             return;
+
+        
     }
 
     
 
-    public SnowPlow getSnowPlow() {
-        return snowPlow;
+    public List<SnowPlow> getSnowPlows() {
+        return snowPlows;
     }
 }

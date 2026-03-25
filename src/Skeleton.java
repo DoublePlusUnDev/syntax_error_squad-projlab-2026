@@ -1,8 +1,7 @@
-import java.util.ArrayList;
 import java.util.List;
 
 public class Skeleton {
-    static List<Runnable> tests = List.of(Skeleton::test1);
+    static List<Runnable> tests = List.of(Skeleton::test1, Skeleton::test2);
 
     static RoadNetwork testRoad;
     static Node node1;
@@ -54,12 +53,38 @@ public class Skeleton {
         testRoad.addNode(node1);
         testRoad.addNode(node2);
         testRoad.addRoadSegment(road1);
-        testRoad.addSnowPlow(snowPlowPlayer.getSnowPlow());
+        testRoad.placeSnowPlow(snowPlowPlayer.getSnowPlows().get(0));
+    }
+
+    static void init3(){
+        testRoad = new RoadNetwork();
+
+        node1 = new Node();
+        node2 = new Node();
+        node3 = new Node();
+        road1 = new RoadSegment(2, node1, node2);
+        road2 = new Bridge(2, node2, node3);
+        snowPlowPlayer = new SnowPlowPlayer(testRoad);
+
+        testRoad.addNode(node1);
+        testRoad.addNode(node2);
+        testRoad.addNode(node3);
+        testRoad.addRoadSegment(road1);
+        testRoad.addRoadSegment(road2);
+        testRoad.placeSnowPlow(snowPlowPlayer.getSnowPlows().get(0));
     }
 
     static void test1() {
+        init3();
+
+        snowPlowPlayer.takeTurn();
+    }
+
+    static void test2() {
         init1();
 
         snowPlowPlayer.takeTurn();
     }
+
+    
 }
