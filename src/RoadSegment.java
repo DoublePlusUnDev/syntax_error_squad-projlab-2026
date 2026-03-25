@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class RoadSegment {
@@ -6,6 +7,7 @@ public class RoadSegment {
     private Node endPoint;
 
     public RoadSegment(int laneCount, Node startPoint, Node endPoint) {
+        lanes = new ArrayList<>();
         for (int i = 0; i < laneCount; i++) {
             lanes.add(new Lane(this));
         }
