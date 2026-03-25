@@ -4,7 +4,7 @@ import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 
 public class RoadNetwork {
     private List<Node> nodes;
-    private List<RoadSegment> segment;
+    private List<RoadSegment> roadSegments;
 
     public boolean tryMoveTowardsNode(Vehicle vehicle) throws NotImplementedException {
         throw new NotImplementedException("");
@@ -20,6 +20,14 @@ public class RoadNetwork {
 
     public void generate() {
 
+    }
+
+    public void addNode(Node node){
+        nodes.add(node);
+    }
+
+    public void addRoadSegment(RoadSegment roadSegment) {
+        roadSegments.add(roadSegment);
     }
 
     public void addBus(Bus bus){

@@ -1,4 +1,4 @@
-public abstract class Node {
+public class Node {
     public void accept(Vehicle vehicle) {
     
     }
