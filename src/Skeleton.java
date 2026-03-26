@@ -27,7 +27,7 @@ public class Skeleton {
             int testCase;
             try { 
                 testCase = Integer.parseInt(TestUtil.scanner.nextLine());
-            } catch (NumberFormatException _) {
+            } catch (NumberFormatException e) {
                 testCase = -1;
             }
             
