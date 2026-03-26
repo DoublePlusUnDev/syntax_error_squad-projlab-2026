@@ -19,7 +19,7 @@ public class Lane implements Updatable{
     }
 
     public void driveOver() {
-
+        System.out.println("Lane:driveOver");
     }
 
     public void crashOccured() {

@@ -11,8 +11,24 @@ public class RoadNetwork {
     }
 
     public boolean tryMoveTowardsNode(Vehicle vehicle, Node node) {
-        System.out.println("Roadnetwork: tryMoveTowardsNode");
-        return TestUtil.askUserYesNo("Can the vehicle move toward its destination?");
+        TestUtil.enterFunction("Roadnetwork: tryMoveTowardsNode(vehicle, node)");
+        if (!vehicle.canEnter(null)){
+            TestUtil.exitFunction("Failed to find suitable lane to enter");
+            return false;
+        }
+
+
+        if  (!TestUtil.askUserYesNo("Can the vehicle find a way toward its destination?"))
+        {
+            TestUtil.exitFunction("Failed to pathfind");
+            return false;
+        }
+        RoadSegment chosenSegment = new RoadSegment(1, null, null);
+
+        chosenSegment.enter(vehicle, 0);
+
+        TestUtil.exitFunction("Move towards target succesfully");
+        return true;
     }
 
     public void addSnow(){

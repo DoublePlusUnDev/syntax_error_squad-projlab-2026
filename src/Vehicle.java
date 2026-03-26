@@ -22,8 +22,9 @@ public abstract  class Vehicle {
 
     }
 
-    public boolean canEnter(Lane lane) throws NotImplementedException {
-        throw new NotImplementedException("");
+    public boolean canEnter(Lane lane) {
+        System.out.println("Vehicle:canEnter");
+        return TestUtil.askUserYesNo("Can the vehicle enter the lane?");
     }
 
     public boolean canSlip() throws NotImplementedException {

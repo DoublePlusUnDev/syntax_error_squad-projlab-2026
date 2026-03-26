@@ -21,7 +21,10 @@ public class RoadSegment {
     }
 
     public void enter(Vehicle vehicle, int lane) {
-
+        TestUtil.enterFunction("RoadSegment:enter");
+        Lane selectedLane = lanes.get(lane);
+        selectedLane.driveOver();
+        vehicle.enter(selectedLane);
     }
 
     public void sweep(Lane lane){

@@ -86,5 +86,11 @@ public class Skeleton {
         snowPlowPlayer.takeTurn();
     }
 
+    static void test3() {
+        init3();
+
+        snowPlowPlayer.takeTurn();
+    }
+
     
 }
