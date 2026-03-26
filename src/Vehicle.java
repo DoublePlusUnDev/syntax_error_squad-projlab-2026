@@ -23,8 +23,25 @@ public abstract  class Vehicle {
     }
 
     public boolean canEnter(Lane lane) {
-        System.out.println("Vehicle:canEnter");
-        return TestUtil.askUserYesNo("Can the vehicle enter the lane?");
+        TestUtil.enterFunction("Vehicle:canEnter()");
+
+        if (lane.isBlocked()){
+            TestUtil.exitFunction("cant enter lane is blocked");
+            return false;
+        }
+
+        if (lane.isSnowy()){
+            TestUtil.exitFunction("cant enter lane is snowy");
+            return false;
+        }
+
+        if (lane.isDebrisFilled()){
+            TestUtil.exitFunction("cant enter lane is full of debris");
+            return false;
+        }
+
+        TestUtil.exitFunction("lane can be entered");
+        return true;
     }
 
     public boolean canSlip() throws NotImplementedException {

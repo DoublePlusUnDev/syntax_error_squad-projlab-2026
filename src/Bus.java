@@ -7,11 +7,9 @@ public class Bus extends Vehicle implements Updatable {
 
     @Override
     public void enterBusStop(BusStop busStop) {
+        TestUtil.enterFunction("Bus:enterBusStop(busStop)");
 
-    }
-
-    public void rollNextStop() {
-
+        TestUtil.exitFunction("bus stop entered");
     }
 
     @Override
@@ -29,8 +27,18 @@ public class Bus extends Vehicle implements Updatable {
 
     @Override
     public void crash(Lane lane) {
-        super.crash(lane);
+        TestUtil.enterFunction("Bus:crash(lane)");
+
+        TestUtil.exitFunction("inactive timer set");
     }
 
-    
+    @Override
+    public boolean canSlip() throws NotImplementedException {
+        TestUtil.enterFunction("Bus:canSlip()");
+        TestUtil.exitFunction("true");
+        
+        return true;
+    }
+
+        
 }

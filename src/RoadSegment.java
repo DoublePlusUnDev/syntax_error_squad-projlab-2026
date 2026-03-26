@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RoadSegment {
-    private List<Lane> lanes;    
+    protected List<Lane> lanes;    
     private Node startPoint;
     private Node endPoint;
 

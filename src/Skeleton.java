@@ -49,6 +49,7 @@ public class Skeleton {
         node2 = new Node();
         road1 = new RoadSegment(1, node1, node2);
         snowPlowPlayer = new SnowPlowPlayer(testRoad);
+        snowPlowPlayer.getSnowPlows().get(0).equip(new SweeperHead());
 
         testRoad.addNode(node1);
         testRoad.addNode(node2);
@@ -65,6 +66,7 @@ public class Skeleton {
         road1 = new RoadSegment(2, node1, node2);
         road2 = new Bridge(2, node2, node3);
         snowPlowPlayer = new SnowPlowPlayer(testRoad);
+        snowPlowPlayer.getSnowPlows().get(0).equip(new SweeperHead());
 
         testRoad.addNode(node1);
         testRoad.addNode(node2);

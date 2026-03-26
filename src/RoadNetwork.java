@@ -12,7 +12,9 @@ public class RoadNetwork {
 
     public boolean tryMoveTowardsNode(Vehicle vehicle, Node node) {
         TestUtil.enterFunction("Roadnetwork: tryMoveTowardsNode(vehicle, node)");
-        if (!vehicle.canEnter(null)){
+ 
+        RoadSegment segment = new RoadSegment(1, null, null);
+        if (!vehicle.canEnter(segment.lanes.get(0))){
             TestUtil.exitFunction("Failed to find suitable lane to enter");
             return false;
         }

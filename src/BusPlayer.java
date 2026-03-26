@@ -1,8 +1,19 @@
 public class BusPlayer extends Player {
 
+    private Bus bus;
+
     public BusPlayer(RoadNetwork roads) {
         super(roads);
-        //TODO Auto-generated constructor stub
+        
     }
+
+    @Override
+    public void takeTurn() {
+        TestUtil.enterFunction("BusPlayer:takeTurn()");
+        roads.tryMoveTowardsNode(bus, null);
+        TestUtil.exitFunction("turn done");
+    }
+
+    
     
 }

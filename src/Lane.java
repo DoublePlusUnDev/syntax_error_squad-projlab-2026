@@ -15,59 +15,90 @@ public class Lane implements Updatable{
     }
 
     public void addSnow(float snowLevel) {
+        TestUtil.enterFunction("Lane:addSnow()");
+        TestUtil.exitFunction("snow added");
+    }
 
+    public float getSnow(){
+        TestUtil.enterFunction("Lane:getSnow()");
+        TestUtil.exitFunction("snow level");
+        return snowHeight;
     }
 
     public void driveOver() {
-        System.out.println("Lane:driveOver");
+        TestUtil.enterFunction("Lane:driveOver()");
+        TestUtil.exitFunction("driven over");
     }
 
     public void crashOccured() {
-
+        TestUtil.enterFunction("Lane:crashOccured()");
+        TestUtil.exitFunction("road blocked");
     }
 
-    public boolean willSlip() throws NotImplementedException {
-        throw new NotImplementedException("");
+    public boolean willSlip() {
+        TestUtil.enterFunction("Lane:willSlip()");
+        boolean slip = TestUtil.askUserYesNo("Will the lane slip?");
+        TestUtil.exitFunction(String.valueOf(slip));
+        return slip;
     }
 
-    public RoadSegment getSegment() throws NotImplementedException{
-        throw new NotImplementedException("");
+    public RoadSegment getSegment() {
+        TestUtil.enterFunction("Lane:getSegment()");
+        TestUtil.exitFunction("road segment");
+        return roadSegment;
     }
 
     public void sweep() {
-
+        TestUtil.enterFunction("Lane:sweep()");
+        roadSegment.sweep(this);
+        TestUtil.exitFunction("lane swept");
     }
 
     public void blow() {
-
+        TestUtil.enterFunction("Lane:blown()");
+        roadSegment.sweep(this);
+        TestUtil.exitFunction("lane blown");
     }
 
     public void salt() {
-
+        TestUtil.enterFunction("Lane:salt()");
+        TestUtil.exitFunction("lane salted");
     }
 
     public void breakIce() {
-
+        TestUtil.enterFunction("Lane:breakIce()");
+        TestUtil.exitFunction("ice broken");
     }
 
     public void destroySnow() {
-        
+        TestUtil.enterFunction("Lane:destroySnow()");
+        TestUtil.exitFunction("snow destroyed");
     }
 
     public void destroyIce() {
-
+        TestUtil.enterFunction("Lane:destroyIce()");
+        TestUtil.exitFunction("ice destroyed");
     }
 
-    public boolean isSnowy() throws NotImplementedException{
-        throw new NotImplementedException("");
+    public boolean isSnowy() {
+        TestUtil.enterFunction("Lane:isSnowy()");
+        boolean input = TestUtil.askUserYesNo("Is the lane snowy?");
+        TestUtil.exitFunction(String.valueOf(input));
+        return input;
     }
 
-    public boolean isBlocked() throws NotImplementedException {
-        throw new NotImplementedException("");
+    public boolean isBlocked() {
+        TestUtil.enterFunction("Lane:isBlocked()");
+        boolean input = TestUtil.askUserYesNo("Is the lane blocked?");
+        TestUtil.exitFunction(String.valueOf(input));
+        return input;
     }
 
-    public boolean isDebrisFilled() throws NotImplementedException {
-        throw new NotImplementedException("");
+    public boolean isDebrisFilled() {
+        TestUtil.enterFunction("Lane:isDebrisFilled()");
+        boolean input = TestUtil.askUserYesNo("Is the lane debris filled?");
+        TestUtil.exitFunction(String.valueOf(input));
+        return input;
     }
 
     @Override

@@ -6,11 +6,22 @@ public class Bridge extends RoadSegment {
 
     @Override
     public void sweep(Lane lane) {
-        super.sweep(lane);
+        
+
+        
+
     }
 
     @Override
     public void blow(Lane lane) {
-        super.blow(lane);
+        TestUtil.enterFunction("Bridghe: blow(lane)");
+        Lane rightMostLane = lanes.get(lanes.size() - 1);
+        float snowLevel = lane.getSnow();
+        lane.destroySnow();
+        rightMostLane.addSnow(snowLevel);
+
+        boolean sameLane = TestUtil.askUserYesNo("Is the blown lane the rightmost one?");
+    
+        TestUtil.exitFunction("bridge blown");
     }
 }
