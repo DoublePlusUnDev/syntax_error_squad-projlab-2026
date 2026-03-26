@@ -4,7 +4,7 @@ public class BusPlayer extends Player {
 
     public BusPlayer(RoadNetwork roads) {
         super(roads);
-        
+        bus = new Bus();
     }
 
     @Override
@@ -14,6 +14,8 @@ public class BusPlayer extends Player {
         TestUtil.exitFunction("turn done");
     }
 
-    
+    public Bus getBus() {
+        return bus;
+    }
     
 }

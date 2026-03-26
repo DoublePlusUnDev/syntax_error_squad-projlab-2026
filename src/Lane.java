@@ -1,6 +1,11 @@
 
-import jdk.jshell.spi.ExecutionControl.NotImplementedException;
-
+/**
+ * Represents a single lane of the road.
+ * Keeps track of how snowy it is, how far it's icing has progressed,
+ * whether it has ICE, debris and if a vehicle is blocking it. Also handles salting progress.
+ * Reports whether a given vehicle will or won't slip on it. Can be cleaned in various ways, 
+ * when other lanes are included in the process it calls back to the roadsegment containing the lane.
+ */
 public class Lane implements Updatable{
     private RoadSegment roadSegment;
     private float snowHeight;

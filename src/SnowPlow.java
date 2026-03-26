@@ -24,7 +24,10 @@ public class SnowPlow extends Vehicle{
     
     public void equip(PlowHead head) {
         TestUtil.enterFunction("SnowPlow:equip()");
+        if (plowHead != null)
+            plowHead.unequip();
         this.plowHead = head;
+        plowHead.equip();
         TestUtil.exitFunction("equipped");
     }
 }

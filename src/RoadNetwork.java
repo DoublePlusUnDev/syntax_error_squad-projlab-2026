@@ -38,6 +38,14 @@ public class RoadNetwork {
 
         chosenSegment.enter(vehicle, 0);
 
+        if (vehicle.canSlip() && chosenSegment.lanes.get(0).willSlip()){
+            Lane newDestination = chosenSegment.lanes.get(0);
+            vehicle.crash(newDestination);
+
+        }
+        
+        
+
         TestUtil.exitFunction("Move towards target succesfully");
         return true;
     }

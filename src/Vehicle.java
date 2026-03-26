@@ -19,7 +19,9 @@ public abstract  class Vehicle {
     }
 
     public void crash(Lane lane) {
-
+        TestUtil.enterFunction("Vehicle:crash()");
+        lane.crashOccured();
+        TestUtil.exitFunction("crashed");
     }
 
     public boolean canEnter(Lane lane) {
@@ -44,7 +46,12 @@ public abstract  class Vehicle {
         return true;
     }
 
-    public boolean canSlip() throws NotImplementedException {
-        throw new NotImplementedException("");
+    public boolean canSlip() {
+        TestUtil.enterFunction("canSlip()");
+    
+        boolean slip = TestUtil.askUserYesNo("Can the vehicle slip?");
+
+        TestUtil.exitFunction(String.valueOf(slip));
+        return slip;
     }
 }
