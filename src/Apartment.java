@@ -1,3 +1,10 @@
+/**
+ * Represents an apartment building as a node.
+ * Spawns cars, also serves as a target to do the cars,
+ *  after they return from their respective workplaces.
+ * 
+ * Responsible for attempeting to spawn cars, at given time periods.
+ */
 public class Apartment extends Node implements Updatable {
 
     private int spawnTimer;

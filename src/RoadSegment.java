@@ -28,7 +28,10 @@ public class RoadSegment {
     }
 
     public void sweep(Lane lane){
+        TestUtil.enterFunction("RoadSegment: blow(lane)");
+        lane.destroySnow();
 
+        TestUtil.exitFunction("road blown");
     }
 
     public void blow(Lane lane) {

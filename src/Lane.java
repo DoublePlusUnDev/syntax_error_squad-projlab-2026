@@ -67,7 +67,13 @@ public class Lane implements Updatable{
 
     public void breakIce() {
         TestUtil.enterFunction("Lane:breakIce()");
-        TestUtil.exitFunction("ice broken");
+
+        boolean ice = TestUtil.askUserYesNo("Is there ice to break");
+
+        if (ice)
+            TestUtil.exitFunction("ice broken");
+        else
+            TestUtil.exitFunction("no ice to break ");
     }
 
     public void destroySnow() {

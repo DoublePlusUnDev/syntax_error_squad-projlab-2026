@@ -4,12 +4,8 @@ public class IceBreakerHead extends PlowHead {
     public void clean(Lane lane) {
         TestUtil.enterFunction("DragonHead:clean(lane)");
 
-        if (!inventory.tryConsumeKerosene()){
-            TestUtil.exitFunction("failed");
-            return;
-        }
-
         lane.breakIce();
+        
         TestUtil.exitFunction("ice broken");
     }
     

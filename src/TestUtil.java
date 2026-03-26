@@ -30,6 +30,17 @@ public class TestUtil {
 
         return !input.isEmpty() && input.toLowerCase().charAt(0) == 'y';        
     }
+
+    public static int askUserNumberedOptions(String question, String[] options) {
+        tabulatePrintln(": " + question + " ");
+        for (int i = 0; i < options.length; i++) {
+            tabulatePrintln(i + 1 + " " + options[i]);
+        }
+        tabulatePrint("");
+
+        String input = scanner.nextLine();
+        return Integer.parseInt(input);
+    }
  
     private static void tabulatePrint(String message) {
         System.out.print("\t".repeat(chainDepth) + message);

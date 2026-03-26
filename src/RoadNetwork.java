@@ -25,7 +25,16 @@ public class RoadNetwork {
             TestUtil.exitFunction("Failed to pathfind");
             return false;
         }
-        RoadSegment chosenSegment = new RoadSegment(1, null, null);
+
+        int roadType = TestUtil.askUserNumberedOptions("What type of road the vehicle enters:", new String[]{"Road", "Bridge", "Tunnel"});
+        
+        RoadSegment chosenSegment;
+        if (roadType == 1)
+            chosenSegment = new RoadSegment(1, null, null);
+        else if (roadType == 2)
+            chosenSegment = new Bridge(1, null, null);
+        else
+            chosenSegment = new Tunnel(1, null, null);
 
         chosenSegment.enter(vehicle, 0);
 
