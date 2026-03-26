@@ -1,7 +1,7 @@
 import java.util.List;
 
 public class Skeleton {
-    static List<Runnable> tests = List.of(Skeleton::test1, Skeleton::test2);
+    static List<Runnable> tests = List.of(Skeleton::test1, Skeleton::test2, Skeleton::test3);
 
     static RoadNetwork testRoad;
     static Node node1;
@@ -11,6 +11,11 @@ public class Skeleton {
     static RoadSegment road2;
     static SnowPlowPlayer snowPlowPlayer;
     static BusPlayer busPlayer;
+    static SweeperHead sweeperHead;
+    static BlowerHead blowerHead;
+    static IceBreakerHead iceBreakerHead;
+    static SalterHead salterHead;
+    static DragonHead dragonHead;
 
     public static void main(String[] args) {
         
@@ -77,21 +82,32 @@ public class Skeleton {
     }
 
     static void test1() {
+        TestUtil.turnOffLogging();
         init3();
+        TestUtil.turnOnLogging();
 
         snowPlowPlayer.takeTurn();
     }
 
     static void test2() {
+        TestUtil.turnOffLogging();
         init1();
+        TestUtil.turnOnLogging();
 
         snowPlowPlayer.takeTurn();
     }
 
     static void test3() {
+        TestUtil.turnOffLogging();
         init3();
 
-        snowPlowPlayer.takeTurn();
+        SnowPlow snowPlow = snowPlowPlayer.getSnowPlows().get(0);
+        sweeperHead = new SweeperHead();
+        sweeperHead.inventory = snowPlowPlayer.inventory;
+        snowPlow.equip(new SweeperHead());
+        TestUtil.turnOnLogging();
+
+        snowPlow.enter(road1.lanes.get(0));
     }
 
     

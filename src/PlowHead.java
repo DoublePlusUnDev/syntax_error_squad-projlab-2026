@@ -1,16 +1,41 @@
 public abstract class PlowHead extends Buyable{
     protected Inventory inventory; 
+    private boolean equipped = false;
 
     public abstract void clean(Lane lane);
 
     @Override
     boolean buy(Inventory inventory) {
-        if (!super.buy(inventory))
+        TestUtil.enterFunction("plowHead:buy(inventory)");
+        
+        if (!super.buy(inventory)){
+            TestUtil.exitFunction("could not buy");
             return false;
+        }
 
         this.inventory = inventory;
+        TestUtil.exitFunction("bought");
         return true;
     }
 
-    
+    public void equip() {
+        TestUtil.enterFunction("plowHead:equip()");
+        equipped = true;
+        TestUtil.exitFunction("equipped");
+    }
+
+    public void unequip() {
+        TestUtil.enterFunction("plowHead:unequip()");
+        equipped = false;
+        TestUtil.exitFunction("unnequipped");
+    }
+
+    public boolean isEquipped() {
+        TestUtil.enterFunction("plowHead:isEquipped()");
+
+        boolean input = TestUtil.askUserYesNo("Can the plowhead be equipped?");
+
+        TestUtil.exitFunction(String.valueOf(input));
+        return input;
+    }
 }

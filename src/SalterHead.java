@@ -3,7 +3,12 @@ public class SalterHead extends PlowHead {
     @Override
     public void clean(Lane lane) {
         TestUtil.enterFunction("SalterHead:clean(lane)");
-        lane.salt();
+
+        if (!inventory.tryConsumeSalt()){
+            TestUtil.exitFunction("failed");
+            return;
+        }
+
         TestUtil.exitFunction("salted");
     }
         
