@@ -86,14 +86,20 @@ public class Skeleton {
         road1 = new RoadSegment(2, node1, node2);
         road2 = new Bridge(2, node2, node3);
         snowPlowPlayer = new SnowPlowPlayer(testRoad);
-        snowPlowPlayer.getSnowPlows().get(0).equip(new SweeperHead());
+        
+        SnowPlow snowPlow = snowPlowPlayer.getSnowPlows().get(0);
+        snowPlow.equip(new SweeperHead());
+
+
 
         testRoad.addNode(node1);
         testRoad.addNode(node2);
         testRoad.addNode(node3);
         testRoad.addRoadSegment(road1);
         testRoad.addRoadSegment(road2);
-        testRoad.placeSnowPlow(snowPlowPlayer.getSnowPlows().get(0));
+        testRoad.placeSnowPlow(snowPlow);
+
+        snowPlow.location = road1.lanes.get(0);
     }
 
     static void init4(){
@@ -113,6 +119,8 @@ public class Skeleton {
         testRoad.addRoadSegment(road1);
         testRoad.addRoadSegment(road2);
         testRoad.placeBus(busPlayer.getBus());
+
+        busPlayer.getBus().location = road1.lanes.get(0);
     }
 
     static void addPlowHead(PlowHead plowHead) {
@@ -415,5 +423,40 @@ public class Skeleton {
 
         
         dragonHead.buy(snowPlowPlayer.inventory);
+    }
+
+    /**
+     * UC 24 Collision of a Bus With a Snowplow
+     */
+    static void test24() {
+        TestUtil.turnOffLogging();
+        //init5();
+
+        TestUtil.turnOnLogging();
+
+        
+    }
+
+    /**
+     * UC 25 Collision of a Bus With a Snowplow
+     */
+    static void test25() {
+        TestUtil.turnOffLogging();
+        //init5();
+
+        TestUtil.turnOnLogging();
+
+    }
+
+    /**
+     * UC 26 Collision of a Bus With a Snowplow
+     */
+    static void test26() {
+        TestUtil.turnOffLogging();
+        //init5();
+
+        TestUtil.turnOnLogging();
+
+        
     }
 }
