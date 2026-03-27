@@ -1,3 +1,10 @@
+/**
+ * An abstract base for vehicles.
+ * Can enter lanes and different types of nodes.
+ * May exhibit different behaviours upon crashing into different vehicles.
+ * Must report whether it can enter a given lane for pathfinding purposes.
+ * May or may not be able to slip on ice.
+ */
 public abstract  class Vehicle {
     protected Lane location;
 

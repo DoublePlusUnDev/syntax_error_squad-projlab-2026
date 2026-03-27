@@ -1,6 +1,9 @@
 
 import java.util.Scanner;
 
+/**
+ * Provides functions for tracing functions calls and reading user inputs for decisions.
+ */
 public class TestUtil {
     public static final Scanner scanner = new Scanner(System.in);
 

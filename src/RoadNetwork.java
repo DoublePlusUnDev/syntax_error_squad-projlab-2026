@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 
+ */
 public class RoadNetwork {
     private List<Node> nodes;
     private List<RoadSegment> roadSegments;

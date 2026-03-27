@@ -1,3 +1,9 @@
+/**
+ * A snowplow vehicle iontended to be controlled by the player.
+ * When it enters a lane it will use it's plowhead to clean it.
+ * Cannot slip on ice, cannot be damaged in a crash.
+ * Can enter debris and snow filled lanes, unable to enter blocked lanes however. 
+ */
 public class SnowPlow extends Vehicle{
 
     private PlowHead plowHead;

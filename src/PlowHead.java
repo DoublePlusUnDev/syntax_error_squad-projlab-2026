@@ -1,3 +1,8 @@
+/**
+ * An abstract base for a plowhead.
+ * Can be checked if it's equipped, can be equipped and unequipped.
+ * When bough it'll place itself in the buyers inventory.
+ */
 public abstract class PlowHead extends Buyable{
     protected Inventory inventory; 
     private boolean equipped = false;

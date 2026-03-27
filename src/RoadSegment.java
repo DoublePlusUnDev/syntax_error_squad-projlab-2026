@@ -1,6 +1,12 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A roadsegment that connects two nodes in the roadnetwork.
+ * May consist of several lanes.
+ * A vehicle may enter one if it's lanes.
+ * Can be swept and blown.
+ */
 public class RoadSegment {
     protected List<Lane> lanes;    
     private Node startPoint;

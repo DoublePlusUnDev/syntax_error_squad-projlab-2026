@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A player that is in control of one or more snowplow(s).
+ */
 public class SnowPlowPlayer extends Player {
     
     private List<SnowPlow> snowPlows;
