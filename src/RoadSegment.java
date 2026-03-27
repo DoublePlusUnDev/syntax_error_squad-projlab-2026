@@ -28,7 +28,7 @@ public class RoadSegment {
     }
 
     public void sweep(Lane lane){
-        TestUtil.enterFunction("RoadSegment: sweep(lane)");
+        TestUtil.enterFunction("RoadSegment:sweep(lane)");
         
         float snowLevel = lane.getSnow();
         lane.destroySnow();

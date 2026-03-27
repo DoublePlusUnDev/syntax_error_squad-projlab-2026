@@ -43,6 +43,8 @@ public class Skeleton {
     }
 
     static void init1(){
+        System.out.println("[Init]");
+        System.out.println("<placeholder>");
         testRoad = new RoadNetwork();
 
         node1 = new Node();
@@ -58,6 +60,8 @@ public class Skeleton {
     }
 
     static void init2(){
+        System.out.println("[Init]");
+        System.out.println("<placeholder>");
         testRoad = new RoadNetwork();
 
         node1 = new Node();
@@ -72,6 +76,8 @@ public class Skeleton {
     }
 
     static void init3(){
+        System.out.println("[Init]");
+        System.out.println("<placeholder>");
         testRoad = new RoadNetwork();
 
         node1 = new Node();
@@ -91,6 +97,8 @@ public class Skeleton {
     }
 
     static void init4(){
+        System.out.println("[Init]");
+        System.out.println("<placeholder>");
         testRoad = new RoadNetwork();
 
         node1 = new Node();
