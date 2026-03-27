@@ -87,7 +87,7 @@ public class RoadNetwork {
 
         vehicle.enter(lane);
         TestUtil.exitFunction("true");
-        return false;
+        return true;
     }
 
     public void addSnow(){

@@ -21,7 +21,9 @@ public class SnowPlow extends Vehicle{
 
         super.enter(lane);
 
-        plowHead.clean(lane);
+        if (plowHead != null) {
+            plowHead.clean(lane);
+        }
         TestUtil.exitFunction("lane entered and cleaned");
     }
     
