@@ -61,7 +61,7 @@ public class Lane implements Updatable{
 
     public void blow() {
         TestUtil.enterFunction("Lane:blown()");
-        roadSegment.sweep(this);
+        roadSegment.blow(this);
         TestUtil.exitFunction("lane blown");
     }
 

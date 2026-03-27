@@ -28,13 +28,22 @@ public class RoadSegment {
     }
 
     public void sweep(Lane lane){
-        TestUtil.enterFunction("RoadSegment: blow(lane)");
+        TestUtil.enterFunction("RoadSegment: sweep(lane)");
+        
+        float snowLevel = lane.getSnow();
         lane.destroySnow();
 
-        TestUtil.exitFunction("road blown");
+        Lane laneToTheRight = new Lane(lane.getSegment());
+        laneToTheRight.addSnow(snowLevel);
+
+        TestUtil.exitFunction("road swept");
     }
 
     public void blow(Lane lane) {
-        
+        TestUtil.enterFunction("RoadSegment:blow(lane)");
+
+        lane.destroySnow();
+
+        TestUtil.exitFunction("lane blown");
     }
 }

@@ -363,7 +363,7 @@ public class Skeleton {
     }
 
     /**
-     * UC 20 Snowplow Lane Change Succesful
+     * UC 20 Snowplow Lane Change Successful
      */
     static void test20() {
         TestUtil.turnOffLogging();
@@ -374,7 +374,7 @@ public class Skeleton {
     }
 
     /**
-     * UC 20 Snowplow Lane Change Unsuccesful
+     * UC 20 Snowplow Lane Change Unsuccessful
      */
     static void test21() {
         TestUtil.turnOffLogging();
@@ -382,5 +382,12 @@ public class Skeleton {
         TestUtil.turnOnLogging();
 
         testRoad.changeLane(snowPlowPlayer.getSnowPlows().get(0), road1.lanes.get(0));
+    }
+
+    /**
+     * UC 21 Purchase Successful
+     */
+    static void test22() {
+
     }
 }
