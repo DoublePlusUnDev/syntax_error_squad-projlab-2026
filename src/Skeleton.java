@@ -3,7 +3,7 @@ import java.util.List;
 public class Skeleton {
     static List<Runnable> tests = List.of(Skeleton::test1, Skeleton::test2, Skeleton::test3, Skeleton::test4, Skeleton::test5, 
         Skeleton::test6, Skeleton::test7, Skeleton::test8, Skeleton::test9, Skeleton::test10, Skeleton::test11, Skeleton::test12, Skeleton::test13, Skeleton::test14, 
-        Skeleton::test15, Skeleton::test16, Skeleton::test17);
+        Skeleton::test15, Skeleton::test16, Skeleton::test17, Skeleton::test18, Skeleton::test19);
 
     static RoadNetwork testRoad;
     static Node node1;
@@ -94,7 +94,7 @@ public class Skeleton {
         testRoad = new RoadNetwork();
 
         node1 = new Node();
-        node2 = new Node();
+        node2 = new BusStop();
         node3 = new Node();
         road1 = new RoadSegment(2, node1, node2);
         road2 = new Bridge(2, node2, node3);
@@ -338,5 +338,27 @@ public class Skeleton {
         TestUtil.turnOnLogging();
 
         busPlayer.takeTurn();
+    }
+
+    /**
+     * UC 18 Bus Slips
+     */
+    static void test18() {
+        TestUtil.turnOffLogging();
+        init4();
+        TestUtil.turnOnLogging();
+
+        busPlayer.takeTurn();
+    }
+
+    /**
+     * UC 19 Bus Enters Busstop
+     */
+    static void test19() {
+        TestUtil.turnOffLogging();
+        init4();
+        TestUtil.turnOnLogging();
+
+        node2.accept(busPlayer.getBus());
     }
 }
