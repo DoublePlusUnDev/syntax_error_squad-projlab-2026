@@ -1,3 +1,7 @@
+/**
+ * An icebreaker head for a snowplow.
+ * Can be given a lane, where it will brake the ice.
+ */
 public class IceBreakerHead extends PlowHead {
 
     @Override

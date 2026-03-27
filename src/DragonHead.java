@@ -1,3 +1,6 @@
+/**
+ * A buyable item that will add salt it it's buyer's inventory.
+ */
 public class DragonHead extends PlowHead {
 
     @Override
