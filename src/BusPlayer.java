@@ -1,3 +1,6 @@
+/**
+ * A player who controls a singular bus vehicle.
+ */
 public class BusPlayer extends Player {
 
     private Bus bus;
