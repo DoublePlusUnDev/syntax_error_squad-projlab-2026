@@ -76,6 +76,20 @@ public class RoadNetwork {
         return true;
     }
 
+    public boolean changeLane(Vehicle vehicle, Lane lane) {
+        TestUtil.enterFunction("changeLane(vehicle, lane)");
+        boolean result = vehicle.canEnter(lane);
+
+        if (!result){
+            TestUtil.exitFunction("false");
+            return false;
+        }
+
+        vehicle.enter(lane);
+        TestUtil.exitFunction("true");
+        return false;
+    }
+
     public void addSnow(){
 
     }

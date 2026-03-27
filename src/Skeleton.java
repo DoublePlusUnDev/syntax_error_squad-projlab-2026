@@ -3,7 +3,7 @@ import java.util.List;
 public class Skeleton {
     static List<Runnable> tests = List.of(Skeleton::test1, Skeleton::test2, Skeleton::test3, Skeleton::test4, Skeleton::test5, 
         Skeleton::test6, Skeleton::test7, Skeleton::test8, Skeleton::test9, Skeleton::test10, Skeleton::test11, Skeleton::test12, Skeleton::test13, Skeleton::test14, 
-        Skeleton::test15, Skeleton::test16, Skeleton::test17, Skeleton::test18, Skeleton::test19);
+        Skeleton::test15, Skeleton::test16, Skeleton::test17, Skeleton::test18, Skeleton::test19, Skeleton::test20, Skeleton::test21);
 
     static RoadNetwork testRoad;
     static Node node1;
@@ -360,5 +360,27 @@ public class Skeleton {
         TestUtil.turnOnLogging();
 
         node2.accept(busPlayer.getBus());
+    }
+
+    /**
+     * UC 20 Snowplow Lane Change Succesful
+     */
+    static void test20() {
+        TestUtil.turnOffLogging();
+        init3();
+        TestUtil.turnOnLogging();
+
+        testRoad.changeLane(snowPlowPlayer.getSnowPlows().get(0), road1.lanes.get(0));
+    }
+
+    /**
+     * UC 20 Snowplow Lane Change Unsuccesful
+     */
+    static void test21() {
+        TestUtil.turnOffLogging();
+        init3();
+        TestUtil.turnOnLogging();
+
+        testRoad.changeLane(snowPlowPlayer.getSnowPlows().get(0), road1.lanes.get(0));
     }
 }
