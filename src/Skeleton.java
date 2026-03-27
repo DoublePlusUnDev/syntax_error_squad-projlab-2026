@@ -3,7 +3,7 @@ import java.util.List;
 public class Skeleton {
     static List<Runnable> tests = List.of(Skeleton::test1, Skeleton::test2, Skeleton::test3, Skeleton::test4, Skeleton::test5, 
         Skeleton::test6, Skeleton::test7, Skeleton::test8, Skeleton::test9, Skeleton::test10, Skeleton::test11, Skeleton::test12, Skeleton::test13, Skeleton::test14, 
-        Skeleton::test15, Skeleton::test16, Skeleton::test17, Skeleton::test18, Skeleton::test19, Skeleton::test20, Skeleton::test21);
+        Skeleton::test15, Skeleton::test16, Skeleton::test17, Skeleton::test18, Skeleton::test19, Skeleton::test20, Skeleton::test21, Skeleton::test22, Skeleton::test23);
 
     static RoadNetwork testRoad;
     static Node node1;
@@ -382,7 +382,7 @@ public class Skeleton {
     }
 
     /**
-     * UC 20 Snowplow Lane Change Unsuccessful
+     * UC 21 Snowplow Lane Change Unsuccessful
      */
     static void test21() {
         TestUtil.turnOffLogging();
@@ -393,9 +393,28 @@ public class Skeleton {
     }
 
     /**
-     * UC 21 Purchase Successful
+     * UC 22 Purchase Successful
      */
     static void test22() {
+        TestUtil.turnOffLogging();
+        init3();
+        DragonHead dragonHead = new DragonHead();
+        TestUtil.turnOnLogging();
 
+        
+        dragonHead.buy(snowPlowPlayer.inventory);
+    }
+
+    /**
+     * UC 23 Purchase Unsuccessful
+     */
+    static void test23() {
+        TestUtil.turnOffLogging();
+        init3();
+        DragonHead dragonHead = new DragonHead();
+        TestUtil.turnOnLogging();
+
+        
+        dragonHead.buy(snowPlowPlayer.inventory);
     }
 }
