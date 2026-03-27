@@ -24,7 +24,7 @@ public class TestUtil {
     }
 
     public static boolean askUserYesNo(String question){
-        tabulatePrintln("? " + question);
+        tabulatePrintln("? " + question + " (yes/no)");
         tabulatePrint("> ");
 
         String input = scanner.nextLine();
