@@ -3,16 +3,20 @@ import java.util.List;
 public class Skeleton {
     static List<Runnable> tests = List.of(Skeleton::test1, Skeleton::test2, Skeleton::test3, Skeleton::test4, Skeleton::test5, 
         Skeleton::test6, Skeleton::test7, Skeleton::test8, Skeleton::test9, Skeleton::test10, Skeleton::test11, Skeleton::test12, Skeleton::test13, Skeleton::test14, 
-        Skeleton::test15, Skeleton::test16, Skeleton::test17, Skeleton::test18, Skeleton::test19, Skeleton::test20, Skeleton::test21, Skeleton::test22, Skeleton::test23);
+        Skeleton::test15, Skeleton::test16, Skeleton::test17, Skeleton::test18, Skeleton::test19, Skeleton::test20, Skeleton::test21, Skeleton::test22, Skeleton::test23,
+        Skeleton::test24, Skeleton::test25, Skeleton::test26);
 
     static RoadNetwork testRoad;
     static Node node1;
     static Node node2;
     static Node node3;
+    static Node node4;
     static RoadSegment road1;
     static RoadSegment road2;
+    static RoadSegment road3;
     static SnowPlowPlayer snowPlowPlayer;
     static BusPlayer busPlayer;
+    static Vehicle collisionVehicle;
 
     public static void main(String[] args) {
         System.out.println("Testing...");
@@ -45,6 +49,10 @@ public class Skeleton {
         
     }
 
+    /**
+     * Initializes two nodes with a single lane road between them.
+     * There is a snowplow on the road. It's unable to move.
+     */
     static void init1(){
         System.out.println("[INIT] SingleRoadSnowplowInit");
         testRoad = new RoadNetwork();
@@ -53,14 +61,21 @@ public class Skeleton {
         node2 = new Node();
         road1 = new RoadSegment(1, node1, node2);
         snowPlowPlayer = new SnowPlowPlayer(testRoad);
-        snowPlowPlayer.getSnowPlows().get(0).equip(new SweeperHead());
+
+        SnowPlow snowPlow = snowPlowPlayer.getSnowPlows().get(0);
+        snowPlow.equip(new SweeperHead());
 
         testRoad.addNode(node1);
         testRoad.addNode(node2);
         testRoad.addRoadSegment(road1);
         testRoad.placeSnowPlow(snowPlowPlayer.getSnowPlows().get(0));
+        snowPlow.location = road1.lanes.get(0);
     }
 
+    /**
+     * Initializes two nodes with a single lane road between them.
+     * There is a bus on the road. It's unable to move.
+     */
     static void init2(){
         System.out.println("[INIT] SingleRoadBusInit");
         testRoad = new RoadNetwork();
@@ -74,6 +89,7 @@ public class Skeleton {
         testRoad.addNode(node2);
         testRoad.addRoadSegment(road1);
         testRoad.placeBus(busPlayer.getBus());
+        busPlayer.getBus().location = road1.lanes.get(0);
     }
 
     static void init3(){
@@ -110,7 +126,7 @@ public class Skeleton {
         node2 = new BusStop();
         node3 = new Node();
         road1 = new RoadSegment(2, node1, node2);
-        road2 = new Bridge(2, node2, node3);
+        road2 = new RoadSegment(2, node2, node3);
         busPlayer = new BusPlayer(testRoad);
 
         testRoad.addNode(node1);
@@ -121,6 +137,105 @@ public class Skeleton {
         testRoad.placeBus(busPlayer.getBus());
 
         busPlayer.getBus().location = road1.lanes.get(0);
+    }
+
+    /**
+     * Initializes four nodes in a line, connected by roadsegments.
+     * There is a bus on the first segment, there is a snowplow on the third.
+     * Intended for crash testing.
+     */
+    static void init5(){
+        System.out.println("[INIT] CollisionBusSnowPlowInit");
+        testRoad = new RoadNetwork();
+
+        node1 = new Node();
+        node2 = new BusStop();
+        node3 = new Node();
+        node4 = new Node();
+        road1 = new RoadSegment(1, node1, node2);
+        road2 = new RoadSegment(1, node2, node3);
+        road3 = new RoadSegment(1, node3, node4);
+        busPlayer = new BusPlayer(testRoad);
+        collisionVehicle = new SnowPlow();
+
+        testRoad.addNode(node1);
+        testRoad.addNode(node2);
+        testRoad.addNode(node3);
+        testRoad.addNode(node4);
+        testRoad.addRoadSegment(road1);
+        testRoad.addRoadSegment(road2);
+        testRoad.addRoadSegment(road3);
+        testRoad.placeBus(busPlayer.getBus());
+        testRoad.placeSnowPlow((SnowPlow)collisionVehicle);
+
+        busPlayer.getBus().location = road1.lanes.get(0);
+        collisionVehicle.location = road3.lanes.get(0);
+    }
+
+    /**
+     * Initializes four nodes in a line, connected by roadsegments.
+     * There is a bus on the first segment, there is a bus on the third.
+     * Intended for crash testing.
+     */
+    static void init6(){
+        System.out.println("[INIT] CollisionBusBusInit");
+        testRoad = new RoadNetwork();
+
+        node1 = new Node();
+        node2 = new BusStop();
+        node3 = new Node();
+        node4 = new Node();
+        road1 = new RoadSegment(1, node1, node2);
+        road2 = new RoadSegment(1, node2, node3);
+        road3 = new RoadSegment(1, node3, node4);
+        busPlayer = new BusPlayer(testRoad);
+        collisionVehicle = new Bus();
+
+        testRoad.addNode(node1);
+        testRoad.addNode(node2);
+        testRoad.addNode(node3);
+        testRoad.addNode(node4);
+        testRoad.addRoadSegment(road1);
+        testRoad.addRoadSegment(road2);
+        testRoad.addRoadSegment(road3);
+        testRoad.placeBus(busPlayer.getBus());
+        testRoad.placeBus((Bus)collisionVehicle);
+
+        busPlayer.getBus().location = road1.lanes.get(0);
+        collisionVehicle.location = road3.lanes.get(0);
+    }
+
+    /**
+     * Initializes four nodes in a line, connected by roadsegments.
+     * There is a bus on the first segment, there is a car on the third.
+     * Intended for crash testing.
+     */
+    static void init7(){
+        System.out.println("[INIT] CollisionBusCarInit");
+        testRoad = new RoadNetwork();
+
+        node1 = new Node();
+        node2 = new BusStop();
+        node3 = new Node();
+        node4 = new Node();
+        road1 = new RoadSegment(1, node1, node2);
+        road2 = new RoadSegment(1, node2, node3);
+        road3 = new RoadSegment(1, node3, node4);
+        busPlayer = new BusPlayer(testRoad);
+        collisionVehicle = new Car();
+
+        testRoad.addNode(node1);
+        testRoad.addNode(node2);
+        testRoad.addNode(node3);
+        testRoad.addNode(node4);
+        testRoad.addRoadSegment(road1);
+        testRoad.addRoadSegment(road2);
+        testRoad.addRoadSegment(road3);
+        testRoad.placeBus(busPlayer.getBus());
+        testRoad.placeCar((Car)collisionVehicle);
+
+        busPlayer.getBus().location = road1.lanes.get(0);
+        collisionVehicle.location = road3.lanes.get(0);
     }
 
     static void addPlowHead(PlowHead plowHead) {
@@ -430,33 +545,34 @@ public class Skeleton {
      */
     static void test24() {
         TestUtil.turnOffLogging();
-        //init5();
+        init5();
 
         TestUtil.turnOnLogging();
 
-        
+        busPlayer.takeTurn();
     }
 
     /**
-     * UC 25 Collision of a Bus With a Snowplow
+     * UC 25 Collision of a Bus With a Bus
      */
     static void test25() {
         TestUtil.turnOffLogging();
-        //init5();
+        init6();
 
         TestUtil.turnOnLogging();
 
+        busPlayer.takeTurn();
     }
 
     /**
-     * UC 26 Collision of a Bus With a Snowplow
+     * UC 26 Collision of a Bus With a Car
      */
     static void test26() {
         TestUtil.turnOffLogging();
-        //init5();
+        init7();
 
         TestUtil.turnOnLogging();
 
-        
+        busPlayer.takeTurn();
     }
 }

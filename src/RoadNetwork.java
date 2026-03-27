@@ -106,19 +106,15 @@ public class RoadNetwork {
         roadSegments.add(roadSegment);
     }
 
+    public void placeCar(Car car){
+
+    }
+
     public void placeBus(Bus bus){
 
     }
 
-    public void placeBus(Bus bus, Lane lane){
-
-    }
-
     public void placeSnowPlow(SnowPlow snowPlow) {
-        
-    }
-
-    public void placeSnowPlow(SnowPlow snowPlow, Lane lane) {
         
     }
 }
