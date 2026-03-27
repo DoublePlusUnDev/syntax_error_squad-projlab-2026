@@ -18,7 +18,10 @@ public class Skeleton {
         System.out.println("Testing...");
         
         while (true) { 
-            System.err.println("Select a testcase: (1-26) ");
+
+            System.out.println();
+            System.out.println("Select a testcase: (1-26)");
+            System.out.print("> ");
             
             int testCase;
             try { 
@@ -43,8 +46,7 @@ public class Skeleton {
     }
 
     static void init1(){
-        System.out.println("[Init]");
-        System.out.println("<placeholder>");
+        System.out.println("[INIT] SingleRoadSnowplowInit");
         testRoad = new RoadNetwork();
 
         node1 = new Node();
@@ -60,8 +62,7 @@ public class Skeleton {
     }
 
     static void init2(){
-        System.out.println("[Init]");
-        System.out.println("<placeholder>");
+        System.out.println("[INIT] SingleRoadBusInit");
         testRoad = new RoadNetwork();
 
         node1 = new Node();
@@ -76,8 +77,7 @@ public class Skeleton {
     }
 
     static void init3(){
-        System.out.println("[Init]");
-        System.out.println("<placeholder>");
+        System.out.println("[INIT] RoadBridgeSnowplowInit");
         testRoad = new RoadNetwork();
 
         node1 = new Node();
@@ -97,8 +97,7 @@ public class Skeleton {
     }
 
     static void init4(){
-        System.out.println("[Init]");
-        System.out.println("<placeholder>");
+        System.out.println("[INIT] BusRouteWithStopInit");
         testRoad = new RoadNetwork();
 
         node1 = new Node();

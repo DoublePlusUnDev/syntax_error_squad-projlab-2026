@@ -24,7 +24,8 @@ public class TestUtil {
     }
 
     public static boolean askUserYesNo(String question){
-        tabulatePrint("? " + question + " ");
+        tabulatePrintln("? " + question);
+        tabulatePrint("> ");
 
         String input = scanner.nextLine();
 
@@ -32,11 +33,11 @@ public class TestUtil {
     }
 
     public static int askUserNumberedOptions(String question, String[] options) {
-        tabulatePrintln(": " + question + " ");
+        tabulatePrintln(": " + question);
         for (int i = 0; i < options.length; i++) {
             tabulatePrintln(i + 1 + " " + options[i]);
         }
-        tabulatePrint("");
+        tabulatePrint("> ");
 
         String input = scanner.nextLine();
         return Integer.parseInt(input);
