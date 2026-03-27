@@ -16,7 +16,11 @@ public class Apartment extends Node implements Updatable {
 
     @Override
     public void accept(Vehicle vehicle) {
-        super.accept(vehicle);
+        TestUtil.enterFunction("Apartment:accept()");
+        
+        vehicle.enterApartment(this);
+
+        TestUtil.exitFunction("apartment accepted vehicle");
     }
 
     

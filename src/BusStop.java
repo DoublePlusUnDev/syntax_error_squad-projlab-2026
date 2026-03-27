@@ -2,9 +2,11 @@ public class BusStop extends Node {
 
     @Override
     public void accept(Vehicle vehicle) {
-        TestUtil.enterFunction("BusStop:enter(vehicle)");
+        TestUtil.enterFunction("BusStop:accept()");
+        
         vehicle.enterBusStop(this);
-        TestUtil.exitFunction("accepted");
+
+        TestUtil.exitFunction("bus stop accepted vehicle");
     }
     
 }

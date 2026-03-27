@@ -1,5 +1,3 @@
-import java.util.List;
-
 /**
  * Represents a single lane of the road.
  * Keeps track of how snowy it is, how far it's icing has progressed,
@@ -15,7 +13,6 @@ public class Lane implements Updatable{
     private boolean iced;
     private boolean vehicleBlock;
     private int saltedTimer;
-    private List<Vehicle> vehicles; 
 
     public Lane(RoadSegment roadSegment){
         this.roadSegment = roadSegment;
@@ -39,6 +36,7 @@ public class Lane implements Updatable{
 
     public void crashOccured() {
         TestUtil.enterFunction("Lane:crashOccured()");
+
         TestUtil.exitFunction("road blocked");
     }
 

@@ -40,11 +40,38 @@ public class RoadNetwork {
 
         if (vehicle.canSlip() && chosenSegment.lanes.get(0).willSlip()){
             Lane newDestination = chosenSegment.lanes.get(0);
+
+            boolean crash = TestUtil.askUserYesNo("Has the vehicle crashed into another vehicle as the result of the slip?");
+
+            if (crash){
+                vehicle.crash(newDestination);
+                int crashedVehicle = TestUtil.askUserNumberedOptions("What type of vehicle it's crashed into?", new String[]{"SnowPlow", "Bus", "Car"});
+            
+                if (crashedVehicle == 1)
+                    new SnowPlow().crash(newDestination);
+                else if (crashedVehicle == 2)
+                    new Bus().crash(newDestination);
+                else
+                    new Car().crash(newDestination);
+            }
+
             vehicle.crash(newDestination);
         }
+    
+        //try to enter both neighbours
+        for (int i = 0; i < 2; i++)
+        {
+            int neighboursNodes = TestUtil.askUserNumberedOptions("What kind of node is the lane next to?", new String[]{"Node", "Apartment", "Workplace", "Bus stop"});
+            if (neighboursNodes == 1)
+                new Node().accept(vehicle);
+            else if (neighboursNodes == 2)
+                new Apartment().accept(vehicle);
+            else if (neighboursNodes == 3)
+                new Workplace().accept(vehicle);
+            else 
+                new BusStop().accept(vehicle);
+        }
         
-        
-
         TestUtil.exitFunction("Move towards target succesfully");
         return true;
     }

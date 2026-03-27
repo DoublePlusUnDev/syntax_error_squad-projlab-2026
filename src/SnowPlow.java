@@ -18,6 +18,9 @@ public class SnowPlow extends Vehicle{
     @Override
     public void enter(Lane lane) {
         TestUtil.enterFunction("SnowPlow:enter(lane)");
+
+        super.enter(lane);
+
         plowHead.clean(lane);
         TestUtil.exitFunction("lane entered and cleaned");
     }

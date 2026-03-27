@@ -2,8 +2,14 @@
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 
 public abstract  class Vehicle {
-    public void enter(Lane lane) {
+    protected Lane location;
 
+    public void enter(Lane lane) {
+        TestUtil.enterFunction("Vehicle:enter(Lane lane)");
+        
+        location = lane;
+
+        TestUtil.exitFunction("entered lane");
     }
 
     public void enterApartment(Apartment apartment) {
@@ -20,7 +26,7 @@ public abstract  class Vehicle {
 
     public void crash(Lane lane) {
         TestUtil.enterFunction("Vehicle:crash()");
-        lane.crashOccured();
+        
         TestUtil.exitFunction("crashed");
     }
 
