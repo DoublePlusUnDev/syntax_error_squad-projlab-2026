@@ -1,3 +1,4 @@
+import java.util.List;
 
 /**
  * Represents a single lane of the road.
@@ -14,6 +15,7 @@ public class Lane implements Updatable{
     private boolean iced;
     private boolean vehicleBlock;
     private int saltedTimer;
+    private List<Vehicle> vehicles; 
 
     public Lane(RoadSegment roadSegment){
         this.roadSegment = roadSegment;

@@ -41,7 +41,6 @@ public class RoadNetwork {
         if (vehicle.canSlip() && chosenSegment.lanes.get(0).willSlip()){
             Lane newDestination = chosenSegment.lanes.get(0);
             vehicle.crash(newDestination);
-
         }
         
         

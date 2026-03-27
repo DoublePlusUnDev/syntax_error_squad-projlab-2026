@@ -2,6 +2,10 @@ public abstract class PlowHead extends Buyable{
     protected Inventory inventory; 
     private boolean equipped = false;
 
+    /**
+     * Clean a select lane using the plowhead.
+     * @param lane 
+     */
     public abstract void clean(Lane lane);
 
     @Override
@@ -18,6 +22,9 @@ public abstract class PlowHead extends Buyable{
         return true;
     }
 
+    /**
+     * Equip the plowhead on a player, it'll mark it as equipped.
+     */
     public void equip() {
         TestUtil.enterFunction("plowHead:equip()");
         equipped = true;
@@ -30,6 +37,10 @@ public abstract class PlowHead extends Buyable{
         TestUtil.exitFunction("unnequipped");
     }
 
+    /**
+     * Check if someone has already equipped the head.
+     * @return If it's equipped.
+     */
     public boolean isEquipped() {
         TestUtil.enterFunction("plowHead:isEquipped()");
 

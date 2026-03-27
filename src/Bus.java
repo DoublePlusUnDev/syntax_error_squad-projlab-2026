@@ -33,7 +33,7 @@ public class Bus extends Vehicle implements Updatable {
     }
 
     @Override
-    public boolean canSlip() throws NotImplementedException {
+    public boolean canSlip() {
         TestUtil.enterFunction("Bus:canSlip()");
         TestUtil.exitFunction("true");
         
