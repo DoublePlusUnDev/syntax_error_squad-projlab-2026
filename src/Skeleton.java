@@ -115,7 +115,7 @@ public class Skeleton {
     }
 
     /**
-     * Successful snowplow movement
+     * UC1 Snowplow Movement Successful
      */
     static void test1() {
         TestUtil.turnOffLogging();
@@ -126,7 +126,7 @@ public class Skeleton {
     }
 
     /**
-     * Unsuccesful snowplow movement
+     * UC2 Snowplow Movement Unsuccessful
      */
     static void test2() {
         TestUtil.turnOffLogging();
@@ -137,7 +137,7 @@ public class Skeleton {
     }
 
     /**
-     * Sweeper head middle of the road
+     * UC3 Sweeper Head Use Middle of the Road
      */
     static void test3() {
         TestUtil.turnOffLogging();
@@ -151,7 +151,7 @@ public class Skeleton {
     }
 
     /**
-     * Sweeper head right side of the road
+     * UC4 Sweeper Head Use on Right Side of the Road
      */
     static void test4() {
         TestUtil.turnOffLogging();
@@ -165,7 +165,7 @@ public class Skeleton {
     }
 
     /**
-     * Sweeper head right side of the bridge
+     * UC5 Sweeper Head Use on Right Side of a Bridge
      */
     static void test5() {
         TestUtil.turnOffLogging();
@@ -179,7 +179,7 @@ public class Skeleton {
     }
 
     /**
-     * Blower head road
+     * UC6 Blower Head Use on RoadSegment
      */
     static void test6() {
         TestUtil.turnOffLogging();
@@ -193,7 +193,7 @@ public class Skeleton {
     }
 
     /**
-     * Blower head middle of the bridge
+     * UC7 Blower Head Use on Middle of Bridge
      */
     static void test7() {
         TestUtil.turnOffLogging();
@@ -207,7 +207,7 @@ public class Skeleton {
     }
 
     /**
-     * Blower head right side if the bridge
+     * UC8 Blower Head Use on Right Side of Bridge
      */
     static void test8() {
         TestUtil.turnOffLogging();
@@ -221,7 +221,7 @@ public class Skeleton {
     }
  
     /**
-     * Ice breaker head on icy road
+     * UC9 Ice Breaker Head Use on Icy Road
      */
     static void test9() {
         TestUtil.turnOffLogging();
@@ -235,7 +235,7 @@ public class Skeleton {
     }
 
     /**
-     * Ice breaker head on iceless road
+     * UC10 Ice Breaker Head Use on Iceless Road
      */
     static void test10() {
         TestUtil.turnOffLogging();
@@ -249,7 +249,7 @@ public class Skeleton {
     }
  
     /**
-     * Salter head successful
+     * UC11 Salter Head Use Successful
      */
     static void test11() {
         TestUtil.turnOffLogging();
@@ -263,7 +263,7 @@ public class Skeleton {
     }
 
     /**
-     * Salter head unsuccesful
+     * UC12 Salter Head Use Unsuccessful
      */
     static void test12() {
         TestUtil.turnOffLogging();
@@ -277,7 +277,7 @@ public class Skeleton {
     }
 
     /**
-     * Dragon head successful
+     * UC13 Dragon Head Use Successful
      */
     static void test13() {
         TestUtil.turnOffLogging();
@@ -291,7 +291,7 @@ public class Skeleton {
     }
 
     /**
-     * Dragon head unsuccesful
+     * UC14 Dragon Head Use Unsuccessful
      */
     static void test14() {
         TestUtil.turnOffLogging();
@@ -305,7 +305,7 @@ public class Skeleton {
     }
  
     /**
-     * Switches the head on a snowplow
+     * UC15 Head Switch
      */
     static void test15() {
         TestUtil.turnOffLogging();
@@ -319,7 +319,7 @@ public class Skeleton {
     }
 
     /**
-     * Bus movement succesful
+     * UC16 Bus Movement Successful
      */
     static void test16() {
         TestUtil.turnOffLogging();
@@ -330,7 +330,7 @@ public class Skeleton {
     }
 
     /**
-     * Bus movement unsuccesful
+     * UC17 Bus Movement Unsuccessful
      */
     static void test17() {
         TestUtil.turnOffLogging();
