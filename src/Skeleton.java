@@ -481,7 +481,7 @@ public class Skeleton {
      */
     static void test17() {
         TestUtil.turnOffLogging();
-        init4();
+        init2();
         TestUtil.turnOnLogging();
 
         busPlayer.takeTurn();
