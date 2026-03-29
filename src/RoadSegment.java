@@ -40,7 +40,9 @@ public class RoadSegment {
         lane.destroySnow();
 
         Lane laneToTheRight = new Lane(lane.getSegment());
-        laneToTheRight.addSnow(snowLevel);
+        boolean righmost = TestUtil.askUserYesNo("Is the vehicle in the rightmost lane?");
+        if (!righmost)
+            laneToTheRight.addSnow(snowLevel);
 
         TestUtil.exitFunction("road swept");
     }
