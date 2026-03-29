@@ -25,7 +25,7 @@ public class SnowPlow extends Vehicle{
     public void enter(Lane lane) {
         TestUtil.enterFunction("SnowPlow:enter(lane)");
 
-        super.enter(lane);
+        location = lane;
 
         if (plowHead != null) {
             plowHead.clean(lane);
