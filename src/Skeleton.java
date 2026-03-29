@@ -364,7 +364,7 @@ public class Skeleton {
         addPlowHead(blowerHead);
         TestUtil.turnOnLogging();
 
-        snowPlow.enter(road1.lanes.get(0));
+        snowPlow.enter(road2.lanes.get(0));
     }
  
     /**
