@@ -1,7 +1,15 @@
+import java.util.List;
+
+/**
+ * An inventory for a player to store their money, salt, biokerosene
+ * and plowheads in.
+ * Said resources may be attempted to be consumed.
+ */
 public class Inventory{
     private int money;
-
-    
+    private int salt;
+    private int bioKerosene;
+    private List<PlowHead> plowHeads;
 
     public void pay(int amount) {
         TestUtil.enterFunction("Inventory:pay(amount)");

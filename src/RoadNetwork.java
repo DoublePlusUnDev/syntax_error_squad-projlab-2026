@@ -2,7 +2,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 
+ * A collections of different types of nodes, connected by road segments, which may have several lanes.
+ * A vehicle can be given with a destination node, the network will attempt to find a way to move them towards it.
+ * Lane change may be requested by vehicles.
+ * Snow can be added to in a radius of a node.
  */
 public class RoadNetwork {
     private List<Node> nodes;
