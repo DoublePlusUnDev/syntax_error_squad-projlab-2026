@@ -60,8 +60,7 @@ public class RoadNetwork {
                 else
                     new Car().crash(newDestination);
             }
-
-            vehicle.crash(newDestination);
+            
         }
     
         //try to enter both neighbours

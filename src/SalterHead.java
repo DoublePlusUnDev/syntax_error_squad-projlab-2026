@@ -14,6 +14,8 @@ public class SalterHead extends PlowHead {
             return;
         }
 
+        lane.salt();
+
         TestUtil.exitFunction("salted");
     }
         
