@@ -17,11 +17,6 @@ public class Skeleton {
     static SnowPlowPlayer snowPlowPlayer;
     static BusPlayer busPlayer;
     static Vehicle collisionVehicle;
-    static SweeperHead sweeperHead;
-    static BlowerHead blowerHead;
-    static IceBreakerHead iceBreakerHead;
-    static SalterHead salterHead;
-    static DragonHead dragonHead;
 
     public static void main(String[] args) {
         System.out.println("Testing...");
@@ -68,7 +63,7 @@ public class Skeleton {
         snowPlowPlayer = new SnowPlowPlayer(testRoad);
 
         SnowPlow snowPlow = snowPlowPlayer.getSnowPlows().get(0);
-        snowPlow.equip(sweeperHead);
+        snowPlow.equip(new SweeperHead());
 
         testRoad.addNode(node1);
         testRoad.addNode(node2);
@@ -98,9 +93,10 @@ public class Skeleton {
     }
 
     /**
-     * Initalizes three nodes in a row, with a road and a bridge connecting them.
-     * There is a snowplow on the first lane of the road.
-     */
+    * Initializes three nodes connected by a two-lane road and a two-lane bridge.
+    * There is a snowplow on the first road segment, equipped with a sweeper head.
+    * Intended for testing snowplow movement and head usage on roads and bridges.
+    */
     static void init3(){
         System.out.println("[INIT] RoadBridgeSnowplowInit");
         testRoad = new RoadNetwork();
@@ -115,12 +111,6 @@ public class Skeleton {
         SnowPlow snowPlow = snowPlowPlayer.getSnowPlows().get(0);
         snowPlow.equip(new SweeperHead());
 
-        sweeperHead = new SweeperHead();
-        blowerHead = new BlowerHead();
-        iceBreakerHead = new IceBreakerHead();
-        salterHead = new SalterHead();
-        dragonHead = new DragonHead();
-
         testRoad.addNode(node1);
         testRoad.addNode(node2);
         testRoad.addNode(node3);
@@ -132,9 +122,11 @@ public class Skeleton {
     }
 
     /**
-     * Initalizes three nodes in a row, with two roads connecting them.
-     * There is a bus on the first lane of the road.
-     */
+    * Initializes three nodes connected by two two-lane road segments.
+    * The middle node is a bus stop
+    * There is a bus on the first road segment.
+    * Intended for testing bus movement and entering a bus stop.
+    */
     static void init4(){
         System.out.println("[INIT] BusRouteWithStopInit");
         testRoad = new RoadNetwork();
@@ -291,7 +283,7 @@ public class Skeleton {
         init3();
 
         SnowPlow snowPlow = snowPlowPlayer.getSnowPlows().get(0);
-        addPlowHead(sweeperHead);
+        addPlowHead(new SweeperHead());
         TestUtil.turnOnLogging();
 
         snowPlow.enter(road1.lanes.get(0));
@@ -305,7 +297,7 @@ public class Skeleton {
         init3();
 
         SnowPlow snowPlow = snowPlowPlayer.getSnowPlows().get(0);
-        addPlowHead(sweeperHead);
+        addPlowHead(new SweeperHead());
         TestUtil.turnOnLogging();
 
         snowPlow.enter(road1.lanes.get(0));
@@ -319,7 +311,7 @@ public class Skeleton {
         init3();
 
         SnowPlow snowPlow = snowPlowPlayer.getSnowPlows().get(0);
-        addPlowHead(sweeperHead);
+        addPlowHead(new SweeperHead());
         TestUtil.turnOnLogging();
 
         snowPlow.enter(road1.lanes.get(0));
@@ -333,7 +325,7 @@ public class Skeleton {
         init3();
 
         SnowPlow snowPlow = snowPlowPlayer.getSnowPlows().get(0);
-        addPlowHead(blowerHead);
+        addPlowHead(new BlowerHead());
         TestUtil.turnOnLogging();
 
         snowPlow.enter(road1.lanes.get(0));
@@ -347,10 +339,10 @@ public class Skeleton {
         init3();
 
         SnowPlow snowPlow = snowPlowPlayer.getSnowPlows().get(0);
-        addPlowHead(blowerHead);
+        addPlowHead(new BlowerHead());
         TestUtil.turnOnLogging();
 
-        snowPlow.enter(road2.lanes.get(0));
+        snowPlow.enter(road1.lanes.get(0));
     }
 
     /**
@@ -361,10 +353,10 @@ public class Skeleton {
         init3();
 
         SnowPlow snowPlow = snowPlowPlayer.getSnowPlows().get(0);
-        addPlowHead(blowerHead);
+        addPlowHead(new BlowerHead());
         TestUtil.turnOnLogging();
 
-        snowPlow.enter(road2.lanes.get(0));
+        snowPlow.enter(road1.lanes.get(0));
     }
  
     /**
@@ -375,7 +367,7 @@ public class Skeleton {
         init3();
 
         SnowPlow snowPlow = snowPlowPlayer.getSnowPlows().get(0);
-        addPlowHead(iceBreakerHead);
+        addPlowHead(new IceBreakerHead());
         TestUtil.turnOnLogging();
 
         snowPlow.enter(road1.lanes.get(0));
@@ -389,7 +381,7 @@ public class Skeleton {
         init3();
 
         SnowPlow snowPlow = snowPlowPlayer.getSnowPlows().get(0);
-        addPlowHead(iceBreakerHead);
+        addPlowHead(new IceBreakerHead());
         TestUtil.turnOnLogging();
 
         snowPlow.enter(road1.lanes.get(0));
@@ -403,7 +395,7 @@ public class Skeleton {
         init3();
 
         SnowPlow snowPlow = snowPlowPlayer.getSnowPlows().get(0);
-        addPlowHead(salterHead);
+        addPlowHead(new SalterHead());
         TestUtil.turnOnLogging();
 
         snowPlow.enter(road1.lanes.get(0));
@@ -417,7 +409,7 @@ public class Skeleton {
         init3();
 
         SnowPlow snowPlow = snowPlowPlayer.getSnowPlows().get(0);
-        addPlowHead(salterHead);
+        addPlowHead(new SalterHead());
         TestUtil.turnOnLogging();
 
         snowPlow.enter(road1.lanes.get(0));
@@ -431,7 +423,7 @@ public class Skeleton {
         init3();
 
         SnowPlow snowPlow = snowPlowPlayer.getSnowPlows().get(0);
-        addPlowHead(dragonHead);
+        addPlowHead(new DragonHead());
         TestUtil.turnOnLogging();
 
         snowPlow.enter(road1.lanes.get(0));
@@ -445,7 +437,7 @@ public class Skeleton {
         init3();
 
         SnowPlow snowPlow = snowPlowPlayer.getSnowPlows().get(0);
-        addPlowHead(dragonHead);
+        addPlowHead(new DragonHead());
         TestUtil.turnOnLogging();
 
         snowPlow.enter(road1.lanes.get(0));
@@ -481,14 +473,14 @@ public class Skeleton {
      */
     static void test17() {
         TestUtil.turnOffLogging();
-        init2();
+        init4();
         TestUtil.turnOnLogging();
 
         busPlayer.takeTurn();
     }
 
     /**
-     * UC 18 Bus Slips
+     * UC18 Bus Slips
      */
     static void test18() {
         TestUtil.turnOffLogging();
@@ -499,7 +491,7 @@ public class Skeleton {
     }
 
     /**
-     * UC 19 Bus Enters Busstop
+     * UC19 Bus Enters Busstop
      */
     static void test19() {
         TestUtil.turnOffLogging();
@@ -510,7 +502,7 @@ public class Skeleton {
     }
 
     /**
-     * UC 20 Snowplow Lane Change Successful
+     * UC20 Snowplow Lane Change Successful
      */
     static void test20() {
         TestUtil.turnOffLogging();
@@ -521,7 +513,7 @@ public class Skeleton {
     }
 
     /**
-     * UC 21 Snowplow Lane Change Unsuccessful
+     * UC21 Snowplow Lane Change Unsuccessful
      */
     static void test21() {
         TestUtil.turnOffLogging();
@@ -532,7 +524,7 @@ public class Skeleton {
     }
 
     /**
-     * UC 22 Purchase Successful
+     * UC22 Purchase Successful
      */
     static void test22() {
         TestUtil.turnOffLogging();
@@ -545,7 +537,7 @@ public class Skeleton {
     }
 
     /**
-     * UC 23 Purchase Unsuccessful
+     * UC23 Purchase Unsuccessful
      */
     static void test23() {
         TestUtil.turnOffLogging();
@@ -558,7 +550,7 @@ public class Skeleton {
     }
 
     /**
-     * UC 24 Collision of a Bus With a Snowplow
+     * UC24 Collision of a Bus With a Snowplow
      */
     static void test24() {
         TestUtil.turnOffLogging();
@@ -570,7 +562,7 @@ public class Skeleton {
     }
 
     /**
-     * UC 25 Collision of a Bus With a Bus
+     * UC25 Collision of a Bus With a Bus
      */
     static void test25() {
         TestUtil.turnOffLogging();
@@ -582,7 +574,7 @@ public class Skeleton {
     }
 
     /**
-     * UC 26 Collision of a Bus With a Car
+     * UC26 Collision of a Bus With a Car
      */
     static void test26() {
         TestUtil.turnOffLogging();
