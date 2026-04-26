@@ -23,7 +23,9 @@ public class RoadSegment {
     }
 
     public void addSnow(int snowLevel) {
-
+        for (Lane lane : lanes){
+            lane.addSnow(snowLevel);
+        }
     }
 
     public void enter(Vehicle vehicle, int lane) {
@@ -34,24 +36,21 @@ public class RoadSegment {
     }
 
     public void sweep(Lane lane){
-        TestUtil.enterFunction("RoadSegment:sweep(lane)");
-        
         float snowLevel = lane.getSnow();
         lane.destroySnow();
 
-        Lane laneToTheRight = new Lane(lane.getSegment());
-        boolean righmost = TestUtil.askUserYesNo("Is the vehicle in the rightmost lane?");
-        if (!righmost)
-            laneToTheRight.addSnow(snowLevel);
+        if (!isRightLane(lane)) {
+            Lane laneToTheRight = lanes.get(lanes.indexOf(lane) + 1);
+                laneToTheRight.addSnow(snowLevel);
+        }
 
-        TestUtil.exitFunction("road swept");
     }
 
     public void blow(Lane lane) {
-        TestUtil.enterFunction("RoadSegment:blow(lane)");
-
         lane.destroySnow();
+    }
 
-        TestUtil.exitFunction("lane blown");
+    private boolean isRightLane(Lane lane){
+        return lanes.getLast() == lane;
     }
 }

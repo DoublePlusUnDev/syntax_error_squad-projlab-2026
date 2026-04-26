@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -6,41 +7,19 @@ import java.util.List;
  * Said resources may be attempted to be consumed.
  */
 public class Inventory{
-    private int money;
-    private int salt;
-    private int bioKerosene;
-    private List<PlowHead> plowHeads;
+    private int salt = 0;
+    private int gravel = 0;
+    private int bioKerosene = 0;
+    private List<PlowHead> plowHeads = new ArrayList<>();
 
-    public void pay(int amount) {
-        TestUtil.enterFunction("Inventory:pay(amount)");
-    
-        TestUtil.exitFunction("payed");
-    }
-
-    public void addHead(PlowHead plowHead) {
-        TestUtil.enterFunction("Inventory:addHead(plowHead)");
-
-        TestUtil.exitFunction("head added");
-    }
-
-    public boolean tryConsumeKerosene() {
-        TestUtil.enterFunction("Inventory:tryConsumeKerosene()");
-    
-        boolean canConsume = TestUtil.askUserYesNo("Is there enough kerosene?");
-
-        if (!canConsume) {
-            TestUtil.exitFunction("no kerosene to consume");
-            return false;
-        }
-
-        TestUtil.exitFunction("kerosene consumed");
-        return true;
-    }
+    private static final int MAX_SALT = 20;
+    private static final int MAX_GRAVEL = 20;
+    private static final int MAX_BIO_KEROSENE = 20;
 
     public boolean tryConsumeSalt() {
         TestUtil.enterFunction("Inventory:tryConsumeSalt()");
     
-        boolean canConsume = TestUtil.askUserYesNo("Is there enough salt?");
+        boolean canConsume = salt > 0;
 
         if (!canConsume) {
             TestUtil.exitFunction("no salt to consume");
@@ -51,15 +30,75 @@ public class Inventory{
         return true;
     }
 
-    public void addKerosene(int amount) {
-        TestUtil.enterFunction("Inventory:addKerosene(amount)");
+    public boolean tryConsumeGravel() {
+        TestUtil.enterFunction("Inventory:tryConsumeGravel()");
     
-        TestUtil.exitFunction("kerosene added");
+        boolean canConsume = gravel > 0;
+
+        if (!canConsume) {
+            TestUtil.exitFunction("no gravel to consume");
+            return false;
+        }
+
+        TestUtil.exitFunction("gravel consumed");
+        return true;
+    }
+
+    public boolean tryConsumeKerosene() {
+        TestUtil.enterFunction("Inventory:tryConsumeKerosene()");
+    
+        boolean canConsume = bioKerosene > 0;
+
+        if (!canConsume) {
+            TestUtil.exitFunction("no kerosene to consume");
+            return false;
+        }
+
+        TestUtil.exitFunction("kerosene consumed");
+        return true;
     }
 
     public void addSalt(int amount) {
         TestUtil.enterFunction("Inventory:addSalt(amount)");
-    
+        
+        if (salt + amount > MAX_SALT) {
+            salt = MAX_SALT;
+        } else {
+            salt += amount;
+        }
+
         TestUtil.exitFunction("salt added");
+    }
+
+    public void addGravel(int amount) {
+        TestUtil.enterFunction("Inventory:addGravel(amount)");
+
+        if (gravel + amount > MAX_GRAVEL) {
+            gravel = MAX_GRAVEL;
+        } else {
+            gravel += amount;
+        }
+
+        TestUtil.exitFunction("gravel added");
+    }
+
+    public void addKerosene(int amount) {
+        TestUtil.enterFunction("Inventory:addKerosene(amount)");
+    
+        if (bioKerosene + amount > MAX_BIO_KEROSENE) {
+            bioKerosene = MAX_BIO_KEROSENE;
+        } else {
+            bioKerosene += amount;
+        }
+
+        TestUtil.exitFunction("kerosene added");
+    }
+
+    
+
+    public void addHead(PlowHead plowHead) {
+        TestUtil.enterFunction("Inventory:addHead(plowHead)");
+        plowHeads.add(plowHead);
+        TestUtil.exitFunction("head added");
     }
 }

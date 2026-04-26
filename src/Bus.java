@@ -1,4 +1,3 @@
-import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 
 /**
  * A bus vehicle, meant to be controlled by the player.
@@ -10,38 +9,39 @@ public class Bus extends Vehicle implements Updatable {
     private BusStop endStop;
     private int inactiveTimer;
 
+    private static final int CRASH_TIMEOUT = 10;
+
     @Override
     public void enterBusStop(BusStop busStop) {
-        TestUtil.enterFunction("Bus:enterBusStop(busStop)");
-
-        TestUtil.exitFunction("bus stop entered");
+        if (busStop == endStop) {
+            BusStop temp = startStop;
+            startStop = endStop;
+            endStop = temp;
+        }
     }
 
     @Override
     public void update() {
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        if (inactiveTimer > 0)
+            inactiveTimer--;
     }
 
-    public boolean isInactive() throws NotImplementedException{
-        throw new NotImplementedException("");
+    public boolean isInactive() {
+        return inactiveTimer > 0;
     }
 
     public void setStops(BusStop startStop, BusStop endStop) {
-
+        this.startStop = startStop;
+        this.endStop = endStop;
     }
 
     @Override
     public void crash(Lane lane) {
-        TestUtil.enterFunction("Bus:crash(lane)");
-
-        TestUtil.exitFunction("inactive timer set");
+        inactiveTimer = CRASH_TIMEOUT; 
     }
 
     @Override
     public boolean canSlip() {
-        TestUtil.enterFunction("Bus:canSlip()");
-        TestUtil.exitFunction("true");
-        
         return true;
     }
 

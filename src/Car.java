@@ -7,12 +7,27 @@
  */
 public class Car extends Vehicle {
 
+    boolean isDestroyed = false;
+
     @Override
     public void crash(Lane lane) {
-        TestUtil.enterFunction("Car:crash(lane)");
         lane.crashOccured();
-        TestUtil.exitFunction("car crashed");
+        isDestroyed = true;
     }
+    
+    public boolean canSlip() {
+        return true;
+    }
+
+    public boolean isDestroyed() {
+        return isDestroyed;
+    }
+
+    @Override
+    public void enterWorkPlace(Workplace workplace) {
+        workplace.carParked(this);
+    }
+
     
     
 }

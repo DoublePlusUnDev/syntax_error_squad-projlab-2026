@@ -5,16 +5,12 @@ public class BioKerosene extends Buyable {
     private int amount;
 
     @Override
-    boolean buy(Inventory inventory) {
-        TestUtil.enterFunction("BioKerosene:buy(inventory)");
-        
-        if (!super.buy(inventory)){
-            TestUtil.exitFunction("could not buy");
+    boolean buy(Inventory inventory, MoneyBank bank) {        
+        if (!super.buy(inventory, bank))
             return false;
-        }
+        
 
         inventory.addKerosene(amount);
-        TestUtil.exitFunction("bought");
         return true;
 
     }

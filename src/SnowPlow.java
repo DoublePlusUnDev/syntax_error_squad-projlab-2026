@@ -10,14 +10,11 @@ public class SnowPlow extends Vehicle{
 
     @Override
     public boolean canEnter(Lane lane) {
-        TestUtil.enterFunction("SnowPlow:canEnter(lane)");
 
         if (lane.isBlocked()){
-            TestUtil.exitFunction("cant enter lane is blocked");
             return false;
         }
 
-        TestUtil.exitFunction("lane can be entered");
         return true;
     }
 

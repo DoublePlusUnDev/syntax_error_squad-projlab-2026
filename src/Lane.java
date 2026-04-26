@@ -7,19 +7,26 @@
  */
 public class Lane implements Updatable{
     private RoadSegment roadSegment;
-    private float snowHeight;
-    private boolean iceDebris;
-    private int icingProgress;
-    private boolean iced;
+    private float snowHeight = 0;
+    private boolean iceDebris = false;
+    private int icingProgress = 0;
+    private boolean iced = false;
     private boolean vehicleBlock;
     private int saltedTimer;
 
+    private static final float snowCompressRate = 0.02f;
+    private static final int iceSteps = 5; 
+    private static final float snowThreshold = 0.2f;
+    private static final float snowRemovedBySalt = 0.01f;
+
     public Lane(RoadSegment roadSegment){
         this.roadSegment = roadSegment;
+        GameLogic.getInstance().registerUpdatable(this);
     }
 
     public void addSnow(float snowLevel) {
         TestUtil.enterFunction("Lane:addSnow()");
+        snowHeight += snowLevel;
         TestUtil.exitFunction("snow added");
     }
 
@@ -29,20 +36,40 @@ public class Lane implements Updatable{
         return snowHeight;
     }
 
+    /**
+     * Handles the logic for a vehicle driving over the lane.
+     * If the lane is snowy, it will compress the snow and increase the icing progress.
+     * If the icing progress reaches the threshold, the lane becomes iced.
+     * If the lane is already iced, driving over it will reset the icing progress, but it will remain iced.
+     */
     public void driveOver() {
         TestUtil.enterFunction("Lane:driveOver()");
+        if (snowHeight >= snowCompressRate){
+            snowHeight -= snowCompressRate;
+            icingProgress++;
+        }
+
+        if (icingProgress >= iceSteps) {
+            iced = true;
+        }
+
+        if (iced) {
+            icingProgress = 0;
+        }
+
         TestUtil.exitFunction("driven over");
     }
 
     public void crashOccured() {
         TestUtil.enterFunction("Lane:crashOccured()");
-
+        vehicleBlock = true;
         TestUtil.exitFunction("road blocked");
     }
 
     public boolean willSlip() {
         TestUtil.enterFunction("Lane:willSlip()");
-        boolean slip = TestUtil.askUserYesNo("Will the lane slip?");
+
+        boolean slip = iced;
         TestUtil.exitFunction(String.valueOf(slip));
         return slip;
     }
@@ -67,54 +94,63 @@ public class Lane implements Updatable{
 
     public void salt() {
         TestUtil.enterFunction("Lane:salt()");
+        saltedTimer = 5; 
         TestUtil.exitFunction("lane salted");
     }
 
     public void breakIce() {
         TestUtil.enterFunction("Lane:breakIce()");
 
-        boolean ice = TestUtil.askUserYesNo("Is there ice to break");
-
-        if (ice)
+        if (iced){
+            iced = false;
+            iceDebris = true;
             TestUtil.exitFunction("ice broken");
+        }
         else
             TestUtil.exitFunction("no ice to break ");
     }
 
     public void destroySnow() {
         TestUtil.enterFunction("Lane:destroySnow()");
+        snowHeight = 0;
         TestUtil.exitFunction("snow destroyed");
     }
 
     public void destroyIce() {
         TestUtil.enterFunction("Lane:destroyIce()");
+        iced = false;
         TestUtil.exitFunction("ice destroyed");
     }
 
     public boolean isSnowy() {
         TestUtil.enterFunction("Lane:isSnowy()");
-        boolean input = TestUtil.askUserYesNo("Is the lane snowy?");
-        TestUtil.exitFunction(String.valueOf(input));
-        return input;
+        
+        TestUtil.exitFunction(String.valueOf(snowHeight > snowThreshold));
+        return snowHeight > snowThreshold;
     }
 
     public boolean isBlocked() {
         TestUtil.enterFunction("Lane:isBlocked()");
-        boolean input = TestUtil.askUserYesNo("Is the lane blocked?");
-        TestUtil.exitFunction(String.valueOf(input));
-        return input;
+        TestUtil.exitFunction(String.valueOf(vehicleBlock));
+        return vehicleBlock;
     }
 
     public boolean isDebrisFilled() {
         TestUtil.enterFunction("Lane:isDebrisFilled()");
-        boolean input = TestUtil.askUserYesNo("Is the lane debris filled?");
-        TestUtil.exitFunction(String.valueOf(input));
-        return input;
+        TestUtil.exitFunction(String.valueOf(iceDebris));
+        return iceDebris;
     }
 
     @Override
     public void update() {
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        if (saltedTimer > 0) {
+            
+            snowHeight = Math.max(0, snowHeight - snowRemovedBySalt);
+
+            saltedTimer--;
+
+            if (saltedTimer == 0)
+                destroyIce();
+        }
     }
-    
 }

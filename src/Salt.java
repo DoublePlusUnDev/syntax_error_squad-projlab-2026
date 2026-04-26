@@ -5,17 +5,14 @@ public class Salt extends Buyable {
     private int amount;
 
     @Override
-    boolean buy(Inventory inventory) {
-
-        TestUtil.enterFunction("Salt:buy(inventory)");
+    boolean buy(Inventory inventory, MoneyBank bank) {
         
-        if (!super.buy(inventory)){
-            TestUtil.exitFunction("could not buy");
+        if (!super.buy(inventory, bank))
             return false;
-        }
+        
 
         inventory.addSalt(amount);
-        TestUtil.exitFunction("bought");
+
         return true;
         
     }

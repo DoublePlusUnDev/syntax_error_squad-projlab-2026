@@ -9,18 +9,35 @@ import java.util.List;
 public class Workplace extends Node implements Updatable {
     List<Car> restingCars;
 
+    int spawnTimer;
+
+    private static final int TIME_BEFORE_SPAWN_ATTEMPT = 5;
+
+    public Workplace() {
+        spawnTimer = TIME_BEFORE_SPAWN_ATTEMPT;
+
+        GameLogic.getInstance().registerUpdatable(this);
+    }
+
     @Override
     public void update() {
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        spawnTimer--;
+
+        if (spawnTimer == 0){
+            //spawn card
+            spawnTimer = TIME_BEFORE_SPAWN_ATTEMPT;
+        }
     }
 
     @Override
     public void accept(Vehicle vehicle) {
-        TestUtil.enterFunction("Workplace:accept()");
-        
         vehicle.enterWorkPlace(this);
 
-        TestUtil.exitFunction("workplace accepted vehicle");
+        
+    }
+
+    public void carParked(Car car){
+        restingCars.add(car);
     }
     
     

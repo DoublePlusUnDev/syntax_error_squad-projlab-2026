@@ -8,20 +8,30 @@
 public class Apartment extends Node implements Updatable {
 
     private int spawnTimer;
+    private static final int TIME_BETWEEN_SPAWN_ATTEMPTS = 10;
+
+    public Apartment() {
+        spawnTimer = TIME_BETWEEN_SPAWN_ATTEMPTS;
+
+        GameLogic.getInstance().registerUpdatable(this);
+    }
 
     @Override
     public void update() {
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        spawnTimer--;
+
+        if (spawnTimer == 0){
+            trySpawnCar();
+            spawnTimer = TIME_BETWEEN_SPAWN_ATTEMPTS;
+        }
     }
 
     @Override
     public void accept(Vehicle vehicle) {
-        TestUtil.enterFunction("Apartment:accept()");
-        
         vehicle.enterApartment(this);
-
-        TestUtil.exitFunction("apartment accepted vehicle");
     }
 
-    
+    private void trySpawnCar(){
+
+    }
 }
