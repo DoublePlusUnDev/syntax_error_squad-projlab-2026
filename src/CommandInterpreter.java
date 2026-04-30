@@ -9,7 +9,7 @@ public class CommandInterpreter {
     }
 
     Map<String, Command> commands = Map.of(
-        "help", this::help
+        "/help", this::help, "/generate", this::generate
     );
 
     public CommandInterpreter() {
@@ -46,5 +46,42 @@ public class CommandInterpreter {
         } catch (Exception e) {
             System.out.println("Error reading help file: " + e.getMessage());
         }
+    }
+
+    public void generate(Map<String, String> args) {
+        RoadGenerationParameters params = new RoadGenerationParameters();
+        if (args.containsKey("nodeMin"))
+            params.nodeMin = Integer.parseInt(args.get("nodeMin"));
+        if (args.containsKey("nodeMax"))
+            params.nodeMax = Integer.parseInt(args.get("nodeMax"));
+        if (args.containsKey("mainLanes"))
+            params.mainLanes = Integer.parseInt(args.get("mainLanes"));
+        if (args.containsKey("smallNodesMin"))
+            params.smallNodesMin = Integer.parseInt(args.get("smallNodesMin"));
+        if (args.containsKey("smallNodesMax"))
+            params.smallNodesMax = Integer.parseInt(args.get("smallNodesMax"));
+        if (args.containsKey("smallNodeLanes"))
+            params.smallNodeLanes = Integer.parseInt(args.get("smallNodeLanes"));
+        if (args.containsKey("bigNodesMin"))
+            params.bigNodesMin = Integer.parseInt(args.get("bigNodesMin"));
+        if (args.containsKey("bigNodesMax"))
+            params.bigNodesMax = Integer.parseInt(args.get("bigNodesMax"));
+        if (args.containsKey("bigNodeLanes"))
+            params.bigNodeLanes = Integer.parseInt(args.get("bigNodeLanes"));
+        if (args.containsKey("busStopsMin"))
+            params.busStopsMin = Integer.parseInt(args.get("busStopsMin"));
+        if (args.containsKey("busStopsMax"))
+            params.busStopsMax = Integer.parseInt(args.get("busStopsMax"));
+        if (args.containsKey("workPlacesMin"))
+            params.workPlacesMin = Integer.parseInt(args.get("workPlacesMin"));
+        if (args.containsKey("workPlacesMax"))
+            params.workPlacesMax = Integer.parseInt(args.get("workPlacesMax"));
+        if (args.containsKey("apartsmentsMin"))
+            params.apartsmentsMin = Integer.parseInt(args.get("apartsmentsMin"));
+        if (args.containsKey("apartsmentsMax"))
+            params.apartsmentsMax = Integer.parseInt(args.get("apartsmentsMax"));
+
+        GameLogic.getInstance().roads.setGenerationParameters(params);
+        GameLogic.getInstance().roads.generate();
     }
 }

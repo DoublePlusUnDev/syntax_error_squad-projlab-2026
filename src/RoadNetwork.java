@@ -8,6 +8,8 @@ import java.util.List;
  * Snow can be added to in a radius of a node.
  */
 public class RoadNetwork {
+    private RoadGenerationParameters generationParameters;
+
     private List<Node> nodes;
     private List<RoadSegment> roadSegments;
 
@@ -121,5 +123,9 @@ public class RoadNetwork {
 
     public void placeSnowPlow(SnowPlow snowPlow) {
         
+    }
+
+    public void setGenerationParameters(RoadGenerationParameters generationParameters){
+        this.generationParameters = generationParameters;
     }
 }
