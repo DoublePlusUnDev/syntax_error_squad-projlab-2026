@@ -1,0 +1,220 @@
+Admin parancsok:
+
+
+/help
+Leírás: Parancsok kiíratása.
+
+/start
+Elindítja a játékosok köreinek végrehajtását
+
+/savelog
+Leírás: Lementi az eddigi kimenetet egy fájlba.
+Opciók: 
+-path [PATH]: Fájlhoz vezető út
+
+/savegame
+Leírás: Lementi a játékot egy fájlba.
+Opciók: 
+-path [PATH]: Fájlhoz vezető út
+
+/loadgame
+Leírás: Betölti a játékot egy fájlból.
+Opciók: 
+-path [PATH]: Fájlhoz vezető út
+
+/random
+Leírás: A véletlen események sorsolásának módját állítja, a random az eredeti esélyekkel dolgozik, az always esetében mindig bekövetkezik az esemény, a never esetében sohasem.
+Opciók: 
+-mode [“random”/”always”/”never”]: Sorsolás módja
+
+
+/seed
+Leírás: Random seed beállítása, ezt használja a játék mindenhol ahol random döntést hoz
+Opciók: 
+-seed [seed]: Random seed
+
+/logging
+Leírás: Engedélyezi a kimeneti események listázását, alapvetően be van kapcsolva.
+Opciók: 
+-enable [“true”/”false”] be van e kapcsolva a naplózás.
+
+/addnet
+Leírás: Létrehoz egy üres úthálózatot
+Opciók: 
+-id [ID] létrehozott úthálózat id-je
+
+/generate
+Leírás: Létrehoz egy utakkal benépesített úthálózatot. Csak random módban használható.
+Opciók: 
+-id [ID]: Létrehozandó út id-je.
+-nodemin [UINT]
+-nodemax [UINT]
+-mainlanes [UINT]
+-smallnodesmin [UINT]
+-smallnodesmax [UINT]
+-smallnodelanes [UINT]
+-bignodesmin [UINT]
+-bignodesmax [UINT]
+-bignodelanes [UINT]
+-busstopsMin [UINT]
+-busstopsMax [UINT]
+-workplacesMin [UINT]
+-workplacesMax [UINT]
+-apartmentsMin [UINT]
+-apartmentsMax [UINT]
+
+
+/addnode
+Leírás: Létrehoz egy csomópontot.
+Opciók: 
+-id [ID]: létrehozott node id-je
+-net [ID]: melyik úthálózathoz tartozik
+
+
+/addroad
+Leírás: Létrehoz egy utat.
+Opciók: 
+-id [ID]: létrehozott út id-je
+-net [ID]: melyik úthálózathoz tartozik
+-start [ID]: kezdőcsomópont
+-end [ID]: végcsomópont
+-lanes [UINT]: sávok száma
+-type [“road”/”bridge”/”tunnel”]: Milyen típusú utat hozzon létre
+
+/modlane
+Leírás: Megváltoztatja egy sáv tulajdonságait.
+Opciók: 
+-id [ID]: módosítandó sáv id-je
+-snow [FLOAT]: hómagasság állítása
+-debris [BOOL]: jégtörmelék beállítása
+-icing [UINT]: beállítható mennyire legyen eljegesedve
+-iced [BOOL]: beállítható hogy jeges legyen e
+-block [BOOL]: úttorlasz beállítása
+-salted [UINT]: sózó időzítő beállítása
+-gravelHeight [UINT]: zuzadék hóhoz képest magasságnak beállítása
+
+/modplow
+Leírás: Kotró specifikus tulajdonságok beállítása.
+Opciók: 
+-id [ID]: módosítandó hókotró id-je
+-head [ID]: fej beállítása
+
+/modbus
+Leírás: Busz specifikus tulajdonságok beállítása.
+Opciók: 
+-id [ID]: módosítandó busz id-je
+-start [ID]: kezdőállomás
+-end [ID]: végállomás
+-inactive [UINT]: Mozgásképtelenség időzítő állítása
+
+/modcar
+Leírás: Autóspecifikus tulajdonságok beállítása.
+Opciók: 
+-id [ID]: módosítandó kocsi id-je
+-apartment [ID]: Lakóhely
+-workplace [ID]: Munkahely
+
+/modapartment
+Leírás: Lakóhely tulajdonságok beállítása.
+Opciók: 
+-id [ID]: módosítandó lakóhely id-je
+-spawn [UINT]: autó spawn időzítő
+
+/modworkplace
+Leírás: Munkahely tulajdonságok beállítása.
+Opciók: 
+-id [ID]: módosítandó munkahely id-je
+-spawn [UINT]: autó spawn időzítő
+-car [UINT]: hány autó vár spawnolásra
+
+/addplayer
+Leírás: Létrehoz egy játékost.
+Opciók: 
+-id [ID]: Létrehozott játékos ID-ja
+-lane [ID]: Melyik sávhoz adják hozzá a járművét.
+-type [“bus”/”snowplow”]: Játékos típusa
+
+/addvehicle
+Leírás: Létrehoz egy járművet.
+Opciók: 
+-id [ID]: Létrehozott jármű id-ja
+-player [ID]: Melyik játékoshoz tartozik
+-lane [ID]: Melyik sávon tartózkodik.
+-type [“snowplow”/”bus”/”car”]: Milyen típusú
+
+/createbuyable
+Leírás: Létrehoz egy megvásárolható tárgyat.
+Opciók: 
+-id [ID]: A tárgy id-ja.
+-amount [UINT]: Tárgy mennyisége
+-price [INT]: A tárgyak összára
+-type [“salt”/“kerosene”/“gravel”/”sweeperhead”/”blowerhead”/”salterhead”/”dragonhead”/”gravelhead”/”icebreakerhead”]
+
+/addmoney
+Leírás: Egy MoneyBank pénzéhez ad.
+Opciók:
+-bank [ID]
+-amount [UINT] 
+
+/setmoney
+Leírás: Egy MoneyBank pénzmennyiségét állítja.
+Opciók: 
+-bank [ID]
+-amount [UINT] 
+
+/movevehicle
+Leírás: Átmozgat egy járművet egy sávra.
+Opciók: 
+-vehicle [ID]
+-lane [ID]
+
+/enter
+Leírás: Belép egy járművel egy csomópontba.
+Opciók: 
+-vehicle [ID]
+-node [ID]
+
+/slip
+Leírás: Becsúszik egy járművel egy sávba.
+Opciók: 
+-vehicle [ID]
+-target [ID]
+
+Játékos parancsok:
+
+
+listroots
+Leírás: Kilistázza a gyökér objektumokat(játékosok, autók, úthálózatok listája), ezeken keresztül minden más objektum megkereshető.
+
+inspect
+Leírás: Egy objektum és az őt tartalmazó objektumok és tulajdonságainak a kimenetre írása. Hasznos id-k megkereséséhez.
+Opciók: 
+-id [ID]: Objektum idja
+
+move
+Leírás: Mozgatja egy játékos járművét egy megadott hely felé, egy úthálózaton keresztül.
+Opciók: 
+-vehicle [ID]
+-net [ID]
+-target [ID]
+
+changelane
+Leírás: Egy azonos útszakaszon lévő sávba váltja a járművet.
+Opciók: 
+-vehicle [ID]
+-net [ID]
+-lane [UINT]
+
+
+equip
+Leírás: Egy járműre rárak egy kotrófejet.
+Opciók: 
+-vehicle [ID]: 
+-head [ID]:
+
+buy
+Leírás: Megvásárol egy megvásárolható tárgyat egy adott inventory-ba helyezve, egy adott Moneybank-ból kivett pénz segítségével.
+Opciók: 
+-buyable [ID]: 
+-inventory [ID]:
+-bank [ID]:
