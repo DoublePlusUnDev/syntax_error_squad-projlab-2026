@@ -1,8 +1,13 @@
 /**
  * A buyable item that will add biokerosene it it's buyer's inventory.
  */
-public class BioKerosene extends Buyable {
+public class BioKerosene extends Buyable{
     private int amount;
+
+    public BioKerosene(String id, int amount) {
+        super(id);
+        this.amount = amount;
+    }
 
     @Override
     boolean buy(Inventory inventory, MoneyBank bank) {        
@@ -13,6 +18,13 @@ public class BioKerosene extends Buyable {
         inventory.addKerosene(amount);
         return true;
 
+    }
+
+    @Override
+    public String inspect() {
+        StringBuilder output = new StringBuilder("Kerosene + " + id + " + details:\n");
+        output.append("Amount: " + amount);
+        return output.toString();     
     }
     
 }

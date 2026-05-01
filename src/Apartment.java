@@ -39,7 +39,7 @@ public class Apartment extends Node implements Updatable {
     @Override
     public String inspect() {
         StringBuilder output = new StringBuilder();
-        output.append("Apartment " + id + "details:");
+        output.append("Apartment " + id + "details:\n");
         output.append("Spawn timer: " + spawnTimer);
         return output.toString();
     }
