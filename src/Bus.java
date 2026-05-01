@@ -49,5 +49,12 @@ public class Bus extends Vehicle implements Updatable {
         return true;
     }
 
+    @Override
+    public String inspect() {
+        StringBuilder output = new StringBuilder("Bus " + id + " details:\n");
+        output.append("Location: " + (location != null ? location.id : "none") + "\n");
+        output.append("Inactive: " + (isInactive() ? "yes" : "no") + "\n");
+        return output.toString();
+    }
         
 }

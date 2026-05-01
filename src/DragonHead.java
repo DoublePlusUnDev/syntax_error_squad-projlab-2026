@@ -3,6 +3,10 @@
  */
 public class DragonHead extends PlowHead {
 
+    public DragonHead() {
+        super(null);
+    }
+
     @Override
     public void clean(Lane lane) {
         if (!inventory.tryConsumeKerosene())
@@ -11,5 +15,13 @@ public class DragonHead extends PlowHead {
         lane.destroyIce();
         lane.destroySnow();
     }
-    
+
+    @Override
+    public String inspect() {
+        StringBuilder output = new StringBuilder("Dragonhead " + id + " details:\n");
+        output.append("Price: " + price + "\n");
+        output.append("Equipped: " + equipped + "\n");
+        output.append("Inventory: " + inventory.id + "\n");
+        return output.toString();
+    }
 }

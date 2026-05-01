@@ -5,12 +5,13 @@
  * Must report whether it can enter a given lane for pathfinding purposes.
  * May or may not be able to slip on ice.
  */
-public abstract  class Vehicle {
+public abstract class Vehicle implements Inspectable {
     String id;
     protected Lane location;
 
     public Vehicle(String id){
         this.id = id;
+        ObjectRegistry.register(id, this);
     }
 
     public void enter(Lane lane) {

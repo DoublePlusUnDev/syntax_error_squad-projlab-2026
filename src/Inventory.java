@@ -6,7 +6,8 @@ import java.util.List;
  * and plowheads in.
  * Said resources may be attempted to be consumed.
  */
-public class Inventory{
+public class Inventory implements Inspectable{
+    String id;
     private int salt = 0;
     private int gravel = 0;
     private int bioKerosene = 0;
@@ -15,6 +16,11 @@ public class Inventory{
     private static final int MAX_SALT = 20;
     private static final int MAX_GRAVEL = 20;
     private static final int MAX_BIO_KEROSENE = 20;
+
+    public Inventory(String id) {
+        this.id = id;
+        ObjectRegistry.register(id, this);
+    }
 
     public boolean tryConsumeSalt() {
         TestUtil.enterFunction("Inventory:tryConsumeSalt()");
@@ -100,5 +106,14 @@ public class Inventory{
         TestUtil.enterFunction("Inventory:addHead(plowHead)");
         plowHeads.add(plowHead);
         TestUtil.exitFunction("head added");
+    }
+
+    @Override
+    public String inspect() {
+        StringBuilder output = new StringBuilder("Inventory " + id + " details:\n");
+        output.append("Salt: " + salt + "/" + MAX_SALT + "\n");
+        output.append("Gravel: " + gravel + "/" + MAX_GRAVEL + "\n");
+        output.append("Bio-Kerosene: " + bioKerosene + "/" + MAX_BIO_KEROSENE + "\n");
+        return output.toString();
     }
 }

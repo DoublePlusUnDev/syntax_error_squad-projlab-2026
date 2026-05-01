@@ -5,8 +5,8 @@ public class BusPlayer extends Player {
 
     private Bus bus;
 
-    public BusPlayer(RoadNetwork roads) {
-        super(roads);
+    public BusPlayer(String id, RoadNetwork roads) {
+        super(id, roads);
         bus = new Bus("");
     }
 
@@ -19,6 +19,14 @@ public class BusPlayer extends Player {
 
     public Bus getBus() {
         return bus;
+    }
+
+    @Override
+    public String inspect() {
+        StringBuilder output = new StringBuilder("BusPlayer " + id + " details:\n");
+        output.append("Inventory: " + inventory.id + "\n");
+        output.append("Bus: " + bus.id + "\n");
+        return output.toString();
     }
     
 }

@@ -1,7 +1,10 @@
-public class MoneyBank {
+public class MoneyBank implements Inspectable {
+    String id;
     private int money;
 
-    public MoneyBank(int initialMoney) {
+    public MoneyBank(String id, int initialMoney) {
+        this.id = id;
+        ObjectRegistry.register(id, this);
         this.money = initialMoney;
     }
 
@@ -25,5 +28,11 @@ public class MoneyBank {
             return false;
         }
     }
-    
+
+    @Override
+    public String inspect() {
+        StringBuilder output = new StringBuilder("MoneyBank " + id + " details:\n");
+        output.append("Money: " + money + "\n");
+        return output.toString();
+    }
 }

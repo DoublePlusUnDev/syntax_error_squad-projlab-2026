@@ -5,7 +5,11 @@
  */
 public abstract class PlowHead extends Buyable{
     protected Inventory inventory; 
-    private boolean equipped = false;
+    protected boolean equipped = false;
+
+    public PlowHead(String id) {
+        super(id);
+    }
 
     /**
      * Clean a select lane using the plowhead.

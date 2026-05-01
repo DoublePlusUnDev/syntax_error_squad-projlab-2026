@@ -4,6 +4,11 @@
 public class Salt extends Buyable {
     private int amount;
 
+    public Salt(String id, int amount) {
+        super(id);
+        this.amount = amount;
+    }
+
     @Override
     boolean buy(Inventory inventory, MoneyBank bank) {
         
@@ -13,8 +18,15 @@ public class Salt extends Buyable {
 
         inventory.addSalt(amount);
 
-        return true;
-        
+        return true;   
+    }
+
+    @Override
+    public String inspect() {
+        StringBuilder output = new StringBuilder("Salt " + id + " details:\n");
+        output.append("Price: " + price + "\n");
+        output.append("Amount: " + amount);
+        return output.toString();
     }
     
 }

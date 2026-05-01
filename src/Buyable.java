@@ -7,6 +7,7 @@ public abstract class Buyable implements Inspectable {
 
     public Buyable(String id) {
         this.id = id;
+        ObjectRegistry.register(id, this);
     }
 
     boolean buy(Inventory inventory, MoneyBank bank){

@@ -26,7 +26,7 @@ public class RoadNetwork implements Inspectable {
     public boolean tryMoveTowardsNode(Vehicle vehicle, Node node) {
         TestUtil.enterFunction("Roadnetwork: tryMoveTowardsNode(vehicle, node)");
  
-        RoadSegment segment = new RoadSegment(1, null, null);
+        RoadSegment segment = new RoadSegment("segment1", 1, null, null);
         if (!vehicle.canEnter(segment.lanes.get(0))){
             TestUtil.exitFunction("Failed to find suitable lane to enter");
             return false;
@@ -43,11 +43,11 @@ public class RoadNetwork implements Inspectable {
         
         RoadSegment chosenSegment;
         if (roadType == 1)
-            chosenSegment = new RoadSegment(1, null, null);
+            chosenSegment = new RoadSegment("segment1", 1, null, null);
         else if (roadType == 2)
-            chosenSegment = new Bridge(1, null, null);
+            chosenSegment = new Bridge("bridge1", 1, null, null);
         else
-            chosenSegment = new Tunnel(1, null, null);
+            chosenSegment = new Tunnel("tunnel1", 1, null, null);
 
         chosenSegment.enter(vehicle, 0);
 
@@ -183,7 +183,7 @@ public class RoadNetwork implements Inspectable {
             nodes.add(node); 
             Node prevNode = i > 0 ? nodes.get(i-1) : null;
 
-            RoadSegment segment = new RoadSegment(generationParameters.mainLanes, prevNode, node);
+            RoadSegment segment = new RoadSegment("Mainroad" + i, generationParameters.mainLanes, prevNode, node);
             roadSegments.add(segment);
             if (prevNode != null){
                 nodeConnections.put(i, i-1);

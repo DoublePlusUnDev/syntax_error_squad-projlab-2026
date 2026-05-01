@@ -5,7 +5,9 @@
  * Reports whether a given vehicle will or won't slip on it. Can be cleaned in various ways, 
  * when other lanes are included in the process it calls back to the roadsegment containing the lane.
  */
-public class Lane implements Updatable{
+public class Lane implements Updatable, Inspectable {
+    String id;
+
     private RoadSegment roadSegment;
     private float snowHeight = 0;
     private boolean iceDebris = false;
@@ -19,7 +21,9 @@ public class Lane implements Updatable{
     private static final float snowThreshold = 0.2f;
     private static final float snowRemovedBySalt = 0.01f;
 
-    public Lane(RoadSegment roadSegment){
+    public Lane(String id, RoadSegment roadSegment){
+        this.id = id;
+        ObjectRegistry.register(id, this);
         this.roadSegment = roadSegment;
         GameLogic.getInstance().registerUpdatable(this);
     }
@@ -152,5 +156,16 @@ public class Lane implements Updatable{
             if (saltedTimer == 0)
                 destroyIce();
         }
+    }
+
+    @Override
+    public String inspect() {
+        StringBuilder output = new StringBuilder("Lane " + id + " details:\n");
+        output.append("Snow Height: " + snowHeight + "\n");
+        output.append("Icing Progress: " + icingProgress + "\n");
+        output.append("Iced: " + (iced ? "yes" : "no") + "\n");
+        output.append("Vehicle Block: " + (vehicleBlock ? "yes" : "no") + "\n");
+        output.append("Ice Debris: " + (iceDebris ? "yes" : "no") + "\n");
+        return output.toString();
     }
 }

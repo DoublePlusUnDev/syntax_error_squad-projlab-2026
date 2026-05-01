@@ -7,15 +7,19 @@ import java.util.List;
  * A vehicle may enter one if it's lanes.
  * Can be swept and blown.
  */
-public class RoadSegment {
+public class RoadSegment implements Inspectable {
+    String id;
     protected List<Lane> lanes;    
-    private Node startPoint;
-    private Node endPoint;
+    protected Node startPoint;
+    protected Node endPoint;
 
-    public RoadSegment(int laneCount, Node startPoint, Node endPoint) {
+    public RoadSegment(String id, int laneCount, Node startPoint, Node endPoint) {
+        this.id = id;
+        ObjectRegistry.register(id, this);
+
         lanes = new ArrayList<>();
         for (int i = 0; i < laneCount; i++) {
-            lanes.add(new Lane(this));
+            lanes.add(new Lane( id + ".lane" + (i + 1), this));
         }
 
         this.startPoint = startPoint;
@@ -60,5 +64,17 @@ public class RoadSegment {
 
     public void setEndPoint(Node endPoint) {
         this.endPoint = endPoint;
+    }
+
+    @Override
+    public String inspect() {
+        StringBuilder output = new StringBuilder("RoadSegment " + id + " details:\n");
+        output.append("Start Point: " + startPoint.id + "\n");
+        output.append("End Point: " + endPoint.id + "\n");
+        output.append("Lanes:\n");
+        for (int i = 0; i < lanes.size(); i++) {
+            output.append("  Lane " + i + ": " + lanes.get(i).id + "\n");
+        }
+        return output.toString();
     }
 }

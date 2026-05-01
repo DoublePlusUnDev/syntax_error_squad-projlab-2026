@@ -6,7 +6,6 @@
  * Can slip, on crash it'll be destroyed and will block the lane. 
  */
 public class Car extends Vehicle {
-
     boolean isDestroyed = false;
 
     public Car(String id){
@@ -32,6 +31,11 @@ public class Car extends Vehicle {
         workplace.carParked(this);
     }
 
-    
-    
+    @Override
+    public String inspect() {
+        StringBuilder output = new StringBuilder("Car " + id + " details:\n");
+        output.append("Location: " + (location != null ? location.id : "none") + "\n");
+        output.append("Destroyed: " + (isDestroyed ? "yes" : "no") + "\n");
+        return output.toString();
+    }    
 }

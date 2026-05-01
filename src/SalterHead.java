@@ -5,6 +5,10 @@
  */
 public class SalterHead extends PlowHead {
 
+    public SalterHead(String id) {
+        super(id);
+    }
+
     @Override
     public void clean(Lane lane) {
         if (!inventory.tryConsumeSalt())
@@ -12,5 +16,13 @@ public class SalterHead extends PlowHead {
 
         lane.salt();
     }
-        
+
+    @Override
+    public String inspect() {
+        StringBuilder output = new StringBuilder("Salterhead " + id + " details:\n");
+        output.append("Price: " + price + "\n");
+        output.append("Equipped: " + equipped + "\n");
+        output.append("Inventory: " + inventory.id + "\n");
+        return output.toString();
+    }
 }
