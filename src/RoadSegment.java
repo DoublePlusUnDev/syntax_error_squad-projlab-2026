@@ -53,4 +53,12 @@ public class RoadSegment {
     private boolean isRightLane(Lane lane){
         return lanes.getLast() == lane;
     }
+
+    public void setStartPoint(Node startPoint) {
+        this.startPoint = startPoint;
+    }
+
+    public void setEndPoint(Node endPoint) {
+        this.endPoint = endPoint;
+    }
 }

@@ -11,7 +11,7 @@ public class SnowPlowPlayer extends Player {
     public SnowPlowPlayer(RoadNetwork roads) {
         super(roads);
         snowPlows = new ArrayList<>();
-        snowPlows.add(new SnowPlow());
+        snowPlows.add(new SnowPlow(""));
     }
 
     @Override

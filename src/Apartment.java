@@ -10,7 +10,8 @@ public class Apartment extends Node implements Updatable {
     private int spawnTimer;
     private static final int TIME_BETWEEN_SPAWN_ATTEMPTS = 10;
 
-    public Apartment() {
+    public Apartment(String id) {
+        super(id);
         spawnTimer = TIME_BETWEEN_SPAWN_ATTEMPTS;
 
         GameLogic.getInstance().registerUpdatable(this);
@@ -33,5 +34,13 @@ public class Apartment extends Node implements Updatable {
 
     private void trySpawnCar(){
 
+    }
+
+    @Override
+    public String inspect() {
+        StringBuilder output = new StringBuilder();
+        output.append("Apartment " + id + "details:");
+        output.append("Spawn timer: " + spawnTimer);
+        return output.toString();
     }
 }

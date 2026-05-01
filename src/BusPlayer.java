@@ -7,7 +7,7 @@ public class BusPlayer extends Player {
 
     public BusPlayer(RoadNetwork roads) {
         super(roads);
-        bus = new Bus();
+        bus = new Bus("");
     }
 
     @Override

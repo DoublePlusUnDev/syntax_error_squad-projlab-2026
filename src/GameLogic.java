@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameLogic {
-    RoadNetwork roads;
+    List<RoadNetwork> roads;
     List<Car> cars;
     List<Player> players;
     List<Updatable> updatables;
@@ -10,7 +10,7 @@ public class GameLogic {
     static GameLogic instance;
 
     public GameLogic() {
-        roads = new RoadNetwork();
+        roads = new ArrayList<>();
         cars = new ArrayList<>();
         players = new ArrayList<>();
         updatables = new ArrayList<>();

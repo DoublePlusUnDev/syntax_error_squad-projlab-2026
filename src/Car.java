@@ -9,6 +9,10 @@ public class Car extends Vehicle {
 
     boolean isDestroyed = false;
 
+    public Car(String id){
+        super(id);
+    }
+
     @Override
     public void crash(Lane lane) {
         lane.crashOccured();

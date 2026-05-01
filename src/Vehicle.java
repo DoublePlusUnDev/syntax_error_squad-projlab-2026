@@ -6,7 +6,12 @@
  * May or may not be able to slip on ice.
  */
 public abstract  class Vehicle {
+    String id;
     protected Lane location;
+
+    public Vehicle(String id){
+        this.id = id;
+    }
 
     public void enter(Lane lane) {
         TestUtil.enterFunction("Vehicle:enter(Lane lane)");

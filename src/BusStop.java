@@ -4,9 +4,17 @@
  */
 public class BusStop extends Node {
 
+    BusStop(String id){
+        super(id);
+    }
+
     @Override
     public void accept(Vehicle vehicle) { 
         vehicle.enterBusStop(this);
     }
     
+    @Override
+    public String inspect() {
+        return "Bus stop" + id;
+    }
 }

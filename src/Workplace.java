@@ -13,7 +13,8 @@ public class Workplace extends Node implements Updatable {
 
     private static final int TIME_BEFORE_SPAWN_ATTEMPT = 5;
 
-    public Workplace() {
+    public Workplace(String id) {
+        super(id);
         spawnTimer = TIME_BEFORE_SPAWN_ATTEMPT;
 
         GameLogic.getInstance().registerUpdatable(this);
@@ -40,5 +41,16 @@ public class Workplace extends Node implements Updatable {
         restingCars.add(car);
     }
     
+    @Override
+    public String inspect() {
+        StringBuilder output = new StringBuilder();
+        output.append("Workplace " + id + "details:");
+        output.append("Spawn timer: " + spawnTimer);
+        output.append("Resting cars: " + restingCars.size());
+        for (Car car : restingCars) {
+            output.append("-" + car.id + "\n");
+        }
+        return output.toString();
+    }
     
 }

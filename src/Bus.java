@@ -11,6 +11,10 @@ public class Bus extends Vehicle implements Updatable {
 
     private static final int CRASH_TIMEOUT = 10;
 
+    public Bus(String id){
+        super(id);
+    }
+
     @Override
     public void enterBusStop(BusStop busStop) {
         if (busStop == endStop) {

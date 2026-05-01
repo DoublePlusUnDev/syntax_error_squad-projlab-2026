@@ -1,3 +1,5 @@
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 public class RandomGenerator {
@@ -9,5 +11,9 @@ public class RandomGenerator {
     
     public static int getRandomInt(int min, int max) {
         return random.nextInt(max - min + 1) + min;
+    }
+
+    public static <T> void shuffleList(List<T> list) {
+        Collections.shuffle(list, random);
     }
 }

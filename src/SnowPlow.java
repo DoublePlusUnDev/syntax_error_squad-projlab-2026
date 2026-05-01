@@ -5,8 +5,11 @@
  * Can enter debris and snow filled lanes, unable to enter blocked lanes however. 
  */
 public class SnowPlow extends Vehicle{
-
     private PlowHead plowHead;
+
+    public SnowPlow(String id){
+        super(id);
+    }
 
     @Override
     public boolean canEnter(Lane lane) {

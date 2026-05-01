@@ -1,4 +1,5 @@
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -9,7 +10,7 @@ public class CommandInterpreter {
     }
 
     Map<String, Command> commands = Map.of(
-        "/help", this::help, "/generate", this::generate
+        "/help", this::help, "/generate", this::generate, "/addnet", this::addNet, "/inspect", this::inspect
     );
 
     public CommandInterpreter() {
@@ -20,8 +21,9 @@ public class CommandInterpreter {
             String[] parts = command.split(" ");
             String commandName = parts[0];
             
-            Map<String, String> args = Map.of(); 
-            for (int i = 1; i < parts.length; i+=2) {
+            Map<String, String> args = new HashMap<>(); 
+            for (int i = 1; i + 1 < parts.length; i+=2) {
+                System.out.println(parts[i] + ": " + parts[i+1]);
                 String argName = parts[i];
                 String argValue = parts[i+1];
                 args.put(argName, argValue);
@@ -49,7 +51,7 @@ public class CommandInterpreter {
     }
 
     public void generate(Map<String, String> args) {
-        RoadGenerationParameters params = new RoadGenerationParameters();
+        RoadGenerationParameters params = RoadGenerationParameters.testParams;
         if (args.containsKey("nodeMin"))
             params.nodeMin = Integer.parseInt(args.get("nodeMin"));
         if (args.containsKey("nodeMax"))
@@ -81,7 +83,32 @@ public class CommandInterpreter {
         if (args.containsKey("apartsmentsMax"))
             params.apartsmentsMax = Integer.parseInt(args.get("apartsmentsMax"));
 
-        GameLogic.getInstance().roads.setGenerationParameters(params);
-        GameLogic.getInstance().roads.generate();
+        RoadNetwork roadNetwork = new RoadNetwork(args.get("-id"));
+        roadNetwork.setGenerationParameters(params);
+        roadNetwork.generate();
+        GameLogic.getInstance().roads.add(roadNetwork);
+    }
+
+    public void addNet(Map<String, String> args) {
+        if (!args.containsKey("-id")) {
+            System.out.println("Error: Missing -id argument for addnet command.");
+            return;
+        }
+
+        GameLogic.getInstance().roads.add(new RoadNetwork(args.get("-id")));
+    }
+
+    public void inspect(Map<String, String> args) {
+        if (!args.containsKey("-id")) {
+            System.out.println("Error: Missing -id argument for inspect command.");
+            return;
+        }
+
+        Object obj = ObjectRegistry.get(args.get("-id"));
+        if (obj instanceof Inspectable) {
+            System.out.println(((Inspectable) obj).inspect());
+        } else {
+            System.out.println("Object with id " + args.get("-id") + " is not inspectable or does not exist.");
+        }
     }
 }
