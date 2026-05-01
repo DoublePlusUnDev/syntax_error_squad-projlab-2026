@@ -150,7 +150,7 @@ public class CommandInterpreter {
             return;
         }
         
-        RoadNetwork net = (RoadNetwork) ObjectRegistry.get(args.get("-net"));
+        RoadNetwork net = ObjectRegistry.get(args.get("-net"), RoadNetwork.class);
         if (net == null) {
             System.out.println("Error: Road network with id " + args.get("-net") + " does not exist.");
             return;
@@ -185,19 +185,19 @@ public class CommandInterpreter {
             return;
         }
         
-        RoadNetwork net = (RoadNetwork) ObjectRegistry.get(args.get("-net"));
+        RoadNetwork net = ObjectRegistry.get(args.get("-net"), RoadNetwork.class);
         if (net == null) {
             System.out.println("Error: Road network with id " + args.get("-net") + " does not exist.");
             return;
         }
 
-        Node start = (Node) ObjectRegistry.get(args.get("-start"));
+        Node start = ObjectRegistry.get(args.get("-start"), Node.class);
         if (start == null) {
             System.out.println("Error: Start node with id " + args.get("-start") + " does not exist.");
             return;
         }
 
-        Node end = (Node) ObjectRegistry.get(args.get("-end"));
+        Node end = ObjectRegistry.get(args.get("-end"), Node.class);
         if (end == null) {
             System.out.println("Error: End node with id " + args.get("-end") + " does not exist.");
             return;
@@ -243,7 +243,7 @@ public class CommandInterpreter {
             return;
         }
 
-        Lane lane = (Lane) ObjectRegistry.get(args.get("-id"));
+        Lane lane = ObjectRegistry.get(args.get("-id"), Lane.class);
         if (lane == null) {
             System.out.println("Error: Lane with id " + args.get("-id") + " does not exist.");
             return;
@@ -283,9 +283,28 @@ public class CommandInterpreter {
             float gravel = Float.parseFloat(args.get("-gravel"));
             lane.setGravelHeight(gravel);
         }
-
-
     }
+
+    public void modPlow(Map<String, String> args) {
+        if (!args.containsKey("-id")) {
+            System.out.println("Error: Missing -id argument for modplow command.");
+            return;
+        }
+
+        SnowPlow plow = ObjectRegistry.get(args.get("-id"), SnowPlow.class);
+        if (plow == null) {
+            System.out.println("Error: Snow plow with id " + args.get("-id") + " does not exist.");
+            return;
+        }
+
+        if (args.containsKey("-head")) {
+            String head = args.get("-head");
+            PlowHead plowHead = ObjectRegistry.get(head, PlowHead.class);
+            plow.equip(plowHead);
+        }
+    }
+
+    
 
     public void inspect(Map<String, String> args) {
         if (!args.containsKey("-id")) {
@@ -293,9 +312,9 @@ public class CommandInterpreter {
             return;
         }
 
-        Object obj = ObjectRegistry.get(args.get("-id"));
-        if (obj instanceof Inspectable) {
-            ((Inspectable) obj).inspect();
+        Inspectable inspectable = ObjectRegistry.get(args.get("-id"), Inspectable.class);
+        if (inspectable != null) {
+            inspectable.inspect();
         } else {
             System.out.println("Object with id " + args.get("-id") + " is not inspectable or does not exist.");
         }
