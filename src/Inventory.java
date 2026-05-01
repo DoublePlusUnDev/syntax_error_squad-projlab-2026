@@ -109,11 +109,10 @@ public class Inventory implements Inspectable{
     }
 
     @Override
-    public String inspect() {
-        StringBuilder output = new StringBuilder("Inventory " + id + " details:\n");
-        output.append("Salt: " + salt + "/" + MAX_SALT + "\n");
-        output.append("Gravel: " + gravel + "/" + MAX_GRAVEL + "\n");
-        output.append("Bio-Kerosene: " + bioKerosene + "/" + MAX_BIO_KEROSENE + "\n");
-        return output.toString();
+    public void inspect() {
+        Logger.logLine("Inventory " + id + " details:");
+        Logger.logLine("Salt: " + salt + "/" + MAX_SALT);
+        Logger.logLine("Gravel: " + gravel + "/" + MAX_GRAVEL);
+        Logger.logLine("Bio-Kerosene: " + bioKerosene + "/" + MAX_BIO_KEROSENE);
     }
 }

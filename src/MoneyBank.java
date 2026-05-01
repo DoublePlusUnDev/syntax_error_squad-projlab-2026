@@ -30,9 +30,8 @@ public class MoneyBank implements Inspectable {
     }
 
     @Override
-    public String inspect() {
-        StringBuilder output = new StringBuilder("MoneyBank " + id + " details:\n");
-        output.append("Money: " + money + "\n");
-        return output.toString();
+    public void inspect() {
+        Logger.logLine("MoneyBank " + id + " details:");
+        Logger.logLine("Money: " + money);
     }
 }

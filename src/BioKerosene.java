@@ -21,10 +21,9 @@ public class BioKerosene extends Buyable{
     }
 
     @Override
-    public String inspect() {
-        StringBuilder output = new StringBuilder("Kerosene + " + id + " + details:\n");
-        output.append("Amount: " + amount);
-        return output.toString();     
+    public void inspect() {
+        Logger.logLine("Kerosene " + id + " details:");
+        Logger.logLine("Amount: " + amount);
     }
     
 }

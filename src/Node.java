@@ -15,7 +15,7 @@ public class Node implements Inspectable{
     }
 
     @Override
-    public String inspect() {
-        return "Node " + id;
+    public void inspect() {
+        Logger.logLine("Node " + id);
     }
 }

@@ -32,10 +32,9 @@ public class Car extends Vehicle {
     }
 
     @Override
-    public String inspect() {
-        StringBuilder output = new StringBuilder("Car " + id + " details:\n");
-        output.append("Location: " + (location != null ? location.id : "none") + "\n");
-        output.append("Destroyed: " + (isDestroyed ? "yes" : "no") + "\n");
-        return output.toString();
+    public void inspect() {
+        Logger.logLine("Car " + id + " details:");
+        Logger.logLine("Location: " + (location != null ? location.id : "none"));
+        Logger.logLine("Destroyed: " + (isDestroyed ? "yes" : "no"));
     }    
 }

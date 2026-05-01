@@ -40,14 +40,13 @@ public class Bridge extends RoadSegment {
     }
 
     @Override
-    public String inspect() {
-        StringBuilder output = new StringBuilder("Bridge " + id + " details:\n");
-        output.append("Start Point: " + startPoint.id + "\n");
-        output.append("End Point: " + endPoint.id + "\n");
-        output.append("Lanes:\n");
+    public void inspect() {
+        Logger.logLine("Bridge " + id + " details:");
+        Logger.logLine("Start Point: " + startPoint.id);
+        Logger.logLine("End Point: " + endPoint.id);
+        Logger.logLine("Lanes:");
         for (int i = 0; i < lanes.size(); i++) {
-            output.append("  Lane " + i + ": " + lanes.get(i).id + "\n");
+            Logger.logLine("  Lane " + i + ": " + lanes.get(i).id);
         }
-        return output.toString();
     }
 }

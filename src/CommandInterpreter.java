@@ -10,7 +10,7 @@ public class CommandInterpreter {
     }
 
     Map<String, Command> commands = Map.of(
-        "/help", this::help, "/generate", this::generate, "/addnet", this::addNet, "/inspect", this::inspect
+        "/help", this::help, "/generate", this::generate, "/addnet", this::addNet, "inspect", this::inspect
     );
 
     public CommandInterpreter() {
@@ -23,7 +23,7 @@ public class CommandInterpreter {
             
             Map<String, String> args = new HashMap<>(); 
             for (int i = 1; i + 1 < parts.length; i+=2) {
-                System.out.println(parts[i] + ": " + parts[i+1]);
+                //System.out.println(parts[i] + ": " + parts[i+1]);
                 String argName = parts[i];
                 String argValue = parts[i+1];
                 args.put(argName, argValue);
@@ -98,6 +98,16 @@ public class CommandInterpreter {
         GameLogic.getInstance().roads.add(new RoadNetwork(args.get("-id")));
     }
 
+    public void seed(Map<String, String> args) {
+        if (!args.containsKey("-seed")) {
+            System.out.println("Error: Missing -seed argument for seed command.");
+            return;
+        }
+
+        String seed = args.get("-seed");
+        RandomGenerator.setSeed(seed);
+    }
+
     public void inspect(Map<String, String> args) {
         if (!args.containsKey("-id")) {
             System.out.println("Error: Missing -id argument for inspect command.");
@@ -106,7 +116,7 @@ public class CommandInterpreter {
 
         Object obj = ObjectRegistry.get(args.get("-id"));
         if (obj instanceof Inspectable) {
-            System.out.println(((Inspectable) obj).inspect());
+            ((Inspectable) obj).inspect();
         } else {
             System.out.println("Object with id " + args.get("-id") + " is not inspectable or does not exist.");
         }

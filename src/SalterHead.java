@@ -18,11 +18,10 @@ public class SalterHead extends PlowHead {
     }
 
     @Override
-    public String inspect() {
-        StringBuilder output = new StringBuilder("Salterhead " + id + " details:\n");
-        output.append("Price: " + price + "\n");
-        output.append("Equipped: " + equipped + "\n");
-        output.append("Inventory: " + inventory.id + "\n");
-        return output.toString();
+    public void inspect() {
+        Logger.logLine("Salterhead " + id + " details:");
+        Logger.logLine("Price: " + price);
+        Logger.logLine("Equipped: " + equipped);
+        Logger.logLine("Inventory: " + inventory.id);
     }
 }

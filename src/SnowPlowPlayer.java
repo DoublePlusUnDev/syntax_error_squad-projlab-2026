@@ -30,12 +30,11 @@ public class SnowPlowPlayer extends Player {
     }
 
     @Override
-    public String inspect() {
-        StringBuilder output = new StringBuilder("SnowPlowPlayer " + id + " details:\n");
-        output.append("Inventory: " + inventory.id + "\n");
+    public void inspect() {
+        Logger.logLine("SnowPlowPlayer " + id + " details:");
+        Logger.logLine("Inventory: " + inventory.id);
         for (int i = 0; i < snowPlows.size(); i++) {
-            output.append("Snowplow " + i + ": " + snowPlows.get(i).id + "\n");
+            Logger.logLine("Snowplow " + i + ": " + snowPlows.get(i).id);
         }
-        return output.toString();
     }
 }

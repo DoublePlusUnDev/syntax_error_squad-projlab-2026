@@ -14,7 +14,7 @@ public class BusStop extends Node {
     }
     
     @Override
-    public String inspect() {
-        return "Bus stop" + id;
+    public void inspect() {
+        Logger.logLine("Bus stop " + id);
     }
 }

@@ -22,11 +22,10 @@ public class BusPlayer extends Player {
     }
 
     @Override
-    public String inspect() {
-        StringBuilder output = new StringBuilder("BusPlayer " + id + " details:\n");
-        output.append("Inventory: " + inventory.id + "\n");
-        output.append("Bus: " + bus.id + "\n");
-        return output.toString();
+    public void inspect() {
+        Logger.logLine("BusPlayer " + id + " details:");
+        Logger.logLine("Inventory: " + inventory.id);
+        Logger.logLine("Bus: " + bus.id);
     }
     
 }

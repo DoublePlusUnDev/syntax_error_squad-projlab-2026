@@ -22,11 +22,10 @@ public class Salt extends Buyable {
     }
 
     @Override
-    public String inspect() {
-        StringBuilder output = new StringBuilder("Salt " + id + " details:\n");
-        output.append("Price: " + price + "\n");
-        output.append("Amount: " + amount);
-        return output.toString();
+    public void inspect() {
+        Logger.logLine("Salt " + id + " details:");
+        Logger.logLine("Price: " + price);
+        Logger.logLine("Amount: " + amount);
     }
     
 }

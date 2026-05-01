@@ -217,15 +217,16 @@ public class RoadNetwork implements Inspectable {
     }
 
     @Override
-    public String inspect() {
-        StringBuilder output = new StringBuilder();
-        output.append("RoadNetwork " + id + "details:");
-        output.append("Contains the following " + nodes.size() + " nodes: ");
+    public void  inspect() {
+        Logger.logLine("RoadNetwork " + id + "details:");
+        Logger.logLine("Contains the following " + nodes.size() + " nodes:");
         for (Node node : nodes) {
-            output.append("-" + node.id + "\n");
+            Logger.logLine("-" + node.id);
         }
 
-
-        return output.toString();
+        Logger.logLine("Contains the following " + roadSegments.size() + " road segments:");
+        for (RoadSegment segment : roadSegments) {
+            Logger.logLine("-" + segment.id);
+        }
     }
 }

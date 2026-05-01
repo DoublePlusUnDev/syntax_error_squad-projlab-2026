@@ -42,15 +42,13 @@ public class Workplace extends Node implements Updatable {
     }
     
     @Override
-    public String inspect() {
-        StringBuilder output = new StringBuilder();
-        output.append("Workplace " + id + "details:");
-        output.append("Spawn timer: " + spawnTimer);
-        output.append("Resting cars: " + restingCars.size());
+    public void inspect() {
+        Logger.logLine("Workplace " + id + " details:");
+        Logger.logLine("Spawn timer: " + spawnTimer);
+        Logger.logLine("Resting cars: " + restingCars.size());
         for (Car car : restingCars) {
-            output.append("-" + car.id + "\n");
+            Logger.logLine("-" + car.id);
         }
-        return output.toString();
     }
     
 }

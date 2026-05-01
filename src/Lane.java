@@ -159,13 +159,12 @@ public class Lane implements Updatable, Inspectable {
     }
 
     @Override
-    public String inspect() {
-        StringBuilder output = new StringBuilder("Lane " + id + " details:\n");
-        output.append("Snow Height: " + snowHeight + "\n");
-        output.append("Icing Progress: " + icingProgress + "\n");
-        output.append("Iced: " + (iced ? "yes" : "no") + "\n");
-        output.append("Vehicle Block: " + (vehicleBlock ? "yes" : "no") + "\n");
-        output.append("Ice Debris: " + (iceDebris ? "yes" : "no") + "\n");
-        return output.toString();
+    public void inspect() {
+        Logger.logLine("Lane " + id + " details:");
+        Logger.logLine("Snow Height: " + snowHeight);
+        Logger.logLine("Icing Progress: " + icingProgress);
+        Logger.logLine("Iced: " + (iced ? "yes" : "no"));
+        Logger.logLine("Vehicle Block: " + (vehicleBlock ? "yes" : "no"));
+        Logger.logLine("Ice Debris: " + (iceDebris ? "yes" : "no"));
     }
 }

@@ -43,10 +43,9 @@ public class SnowPlow extends Vehicle{
     }
 
     @Override
-    public String inspect() {
-        StringBuilder output = new StringBuilder("SnowPlow " + id + " details:\n");
-        output.append("Location: " + (location != null ? location.id : "none") + "\n");
-        output.append("PlowHead: " + (plowHead != null ? plowHead.id : "none") + "\n");
-        return output.toString();
+    public void inspect() {
+        Logger.logLine("SnowPlow " + id + " details:");
+        Logger.logLine("Location: " + (location != null ? location.id : "none"));
+        Logger.logLine("PlowHead: " + (plowHead != null ? plowHead.id : "none"));
     }
 }
