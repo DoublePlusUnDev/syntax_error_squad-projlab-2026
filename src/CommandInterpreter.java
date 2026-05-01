@@ -18,6 +18,7 @@ public class CommandInterpreter {
         "/generate", this::generate,
         "/addnode", this::addNode,
         "/addroad", this::addRoad, 
+        "/modlane", this::modLane,
         "inspect", this::inspect
     );
 
@@ -233,6 +234,56 @@ public class CommandInterpreter {
         }
 
         net.addRoadSegment(road);
+
+    }
+
+    public void modLane(Map<String, String> args) {
+        if (!args.containsKey("-id")) {
+            System.out.println("Error: Missing -id argument for modlane command.");
+            return;
+        }
+
+        Lane lane = (Lane) ObjectRegistry.get(args.get("-id"));
+        if (lane == null) {
+            System.out.println("Error: Lane with id " + args.get("-id") + " does not exist.");
+            return;
+        }
+
+        if (args.containsKey("-snow")) {
+            float snow = Float.parseFloat(args.get("-snow"));
+            lane.setSnowHeight(snow);
+        }
+
+        if (args.containsKey("-iced")) {
+            boolean iced = Boolean.parseBoolean(args.get("-iced"));
+            lane.setIced(iced);
+        }
+
+        if (args.containsKey("-icing")){
+            int icing = Integer.parseInt(args.get("-icing"));
+            lane.setIcingProgress(icing);
+        }
+
+        if (args.containsKey("-block")) {
+            boolean block = Boolean.parseBoolean(args.get("-block"));
+            lane.setVehicleBlock(block);
+        }
+
+        if (args.containsKey("-debris")) {
+            boolean debris = Boolean.parseBoolean(args.get("-debris"));
+            lane.setIceDebris(debris);
+        }
+
+        if (args.containsKey("-salted")) {
+            int salted = Integer.parseInt(args.get("-salted"));
+            lane.setSaltedTimer(salted);
+        }
+
+        if (args.containsKey("-gravel")) {
+            float gravel = Float.parseFloat(args.get("-gravel"));
+            lane.setGravelHeight(gravel);
+        }
+
 
     }
 

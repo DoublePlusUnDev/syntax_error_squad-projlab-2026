@@ -29,14 +29,10 @@ public class Lane implements Updatable, Inspectable {
     }
 
     public void addSnow(float snowLevel) {
-        TestUtil.enterFunction("Lane:addSnow()");
         snowHeight += snowLevel;
-        TestUtil.exitFunction("snow added");
     }
 
     public float getSnow(){
-        TestUtil.enterFunction("Lane:getSnow()");
-        TestUtil.exitFunction("snow level");
         return snowHeight;
     }
 
@@ -60,89 +56,87 @@ public class Lane implements Updatable, Inspectable {
         if (iced) {
             icingProgress = 0;
         }
-
-        TestUtil.exitFunction("driven over");
     }
 
     public void crashOccured() {
-        TestUtil.enterFunction("Lane:crashOccured()");
         vehicleBlock = true;
-        TestUtil.exitFunction("road blocked");
     }
 
     public boolean willSlip() {
-        TestUtil.enterFunction("Lane:willSlip()");
-
         boolean slip = iced;
-        TestUtil.exitFunction(String.valueOf(slip));
         return slip;
     }
 
     public RoadSegment getSegment() {
-        TestUtil.enterFunction("Lane:getSegment()");
-        TestUtil.exitFunction("road segment");
         return roadSegment;
     }
 
     public void sweep() {
-        TestUtil.enterFunction("Lane:sweep()");
         roadSegment.sweep(this);
-        TestUtil.exitFunction("lane swept");
     }
 
     public void blow() {
-        TestUtil.enterFunction("Lane:blown()");
         roadSegment.blow(this);
-        TestUtil.exitFunction("lane blown");
     }
 
     public void salt() {
-        TestUtil.enterFunction("Lane:salt()");
         saltedTimer = 5; 
-        TestUtil.exitFunction("lane salted");
     }
 
     public void breakIce() {
-        TestUtil.enterFunction("Lane:breakIce()");
 
         if (iced){
             iced = false;
             iceDebris = true;
-            TestUtil.exitFunction("ice broken");
         }
-        else
-            TestUtil.exitFunction("no ice to break ");
+            
     }
 
     public void destroySnow() {
-        TestUtil.enterFunction("Lane:destroySnow()");
         snowHeight = 0;
-        TestUtil.exitFunction("snow destroyed");
     }
 
     public void destroyIce() {
-        TestUtil.enterFunction("Lane:destroyIce()");
         iced = false;
-        TestUtil.exitFunction("ice destroyed");
     }
 
     public boolean isSnowy() {
-        TestUtil.enterFunction("Lane:isSnowy()");
-        
-        TestUtil.exitFunction(String.valueOf(snowHeight > snowThreshold));
         return snowHeight > snowThreshold;
     }
 
     public boolean isBlocked() {
-        TestUtil.enterFunction("Lane:isBlocked()");
-        TestUtil.exitFunction(String.valueOf(vehicleBlock));
         return vehicleBlock;
     }
 
     public boolean isDebrisFilled() {
-        TestUtil.enterFunction("Lane:isDebrisFilled()");
-        TestUtil.exitFunction(String.valueOf(iceDebris));
         return iceDebris;
+    }
+
+    public void setSnowHeight(float height) {
+        snowHeight = height;
+    }
+
+    public void setIcingProgress(int progress) {
+        icingProgress = progress;
+    }
+
+    public void setIced(boolean iced) {
+        this.iced = iced;
+    }
+
+    public void setVehicleBlock(boolean vehicleBlock) {
+        this.vehicleBlock = vehicleBlock;
+    }
+
+    public void setIceDebris(boolean iceDebris) {
+        this.iceDebris = iceDebris;
+    }
+
+    public void setSaltedTimer(int saltedTimer) {
+        this.saltedTimer = saltedTimer;
+    }
+
+    public void setGravelHeight(float gravelHeight) {
     }
 
     @Override
