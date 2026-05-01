@@ -10,7 +10,15 @@ public class CommandInterpreter {
     }
 
     Map<String, Command> commands = Map.of(
-        "/help", this::help, "/generate", this::generate, "/addnet", this::addNet, "inspect", this::inspect
+        "/help", this::help, 
+        "/random", this::random, 
+        "/seed", this::seed, 
+        "/logging", this::logging,
+        "/addnet", this::addNet, 
+        "/generate", this::generate,
+        "/addnode", this::addNode,
+        "/addroad", this::addRoad, 
+        "inspect", this::inspect
     );
 
     public CommandInterpreter() {
@@ -48,6 +56,52 @@ public class CommandInterpreter {
         } catch (Exception e) {
             System.out.println("Error reading help file: " + e.getMessage());
         }
+    }
+
+    public void random(Map<String, String> args) {
+        if (!args.containsKey("-mode")) {
+            System.out.println("Error: Missing -mode argument for random command.");
+            return;
+        }
+        String mode = args.get("-mode");
+        if (mode.equals("always")) {
+            RandomGenerator.setMode(RandomGeneratorMode.ALWAYS);
+        } else if (mode.equals("never")) {
+            RandomGenerator.setMode(RandomGeneratorMode.NEVER);
+        } else if (mode.equals("random")) {
+            RandomGenerator.setMode(RandomGeneratorMode.RANDOM);
+        } else {
+            System.out.println("Error: Invalid mode for random command. Use always, never, or random.");
+        }
+    }
+
+    public void seed(Map<String, String> args) {
+        if (!args.containsKey("-seed")) {
+            System.out.println("Error: Missing -seed argument for seed command.");
+            return;
+        }
+
+        String seed = args.get("-seed");
+        RandomGenerator.setSeed(seed);
+    }
+
+    public void logging(Map<String, String> args) {
+        if (!args.containsKey("-enable")) {
+            System.out.println("Error: Missing -enable argument for logging command.");
+            return;
+        }
+
+        boolean enable = Boolean.parseBoolean(args.get("-enable"));
+        Logger.setEnabled(enable);
+    }
+
+    public void addNet(Map<String, String> args) {
+        if (!args.containsKey("-id")) {
+            System.out.println("Error: Missing -id argument for addnet command.");
+            return;
+        }
+
+        GameLogic.getInstance().roads.add(new RoadNetwork(args.get("-id")));
     }
 
     public void generate(Map<String, String> args) {
@@ -89,23 +143,97 @@ public class CommandInterpreter {
         GameLogic.getInstance().roads.add(roadNetwork);
     }
 
-    public void addNet(Map<String, String> args) {
-        if (!args.containsKey("-id")) {
-            System.out.println("Error: Missing -id argument for addnet command.");
+    public void addNode(Map<String, String> args) {
+        if (!args.containsKey("-id") || !args.containsKey("-net")) {
+            System.out.println("Error: Missing arguments for addnode command. Required: -id, -net.");
+            return;
+        }
+        
+        RoadNetwork net = (RoadNetwork) ObjectRegistry.get(args.get("-net"));
+        if (net == null) {
+            System.out.println("Error: Road network with id " + args.get("-net") + " does not exist.");
             return;
         }
 
-        GameLogic.getInstance().roads.add(new RoadNetwork(args.get("-id")));
+        if (args.containsKey("-type")) {
+            String type = args.get("-type");
+            if (type.equals("busstop")) {
+                net.addNode(new BusStop(args.get("-id")));
+            }
+            else if (type.equals("workplace")) {
+                net.addNode(new Workplace(args.get("-id")));
+            }
+            else if (type.equals("apartment")) {
+                net.addNode(new Apartment(args.get("-id")));
+            }
+            else {
+                System.out.println("Error: Invalid node type. Use busstop, workplace, or apartment. Using default type of busstop.");
+                net.addNode(new BusStop(args.get("-id")));
+            }
+        }
+        else {
+            net.addNode(new BusStop(args.get("-id")));
+        }
     }
 
-    public void seed(Map<String, String> args) {
-        if (!args.containsKey("-seed")) {
-            System.out.println("Error: Missing -seed argument for seed command.");
+        
+
+    public void addRoad(Map<String, String> args) {
+        if (!args.containsKey("-id") || !args.containsKey("-net") || !args.containsKey("-start") || !args.containsKey("-end")) {
+            System.out.println("Error: Missing arguments for addroad command. Required: -id, -net, -start, -end.");
+            return;
+        }
+        
+        RoadNetwork net = (RoadNetwork) ObjectRegistry.get(args.get("-net"));
+        if (net == null) {
+            System.out.println("Error: Road network with id " + args.get("-net") + " does not exist.");
             return;
         }
 
-        String seed = args.get("-seed");
-        RandomGenerator.setSeed(seed);
+        Node start = (Node) ObjectRegistry.get(args.get("-start"));
+        if (start == null) {
+            System.out.println("Error: Start node with id " + args.get("-start") + " does not exist.");
+            return;
+        }
+
+        Node end = (Node) ObjectRegistry.get(args.get("-end"));
+        if (end == null) {
+            System.out.println("Error: End node with id " + args.get("-end") + " does not exist.");
+            return;
+        }
+
+        int lanes = 1;
+        if (args.containsKey("-lanes")) {
+            try {
+                lanes = Integer.parseInt(args.get("-lanes"));
+            } catch (NumberFormatException e) {
+                System.out.println("Error: Invalid number format for lanes. Using default value of 1.");
+            }
+        }
+
+        RoadSegment road;
+        if (args.containsKey("-type")) {
+            String type = args.get("-type");
+            if (type.equals("road")) {
+                road = new RoadSegment(args.get("-id"), lanes, start, end);
+            }
+            else if (type.equals("bridge")) {
+                road = new Bridge(args.get("-id"), lanes, start, end);
+            }
+            else if (type.equals("tunnel")) {
+                road = new Tunnel(args.get("-id"), lanes, start, end);
+            }
+            else {
+                System.out.println("Error: Invalid road type. Use road, bridge, or tunnel. Using default type of road.");
+                road = new RoadSegment(args.get("-id"), lanes, start, end);
+            }
+        }
+        else {
+            road = new RoadSegment(args.get("-id"), lanes, start, end);
+        }
+
+        net.addRoadSegment(road);
+
     }
 
     public void inspect(Map<String, String> args) {
