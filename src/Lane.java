@@ -31,7 +31,7 @@ public class Lane implements Updatable, Inspectable {
     private static final float SNOW_THRESHOLD = 0.2f;
     private static final float SNOW_REMOVED_BY_SALT = 0.01f;
     private static final float SLIP_CHANCE = 0.5f;
-    private static final float GRAVEL_OVER_SNOW_BUFFER = 0.02f;
+    private static final float GRAVEL_OVER_SNOW_BUFFER = 0.1f;
 
     // ==================== Initialization ====================
 

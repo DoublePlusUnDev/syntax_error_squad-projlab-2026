@@ -1,0 +1,22 @@
+SNOWPLOW [snowPlowPlayer.snowPlow1] EQUIPPED [gravelHead]
+BUYABLE [gravel] BOUGHT BY [snowPlowPlayer.snowPlow1.inventory] FOR [0]
+LANE [road1.lane1] CHANGED [gravelHeight] FROM [0.0] TO [0.2]
+Lane road1.lane1 details:
+Snow Height: 0.1
+Gravel Height: 0.2
+Icing Progress: 0
+Iced: yes
+Vehicle Block: no
+Ice Debris: no
+Salted Timer: 0
+Inventory snowPlowPlayer.snowPlow1.inventory details:
+Salt: 0/10
+Gravel: 0/10
+Bio-Kerosene: 0/10
+Plow heads: 6
+- sweeperHead
+- blowerHead
+- salterHead
+- dragonHead
+- gravelHead
+- iceBreakerHead

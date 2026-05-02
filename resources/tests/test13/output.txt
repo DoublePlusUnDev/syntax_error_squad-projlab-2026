@@ -1,0 +1,25 @@
+SNOWPLOW [snowPlowPlayer.snowPlow1] EQUIPPED [dragonHead]
+BUYABLE [kerosene] BOUGHT BY [snowPlowPlayer.snowPlow1.inventory] FOR [0]
+LANE [road1.lane1] CHANGED [iced] FROM [true] TO [false]
+LANE [road1.lane1] ICE DESTROYED
+LANE [road1.lane1] CHANGED [snowHeight] FROM [0.1] TO [0.0]
+LANE [road1.lane1] SNOW DESTROYED
+Lane road1.lane1 details:
+Snow Height: 0.0
+Gravel Height: 0.0
+Icing Progress: 0
+Iced: no
+Vehicle Block: no
+Ice Debris: no
+Salted Timer: 0
+Inventory snowPlowPlayer.snowPlow1.inventory details:
+Salt: 0/20
+Gravel: 0/20
+Bio-Kerosene: 0/20
+Plow heads: 6
+- sweeperHead
+- blowerHead
+- salterHead
+- dragonHead
+- gravelHead
+- iceBreakerHead

@@ -1,0 +1,20 @@
+SNOWPLOW [snowPlowPlayer.snowPlow1] EQUIPPED [dragonHead]
+Lane road1.lane1 details:
+Snow Height: 0.1
+Gravel Height: 0.0
+Icing Progress: 0
+Iced: yes
+Vehicle Block: no
+Ice Debris: no
+Salted Timer: 0
+Inventory snowPlowPlayer.snowPlow1.inventory details:
+Salt: 0/10
+Gravel: 0/10
+Bio-Kerosene: 0/10
+Plow heads: 6
+- sweeperHead
+- blowerHead
+- salterHead
+- dragonHead
+- gravelHead
+- iceBreakerHead

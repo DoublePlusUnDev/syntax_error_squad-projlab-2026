@@ -13,9 +13,9 @@ public class Inventory implements Inspectable{
     private int bioKerosene = 0;
     private List<PlowHead> plowHeads = new ArrayList<>();
 
-    private static final int MAX_SALT = 20;
-    private static final int MAX_GRAVEL = 20;
-    private static final int MAX_BIO_KEROSENE = 20;
+    private static final int MAX_SALT = 10;
+    private static final int MAX_GRAVEL = 10;
+    private static final int MAX_BIO_KEROSENE = 10;
 
     public Inventory(String id) {
         this.id = id;
@@ -28,7 +28,7 @@ public class Inventory implements Inspectable{
         if (!canConsume) 
             return false;
         
-
+        salt--;
         return true;
     }
 
@@ -38,6 +38,7 @@ public class Inventory implements Inspectable{
         if (!canConsume) 
             return false;
         
+        gravel--;
         return true;
     }
 
@@ -47,6 +48,7 @@ public class Inventory implements Inspectable{
         if (!canConsume) 
             return false;
         
+        bioKerosene--;
         return true;
     }
 
@@ -85,5 +87,9 @@ public class Inventory implements Inspectable{
         Logger.logLine("Salt: " + salt + "/" + MAX_SALT);
         Logger.logLine("Gravel: " + gravel + "/" + MAX_GRAVEL);
         Logger.logLine("Bio-Kerosene: " + bioKerosene + "/" + MAX_BIO_KEROSENE);
+        Logger.logLine("Plow heads: " + plowHeads.size());
+        for (PlowHead plowHead : plowHeads) {
+            Logger.logLine("- " + plowHead.id);
+        }
     }
 }

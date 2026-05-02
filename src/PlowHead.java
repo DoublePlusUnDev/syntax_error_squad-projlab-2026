@@ -23,6 +23,7 @@ public abstract class PlowHead extends Buyable{
             return false;
 
         this.inventory = inventory;
+        inventory.addHead(this);
         return true;
     }
 

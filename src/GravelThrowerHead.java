@@ -6,7 +6,8 @@ public class GravelThrowerHead extends PlowHead {
 
     @Override
     public void clean(Lane lane) {
-        lane.throwGravel();
+        if (inventory.tryConsumeGravel())
+            lane.throwGravel();      
     }
     
     @Override
