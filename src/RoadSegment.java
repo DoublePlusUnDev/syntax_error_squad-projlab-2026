@@ -24,11 +24,103 @@ public class RoadSegment implements Inspectable {
 
         this.startPoint = startPoint;
         this.endPoint = endPoint;
-        if (startPoint != null && endPoint != null) {
-            startPoint.addNeighbour(endPoint, this);
-            endPoint.addNeighbour(startPoint, this);
+        addNodeNeighbours();
+    }
+
+    // Getters and Setters
+
+    /**
+     * Gets the number of lanes in this road segment.
+     *
+     * @return the number of lanes
+     */
+    public int getLaneCount() {
+        return lanes.size();
+    }
+
+    /**
+     * Sets the start point of this road segment.
+     *
+     * @param startPoint the new start node
+     */
+    public void setStartPoint(Node startPoint) {
+        removeNodeNeighbours();
+        this.startPoint = startPoint;
+        addNodeNeighbours();
+    }
+
+    /**
+     * Sets the end point of this road segment.
+     *
+     * @param endPoint the new end node
+     */
+    public void setEndPoint(Node endPoint) {
+        removeNodeNeighbours();
+        this.endPoint = endPoint;
+        addNodeNeighbours();
+    }
+
+    // Public Operations
+
+    /**
+     * Adds snow to all lanes in this road segment.
+     *
+     * @param snowLevel the amount of snow to add
+     */
+    public void addSnow(int snowLevel) {
+        for (Lane lane : lanes){
+            lane.addSnow(snowLevel);
         }
     }
+
+    /**
+     * Allows a vehicle to enter this road segment on a specific lane.
+     *
+     * @param vehicle the vehicle entering
+     * @param lane the lane index to enter
+     */
+    public void enter(Vehicle vehicle, int lane) {
+        Lane selectedLane = lanes.get(lane);
+        selectedLane.driveOver();
+        vehicle.enter(selectedLane);
+    }
+
+    /**
+     * Sweeps a lane, removing snow and pushing it to the right lane if not the rightmost.
+     *
+     * @param lane the lane to sweep
+     */
+    public void sweep(Lane lane){
+        float snowLevel = lane.getSnow();
+        lane.destroySnow();
+
+        if (!isRightLane(lane)) {
+            Lane laneToTheRight = lanes.get(lanes.indexOf(lane) + 1);
+            laneToTheRight.addSnow(snowLevel);
+        }
+    }
+
+    /**
+     * Removes all snow from a lane by blowing it away.
+     *
+     * @param lane the lane to blow
+     */
+    public void blow(Lane lane) {
+        lane.destroySnow();
+    }
+
+    @Override
+    public void inspect() {
+        Logger.logLine("RoadSegment " + id + " details:");
+        Logger.logLine("Start Point: " + startPoint.id);
+        Logger.logLine("End Point: " + endPoint.id);
+        Logger.logLine("Lanes:");
+        for (int i = 0; i < lanes.size(); i++) {
+            Logger.logLine("  Lane " + i + ": " + lanes.get(i).id);
+        }
+    }
+
+    // Private Helpers
 
     private void addNodeNeighbours(){
         if (startPoint != null && endPoint != null) {
@@ -44,61 +136,7 @@ public class RoadSegment implements Inspectable {
         }
     }
 
-    public void addSnow(int snowLevel) {
-        for (Lane lane : lanes){
-            lane.addSnow(snowLevel);
-        }
-    }
-
-    public void enter(Vehicle vehicle, int lane) {
-        Lane selectedLane = lanes.get(lane);
-        selectedLane.driveOver();
-        vehicle.enter(selectedLane);
-    }
-
-    public void sweep(Lane lane){
-        float snowLevel = lane.getSnow();
-        lane.destroySnow();
-
-        if (!isRightLane(lane)) {
-            Lane laneToTheRight = lanes.get(lanes.indexOf(lane) + 1);
-                laneToTheRight.addSnow(snowLevel);
-        }
-
-    }
-
-    public void blow(Lane lane) {
-        lane.destroySnow();
-    }
-
-    private boolean isRightLane(Lane lane){
+    protected boolean isRightLane(Lane lane){
         return lanes.getLast() == lane;
-    }
-
-    public void setStartPoint(Node startPoint) {
-        removeNodeNeighbours();
-        this.startPoint = startPoint;
-        addNodeNeighbours();
-    }
-
-    public void setEndPoint(Node endPoint) {
-        removeNodeNeighbours();
-        this.endPoint = endPoint;
-        addNodeNeighbours();
-    }
-
-    public int getLaneCount() {
-        return lanes.size();
-    }
-
-    @Override
-    public void inspect() {
-        Logger.logLine("RoadSegment " + id + " details:");
-        Logger.logLine("Start Point: " + startPoint.id);
-        Logger.logLine("End Point: " + endPoint.id);
-        Logger.logLine("Lanes:");
-        for (int i = 0; i < lanes.size(); i++) {
-            Logger.logLine("  Lane " + i + ": " + lanes.get(i).id);
-        }
     }
 }

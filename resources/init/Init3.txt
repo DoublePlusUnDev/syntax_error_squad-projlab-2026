@@ -3,32 +3,33 @@
 /addNode -id node1 -net net
 /addNode -id node2 -net net
 /addNode -id node3 -net net
-/addRoad -id road1 -start node1 -end node2 -lanes 2 -type road
-/addRoad -id road2 -start node2 -end node3 -lanes 2 -type bridge
-/addPlayer -id snowPlowPlayer -type snowplow -lane road1.lane1
+/addRoad -id road1 -start node1 -end node2 -lanes 2 -type road -net net
+/addRoad -id road2 -start node2 -end node3 -lanes 2 -type bridge -net net
+/addPlayer -id snowPlowPlayer -type snowplow -lane road1.lane1 -net net
 
 /modLane -id road1.lane1 -snow  0.1 -ice true
 /modLane -id road1.lane2 -snow  0.1
 /modLane -id road2.lane1 -snow  0.1
 /modLane -id road2.lane2 -snow  0.1
 
-/createBuyable -id sweeperHead -price 0
+/createBuyable -id sweeperHead -price 0 -type sweeperhead
 buy -buyable sweeperHead -inventory snowPlowPlayer.inventory -bank snowPlowPlayer.bank -type sweeperhead
 
-/createBuyable -id blowerHead -price 0
+/createBuyable -id blowerHead -price 0 -type blowerhead
 buy -buyable blowerHead -inventory snowPlowPlayer.inventory -bank snowPlowPlayer.bank -type blowerhead
 
-/createBuyable -id salterHead -price 0
+/createBuyable -id salterHead -price 0 -type salterhead
 buy -buyable salterHead -inventory snowPlowPlayer.inventory -bank snowPlowPlayer.bank -type salterhead
 
-/createBuyable -id dragonHead -price 0
+/createBuyable -id dragonHead -price 0 -type dragonhead
 buy -buyable dragonHead -inventory snowPlowPlayer.inventory -bank snowPlowPlayer.bank -type dragonhead
 
-/createBuyable -id gravelHead -price 0
+/createBuyable -id gravelHead -price 0 -type gravelhead
 buy -buyable gravelHead -inventory snowPlowPlayer.inventory -bank snowPlowPlayer.bank -type gravelhead
 
-/createBuyable -id iceBreakerHead -price 0
+/createBuyable -id iceBreakerHead -price 0 -type icebreakerhead
 buy -buyable iceBreakerHead -inventory snowPlowPlayer.inventory -bank snowPlowPlayer.bank -type icebreakerhead
+
 /createBuyable -id salt -price 0 -type salt
 /createBuyable -id kerosene -price 0 -type kerosene
 /createBuyable -id gravel -price 0 -type gravel

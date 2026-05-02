@@ -15,7 +15,7 @@ public class BlowerHead extends PlowHead {
 
     @Override
     public void inspect() {
-        Logger.logLine("Blowerhead " + id + " details:");
+        Logger.logLine("Blower head " + id + " details:");
         Logger.logLine("Price: " + price);
         Logger.logLine("Equipped: " + equipped);
         Logger.logLine("Inventory: " + inventory.id);

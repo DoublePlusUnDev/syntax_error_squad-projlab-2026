@@ -30,7 +30,7 @@ public class CommandInterpreter {
         Map.entry("/modWorkplace", this::modWorkplace),
         Map.entry("/addPlayer", this::addPlayer),
         Map.entry("/addVehicle", this::addVehicle),
-        Map.entry("/createbuyable", this::createBuyable),
+        Map.entry("/createBuyable", this::createBuyable),
         /*Map.entry("/addmoney", this::addMoney),
         Map.entry("/setmoney", this::setMoney),
         Map.entry("/movevehicle", this::moveVehicle),
@@ -38,11 +38,11 @@ public class CommandInterpreter {
         Map.entry("/slip", this::slip),
       */
         Map.entry("listRoots", this::listRoots),
-        Map.entry("inspect", this::inspect)
+        Map.entry("inspect", this::inspect),
         /*Map.entry("move", this::move),
         Map.entry("changelane", this::changeLane),
-        Map.entry("equip", this::equip),
-        Map.entry("buy", this::buy)*/
+        Map.entry("equip", this::equip),/* */
+        Map.entry("buy", this::buy)
     );
 
     public CommandInterpreter() {
@@ -50,7 +50,7 @@ public class CommandInterpreter {
     }
 
     public void execute(String command) {
-            String[] parts = command.split(" ");
+            String[] parts = command.split("\\s+");
             String commandName = parts[0];
             
             Map<String, String> args = new HashMap<>(); 
@@ -152,11 +152,12 @@ public class CommandInterpreter {
         
         try (Scanner fileScanner = new Scanner(new File(args.get("-path")))) {
             while (fileScanner.hasNextLine()) {
-                String line = fileScanner.nextLine();
+                String line = fileScanner.nextLine().trim();
                 
-                if (line.trim().isEmpty() || line.startsWith("#")) {
+                if (line.isBlank() || line.startsWith("#")) {
                     continue; // Skip empty lines and comments
                 }
+                System.out.println(line);
 
                 execute(line);
             }
@@ -569,11 +570,12 @@ public class CommandInterpreter {
         switch (type) {
             case "salt" -> buyable = new Salt(args.get("-id"), amount, price);
             case "kerosene" -> buyable = new BioKerosene(args.get("-id"), amount, price);
-
+            case "gravel" -> buyable = new Gravel(args.get("-id"), amount, price);
             case "sweeperhead" -> buyable = new SweeperHead(args.get("-id"), price);
             case "blowerhead" -> buyable = new BlowerHead(args.get("-id"), price);
             case "salterhead" -> buyable = new SalterHead(args.get("-id"), price);
             case "dragonhead" -> buyable = new DragonHead(args.get("-id"), price);
+            case "gravelhead" -> buyable = new GravelThrowerHead(args.get("-id"), price);
             case "icebreakerhead" -> buyable = new IceBreakerHead(args.get("-id"), price);
             default -> Logger.logError("Error: Invalid buyable type.");
         }
@@ -609,5 +611,32 @@ public class CommandInterpreter {
         } else {
             Logger.logError("Object with id " + args.get("-id") + " is not inspectable or does not exist.");
         }
+    }
+
+    public void buy(Map<String, String> args) {
+        if (!args.containsKey("-buyable") || !args.containsKey("-inventory") || !args.containsKey("-bank")) {
+            Logger.logError("Error: Missing arguments for buy command. Required: -buyable, -inventory, -bank.");
+            return;
+        }
+
+        Buyable buyable = ObjectRegistry.get(args.get("-buyable"), Buyable.class);
+        if (buyable == null) {
+            Logger.logError("Error: Buyable with id " + args.get("-buyable") + " does not exist.");
+            return;
+        }
+
+        Inventory inventory = ObjectRegistry.get(args.get("-inventory"), Inventory.class);
+        if (inventory == null) {
+            Logger.logError("Error: Inventory with id " + args.get("-inventory") + " does not exist.");
+            return;
+        }
+
+        MoneyBank moneyBank = ObjectRegistry.get(args.get("-bank"), MoneyBank.class);
+        if (moneyBank == null) {
+            Logger.logError("Error: MoneyBank with id " + args.get("-bank") + " does not exist.");
+            return;
+        }
+
+        buyable.buy(inventory, moneyBank);
     }
 }

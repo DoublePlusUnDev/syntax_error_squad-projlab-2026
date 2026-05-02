@@ -8,12 +8,14 @@ public abstract class Player implements Inspectable {
 
     protected RoadNetwork roads;
     protected Inventory inventory;
+    protected MoneyBank moneyBank;
 
     public Player(String id, RoadNetwork roads) {
         this.id = id;
         ObjectRegistry.register(id, this);
         this.roads = roads;
         inventory = new Inventory(id + ".inventory");
+        moneyBank = new MoneyBank(id + ".bank", 0);
     }
 
     

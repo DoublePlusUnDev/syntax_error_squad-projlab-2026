@@ -5,14 +5,73 @@
  * Can slip, cannot traverse deep snow or ice debris. 
  */
 public class Bus extends Vehicle implements Updatable {
+    private static final int CRASH_TIMEOUT = 10;
+
     private BusStop startStop;
     private BusStop endStop;
     private int inactiveTimer;
 
-    private static final int CRASH_TIMEOUT = 10;
-
-    public Bus(String id){
+    public Bus(String id) {
         super(id);
+    }
+
+    // Getters
+
+    /**
+     * Checks if this bus is currently inactive (crashed or in recovery).
+     *
+     * @return true if the bus is inactive
+     */
+    public boolean isInactive() {
+        return inactiveTimer > 0;
+    }
+
+    // Setters
+
+    /**
+     * Sets both the start and end stops for this bus.
+     *
+     * @param startStop the starting bus stop
+     * @param endStop the ending bus stop
+     */
+    public void setStops(BusStop startStop, BusStop endStop) {
+        this.startStop = startStop;
+        this.endStop = endStop;
+    }
+
+    /**
+     * Sets the start stop for this bus.
+     *
+     * @param startStop the starting bus stop
+     */
+    public void setStartStop(BusStop startStop) {
+        this.startStop = startStop;
+    }
+
+    /**
+     * Sets the end stop for this bus.
+     *
+     * @param endStop the ending bus stop
+     */
+    public void setEndStop(BusStop endStop) {
+        this.endStop = endStop;
+    }
+
+    /**
+     * Sets the inactive timer duration.
+     *
+     * @param time the timer duration in update cycles
+     */
+    public void setInactiveTimer(int time) {
+        this.inactiveTimer = time;
+    }
+
+    // Overridden Methods
+
+    @Override
+    public void update() {
+        if (inactiveTimer > 0)
+            inactiveTimer--;
     }
 
     @Override
@@ -22,33 +81,6 @@ public class Bus extends Vehicle implements Updatable {
             startStop = endStop;
             endStop = temp;
         }
-    }
-
-    @Override
-    public void update() {
-        if (inactiveTimer > 0)
-            inactiveTimer--;
-    }
-
-    public boolean isInactive() {
-        return inactiveTimer > 0;
-    }
-
-    public void setStops(BusStop startStop, BusStop endStop) {
-        this.startStop = startStop;
-        this.endStop = endStop;
-    }
-
-    public void setStartStop(BusStop startStop) {
-        this.startStop = startStop;
-    }
-
-    public void setEndStop(BusStop endStop) {
-        this.endStop = endStop;
-    }
-
-    void setInactiveTimer(int time) {
-        this.inactiveTimer = time;
     }
 
     @Override
@@ -67,5 +99,4 @@ public class Bus extends Vehicle implements Updatable {
         Logger.logLine("Location: " + (location != null ? location.id : "none"));
         Logger.logLine("Inactive: " + (isInactive() ? "yes" : "no"));
     }
-        
 }

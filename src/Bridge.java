@@ -35,10 +35,6 @@ public class Bridge extends RoadSegment {
         rightMostLane.addSnow(snowLevel);
     }
 
-    boolean isRightLane(Lane lane){
-        return lanes.getLast() == lane;
-    }
-
     @Override
     public void inspect() {
         Logger.logLine("Bridge " + id + " details:");

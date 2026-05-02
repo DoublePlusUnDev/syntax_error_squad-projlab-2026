@@ -2,7 +2,7 @@
  * A buyable item that will add biokerosene it it's buyer's inventory.
  */
 public class BioKerosene extends Buyable{
-    private int amount;
+    private final int amount;
 
     public BioKerosene(String id, int amount, int price) {
         super(id, price);

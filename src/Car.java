@@ -6,34 +6,73 @@
  * Can slip, on crash it'll be destroyed and will block the lane. 
  */
 public class Car extends Vehicle {
-    boolean isDestroyed = false;
-    Apartment home;
-    Workplace workplace;
+    private boolean isDestroyed = false;
+    private Apartment home;
+    private Workplace workplace;
+    private boolean headedHome = false;
 
-    public Car(String id){
+     
+    public Car(String id) {
         super(id);
+    }
+
+    public void move() {
+        if (isDestroyed) {
+            return; // Cannot move if destroyed
+        }
+
+        Node target = headedHome ? home : workplace;
+
+        if (target == null)
+            return; // No target to move towards
+        
+        
+
+
+    }
+
+    // Getters
+
+    /**
+     * Checks if this car has been destroyed.
+     *
+     * @return true if the car is destroyed
+     */
+    public boolean isDestroyed() {
+        return isDestroyed;
+    }
+
+    // Setters
+
+    /**
+     * Sets the home apartment for this car.
+     *
+     * @param apartment the home apartment
+     */
+    public void setApartment(Apartment apartment) {
+        this.home = apartment;
+    }
+
+    /**
+     * Sets the workplace destination for this car.
+     *
+     * @param workplace the workplace to work at
+     */
+    public void setWorkplace(Workplace workplace) {
+        this.workplace = workplace;
+    }
+
+    // Overridden Methods
+
+    @Override
+    public boolean canSlip() {
+        return true;
     }
 
     @Override
     public void crash(Lane lane) {
         lane.crashOccured();
         isDestroyed = true;
-    }
-    
-    public boolean canSlip() {
-        return true;
-    }
-
-    public void setApartment(Apartment apartment) {
-        this.home = apartment;
-    }
-
-    public void setWorkplace(Workplace workplace) {
-        this.workplace = workplace;
-    }
-
-    public boolean isDestroyed() {
-        return isDestroyed;
     }
 
     @Override
@@ -46,5 +85,5 @@ public class Car extends Vehicle {
         Logger.logLine("Car " + id + " details:");
         Logger.logLine("Location: " + (location != null ? location.id : "none"));
         Logger.logLine("Destroyed: " + (isDestroyed ? "yes" : "no"));
-    }    
+    }
 }
