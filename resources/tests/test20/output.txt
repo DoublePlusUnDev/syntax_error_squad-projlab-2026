@@ -1,0 +1,1 @@
+VEHICLE [busPlayer.bus] SLIPPED ONTO LANE [road2.lane1]
