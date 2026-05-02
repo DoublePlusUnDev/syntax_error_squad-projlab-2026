@@ -32,9 +32,8 @@ public class Workplace extends Node implements Updatable {
 
     @Override
     public void accept(Vehicle vehicle) {
+        Logger.logLine("VEHICLE [" + vehicle.id + "] ENTERED [" + id + "] WORKPLACE ");
         vehicle.enterWorkPlace(this);
-
-        
     }
 
     public void carParked(Car car){

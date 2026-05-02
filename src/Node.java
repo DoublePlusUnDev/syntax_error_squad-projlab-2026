@@ -18,7 +18,7 @@ public class Node implements Inspectable{
     }
 
     public void accept(Vehicle vehicle) {
-        
+        Logger.logLine("VEHICLE [" + vehicle.id + "] ENTERED [" + id + "] NODE"); 
     }
 
     public List<Neighbour> getNeighbours() {

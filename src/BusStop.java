@@ -9,7 +9,8 @@ public class BusStop extends Node {
     }
 
     @Override
-    public void accept(Vehicle vehicle) { 
+    public void accept(Vehicle vehicle) {
+        Logger.logLine("VEHICLE [" + vehicle.id + "] ENTERED [" + id + "] BUS STOP "); 
         vehicle.enterBusStop(this);
     }
     

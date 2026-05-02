@@ -29,6 +29,7 @@ public class Apartment extends Node implements Updatable {
 
     @Override
     public void accept(Vehicle vehicle) {
+        Logger.logLine("VEHICLE [" + vehicle.id + "] ENTERED [" + id + "] APARTMENT "); 
         vehicle.enterApartment(this);
     }
 

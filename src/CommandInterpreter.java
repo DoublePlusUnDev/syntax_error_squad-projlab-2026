@@ -37,8 +37,8 @@ public class CommandInterpreter {
         */
         Map.entry("/clean", this::clean),
        /* 
-        Map.entry("/movevehicle", this::moveVehicle),
-        Map.entry("/enter", this::enter),*/
+        Map.entry("/movevehicle", this::moveVehicle),*/
+        Map.entry("/enter", this::enter),
         Map.entry("/slip", this::slip),
         Map.entry("listRoots", this::listRoots),
         Map.entry("inspect", this::inspect),
@@ -615,6 +615,27 @@ public class CommandInterpreter {
         }
 
         head.clean(target);
+    }
+
+    public void enter(Map<String, String> args) {
+        if (!args.containsKey("-vehicle") || !args.containsKey("-target")) {
+            Logger.logError("Error: Missing arguments for enter command. Required: -vehicle, -target.");
+            return;
+        }
+
+        Vehicle vehicle = ObjectRegistry.get(args.get("-vehicle"), Vehicle.class);
+        if (vehicle == null) {
+            Logger.logError("Error: Vehicle with id " + args.get("-vehicle") + " does not exist.");
+            return;
+        }
+
+        Node target = ObjectRegistry.get(args.get("-target"), Node.class);
+        if (target == null) {
+            Logger.logError("Error: Node with id " + args.get("-target") + " does not exist.");
+            return;
+        }
+
+        target.accept(vehicle);
     }
 
     public void slip(Map<String, String> args) {
