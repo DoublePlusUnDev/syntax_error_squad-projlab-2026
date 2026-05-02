@@ -1,0 +1,19 @@
+SNOWPLOW [snowPlowPlayer.snowPlow1] EQUIPPED [blowerHead]
+LANE [road1.lane1] CHANGED [snowHeight] FROM [0.1] TO [0.0]
+LANE [road1.lane1] SNOW DESTROYED
+Lane road1.lane1 details:
+Snow Height: 0.0
+Gravel Height: 0.0
+Icing Progress: 0
+Iced: no
+Vehicle Block: no
+Ice Debris: no
+Salted Timer: 0
+Lane road1.lane2 details:
+Snow Height: 0.1
+Gravel Height: 0.0
+Icing Progress: 0
+Iced: no
+Vehicle Block: no
+Ice Debris: no
+Salted Timer: 0

@@ -1,0 +1,4 @@
+/loadGame -path resources/init/Init3.txt
+equip -vehicle snowPlowPlayer.snowPlow1 -head sweeperHead
+/clean -head sweeperHead -target road2.lane2
+inspect -id road2.lane2

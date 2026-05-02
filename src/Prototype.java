@@ -5,7 +5,7 @@ public class Prototype {
         CommandInterpreter ci = new CommandInterpreter();
         
         TestRunner testRunner = new TestRunner();
-        testRunner.runTest("test3");
+        testRunner.runTest("test6");
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
