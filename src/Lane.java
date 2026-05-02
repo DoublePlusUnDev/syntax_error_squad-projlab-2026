@@ -1,29 +1,41 @@
 /**
  * Represents a single lane of the road.
- * Keeps track of how snowy it is, how far it's icing has progressed,
- * whether it has ICE, debris and if a vehicle is blocking it. Also handles salting progress.
- * Reports whether a given vehicle will or won't slip on it. Can be cleaned in various ways, 
- * when other lanes are included in the process it calls back to the roadsegment containing the lane.
+ * 
+ * Tracks the lane's condition including snow accumulation, ice formation, and debris.
+ * Manages vehicle interactions (collisions, driving over snow/ice) and maintenance actions
+ * (sweeping, blowing, salting, ice breaking). Reports slip hazards and can be cleaned
+ * via the parent RoadSegment when multiple lanes are involved.
  */
 public class Lane implements Updatable, Inspectable {
+    // Lane identification
     String id;
-
     private RoadSegment roadSegment;
     private int laneCount;
 
+    // Snow and ice state
     private float snowHeight = 0;
-    private boolean iceDebris = false;
     private int icingProgress = 0;
     private boolean iced = false;
-    private boolean vehicleBlock;
-    private int saltedTimer;
+    
+    // Hazard state
+    private boolean iceDebris = false;
+    private boolean vehicleBlock = false;
+    
+    // Maintenance state
+    private int saltedTimer = 0;
+    private float gravelHeight = 0;
 
+    // Physical constants
     private static final float SNOW_COMPRESS_RATE = 0.02f;
-    private static final int ICE_STEPS = 5; 
+    private static final int ICE_STEPS = 5;
     private static final float SNOW_THRESHOLD = 0.2f;
     private static final float SNOW_REMOVED_BY_SALT = 0.01f;
+    private static final float SLIP_CHANCE = 0.5f;
+    private static final float GRAVEL_OVER_SNOW_BUFFER = 0.02f;
 
-    public Lane(String id, RoadSegment roadSegment, int laneCount){
+    // ==================== Initialization ====================
+
+    public Lane(String id, RoadSegment roadSegment, int laneCount) {
         this.id = id;
         ObjectRegistry.register(id, this);
         this.roadSegment = roadSegment;
@@ -31,22 +43,69 @@ public class Lane implements Updatable, Inspectable {
         GameLogic.getInstance().registerUpdatable(this);
     }
 
+    // ==================== State Queries ====================
+
+    /**
+     * Checks if the lane has enough snow to be considered snowy.
+     * @return true if snow height exceeds the threshold
+     */
+    public boolean isSnowy() {
+        return snowHeight > SNOW_THRESHOLD;
+    }
+
+    /**
+     * Checks if a vehicle is blocking this lane (e.g., from a crash).
+     * @return true if the lane is blocked
+     */
+    public boolean isBlocked() {
+        return vehicleBlock;
+    }
+
+    /**
+     * Checks if the lane has ice debris from broken ice.
+     * @return true if ice debris is present
+     */
+    public boolean isDebrisFilled() {
+        return iceDebris;
+    }
+
+    /**
+     * Checks if the lane is currently iced over.
+     * @return true if the lane is iced
+     */
+    public boolean isIced() {
+        return iced;
+    }
+
+    /**
+     * Determines if a vehicle will slip on this lane.
+     * @return true if the lane is iced (slip hazard)
+     */
+    public boolean willSlip() {
+        return iced && snowHeight > gravelHeight && RandomGenerator.decide(SLIP_CHANCE);
+    }
+
+    // ==================== State Modifiers ====================
+
+    /**
+     * Adds snow to the lane, accumulating over multiple calls.
+     * @param snowLevel the amount of snow to add
+     */
     public void addSnow(float snowLevel) {
         snowHeight += snowLevel;
     }
 
-    public float getSnow(){
-        return snowHeight;
+    public void throwGravel() {
+        gravelHeight = snowHeight + GRAVEL_OVER_SNOW_BUFFER;
     }
 
     /**
-     * Handles the logic for a vehicle driving over the lane.
-     * If the lane is snowy, it will compress the snow and increase the icing progress.
-     * If the icing progress reaches the threshold, the lane becomes iced.
-     * If the lane is already iced, driving over it will reset the icing progress, but it will remain iced.
+     * Simulates a vehicle driving over the lane.
+     * Compresses snow and advances icing progress. Once fully iced, the lane
+     * remains iced but resets icing progress with each pass.
      */
     public void driveOver() {
-        if (snowHeight >= SNOW_COMPRESS_RATE){
+        if (snowHeight >= SNOW_COMPRESS_RATE) {
             snowHeight -= SNOW_COMPRESS_RATE;
             icingProgress++;
         }
@@ -60,13 +119,70 @@ public class Lane implements Updatable, Inspectable {
         }
     }
 
+    /**
+     * Records that a crash has occurred on this lane, blocking it.
+     */
     public void crashOccured() {
         vehicleBlock = true;
     }
 
-    public boolean willSlip() {
-        boolean slip = iced;
-        return slip;
+    /**
+     * Applies salt to the lane. Reduces snow over time and eventually destroys ice.
+     */
+    public void salt() {
+        saltedTimer = 5;
+    }
+
+    /**
+     * Breaks the ice on the lane, converting it to debris.
+     */
+    public void breakIce() {
+        if (iced) {
+            iced = false;
+            iceDebris = true;
+        }
+    }
+
+    /**
+     * Completely removes all snow from the lane.
+     */
+    public void destroySnow() {
+        snowHeight = 0;
+    }
+
+    /**
+     * Removes the ice from the lane without creating debris.
+     */
+    public void destroyIce() {
+        iced = false;
+    }
+
+    /**
+     * Delegates sweeping to the parent road segment.
+     */
+    public void sweep() {
+        roadSegment.sweep(this);
+    }
+
+    /**
+     * Delegates blowing to the parent road segment.
+     */
+    public void blow() {
+        roadSegment.blow(this);
+    }
+
+    // ==================== Accessors ====================
+
+    public float getSnow() {
+        return snowHeight;
+    }
+
+    public int getIcingProgress() {
+        return icingProgress;
+    }
+
+    public float getGravelHeight() {
+        return gravelHeight;
     }
 
     public RoadSegment getSegment() {
@@ -77,46 +193,7 @@ public class Lane implements Updatable, Inspectable {
         return laneCount;
     }
 
-    public void sweep() {
-        roadSegment.sweep(this);
-    }
-
-    public void blow() {
-        roadSegment.blow(this);
-    }
-
-    public void salt() {
-        saltedTimer = 5; 
-    }
-
-    public void breakIce() {
-
-        if (iced){
-            iced = false;
-            iceDebris = true;
-        }
-            
-    }
-
-    public void destroySnow() {
-        snowHeight = 0;
-    }
-
-    public void destroyIce() {
-        iced = false;
-    }
-
-    public boolean isSnowy() {
-        return snowHeight > SNOW_THRESHOLD;
-    }
-
-    public boolean isBlocked() {
-        return vehicleBlock;
-    }
-
-    public boolean isDebrisFilled() {
-        return iceDebris;
-    }
+    // ==================== Mutators (for restoration/testing) ====================
 
     public void setSnowHeight(float height) {
         snowHeight = height;
@@ -143,41 +220,39 @@ public class Lane implements Updatable, Inspectable {
     }
 
     public void setGravelHeight(float gravelHeight) {
+        this.gravelHeight = gravelHeight;
     }
 
-    public int getIcingProgress() {
-        return icingProgress;
-    }
+    // ==================== Lifecycle ====================
 
-    public boolean isIced() {
-        return iced;
-    }
-
-    public float getGravelHeight() {
-        return 0;
-    }
-
-
+    /**
+     * Updates the lane state each game tick.
+     * Reduces snow when salted and eventually destroys ice after salt timer expires.
+     */
     @Override
     public void update() {
         if (saltedTimer > 0) {
-            
             snowHeight = Math.max(0, snowHeight - SNOW_REMOVED_BY_SALT);
-
             saltedTimer--;
 
-            if (saltedTimer == 0)
+            if (saltedTimer == 0) {
                 destroyIce();
+            }
         }
     }
 
+    /**
+     * Logs detailed information about the lane's current state.
+     */
     @Override
     public void inspect() {
         Logger.logLine("Lane " + id + " details:");
         Logger.logLine("Snow Height: " + snowHeight);
+        Logger.logLine("Gravel Height: " + gravelHeight);
         Logger.logLine("Icing Progress: " + icingProgress);
         Logger.logLine("Iced: " + (iced ? "yes" : "no"));
         Logger.logLine("Vehicle Block: " + (vehicleBlock ? "yes" : "no"));
         Logger.logLine("Ice Debris: " + (iceDebris ? "yes" : "no"));
+        Logger.logLine("Salted Timer: " + saltedTimer);
     }
 }

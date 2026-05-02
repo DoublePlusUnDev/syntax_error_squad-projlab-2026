@@ -23,7 +23,7 @@ public class RandomGenerator {
         Collections.shuffle(list, random);
     }
 
-    boolean decision(double probability) {
+    public static boolean decide(float probability) {
         if (mode == RandomGeneratorMode.ALWAYS) {
             return true;
         } else if (mode == RandomGeneratorMode.NEVER) {
