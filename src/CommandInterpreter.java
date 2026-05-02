@@ -14,30 +14,30 @@ public class CommandInterpreter {
         Map.entry("/random", this::random),
         Map.entry("/seed", this::seed),
         Map.entry("/logging", this::logging),
-        Map.entry("/addnet", this::addNet),
+        Map.entry("/addNet", this::addNet),
         Map.entry("/start", this::start),
-        Map.entry("/savelog", this::savelog),
-        Map.entry("/savegame", this::savegame),
-        Map.entry("/loadgame", this::loadgame),
+        Map.entry("/saveLog", this::savelog),
+        Map.entry("/saveGame", this::savegame),
+        Map.entry("/loadGame", this::loadgame),
         Map.entry("/generate", this::generate),
-        Map.entry("/addnode", this::addNode),
-        Map.entry("/addroad", this::addRoad),
-        Map.entry("/modlane", this::modLane),
-        Map.entry("/modplow", this::modPlow),
-        Map.entry("/modbus", this::modBus),
-        Map.entry("/modcar", this::modCar),
-        Map.entry("/modapartment", this::modApartment),
-        Map.entry("/modworkplace", this::modWorkplace),
-        Map.entry("/addplayer", this::addPlayer),
-        Map.entry("/addvehicle", this::addVehicle),
-        /*Map.entry("/createbuyable", this::createBuyable),
-        Map.entry("/addmoney", this::addMoney),
+        Map.entry("/addNode", this::addNode),
+        Map.entry("/addRoad", this::addRoad),
+        Map.entry("/modLane", this::modLane),
+        Map.entry("/modPlow", this::modPlow),
+        Map.entry("/modBus", this::modBus),
+        Map.entry("/modCar", this::modCar),
+        Map.entry("/modApartment", this::modApartment),
+        Map.entry("/modWorkplace", this::modWorkplace),
+        Map.entry("/addPlayer", this::addPlayer),
+        Map.entry("/addVehicle", this::addVehicle),
+        Map.entry("/createbuyable", this::createBuyable),
+        /*Map.entry("/addmoney", this::addMoney),
         Map.entry("/setmoney", this::setMoney),
         Map.entry("/movevehicle", this::moveVehicle),
         Map.entry("/enter", this::enter),
         Map.entry("/slip", this::slip),
       */
-        Map.entry("listroots", this::listRoots),
+        Map.entry("listRoots", this::listRoots),
         Map.entry("inspect", this::inspect)
         /*Map.entry("move", this::move),
         Map.entry("changelane", this::changeLane),
@@ -149,7 +149,20 @@ public class CommandInterpreter {
             System.out.println("Error: Missing -path argument for loadgame command.");
             return;
         }
-        // TODO: Implement logic to load game state from a file
+        
+        try (Scanner fileScanner = new Scanner(new File(args.get("-path")))) {
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
+                
+                if (line.trim().isEmpty() || line.startsWith("#")) {
+                    continue; // Skip empty lines and comments
+                }
+
+                execute(line);
+            }
+        } catch (Exception e) {
+            Logger.logError("Error loading game: " + e.getMessage());
+        }
     }
 
     public void generate(Map<String, String> args) {
@@ -454,15 +467,15 @@ public class CommandInterpreter {
 
     public void addVehicle(Map<String, String> args) {
         if (!args.containsKey("-id")) {
-            System.out.println("Error: Missing -id argument for addplayer command.");
+            System.out.println("Error: Missing -id argument for addVehicle command.");
             return;
         }
         if (!args.containsKey("-lane")) {
-            System.out.println("Error: Missing -lane argument for addplayer command.");
+            System.out.println("Error: Missing -lane argument for addVehicle command.");
             return;
         }
         if (!args.containsKey("-type")) {
-            System.out.println("Error: Missing -type argument for addplayer command.");
+            System.out.println("Error: Missing -type argument for addVehicle command.");
             return;
         }
 
@@ -492,8 +505,8 @@ public class CommandInterpreter {
     }
 
     public void addPlayer(Map<String, String> args) {
-        if (!args.containsKey("-id") || !args.containsKey("-net") || !args.containsKey("-net")) {
-            Logger.logError("Error: Missing -id argument for addplayer command.");
+        if (!args.containsKey("-id") || !args.containsKey("-net") || !args.containsKey("-lane")) {
+            Logger.logError("Error: Missing -id -net -lane arguments for addplayer command.");
             return;
         }
 

@@ -1,0 +1,9 @@
+/logging -enable false
+/addNet -id net
+/addNode -id node1 -net net
+/addNode -id node2 -net net
+/addNode -id node3 -net net -type busstop
+/addRoad -id road1 -start node1 -end node2 -lanes 2 -type road
+/addRoad -id road2 -start node2 -end node3 -lanes 2 -type road
+/addPlayer -id busPlayer -type bus -lane road1.lane1
+/logging -enable true

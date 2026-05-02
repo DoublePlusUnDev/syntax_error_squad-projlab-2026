@@ -1,0 +1,7 @@
+/logging -enable false
+/addNet -id net
+/addNode -id node1 -net net
+/addNode -id node2 -net net
+/addRoad -id road1 -start node1 -end node2 -lanes 1 -net net
+/addPlayer -id snowPlowPlayer -type snowplow -lane road1.lane1 -net net
+/logging -enable true
