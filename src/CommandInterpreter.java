@@ -29,17 +29,17 @@ public class CommandInterpreter {
         Map.entry("/modapartment", this::modApartment),
         Map.entry("/modworkplace", this::modWorkplace),
         Map.entry("/addplayer", this::addPlayer),
-        Map.entry("/addvehicle", this::addVehicle)//,
+        Map.entry("/addvehicle", this::addVehicle),
         /*Map.entry("/createbuyable", this::createBuyable),
         Map.entry("/addmoney", this::addMoney),
         Map.entry("/setmoney", this::setMoney),
         Map.entry("/movevehicle", this::moveVehicle),
         Map.entry("/enter", this::enter),
         Map.entry("/slip", this::slip),
-      
+      */
         Map.entry("listroots", this::listRoots),
-        Map.entry("inspect", this::inspect),
-        Map.entry("move", this::move),
+        Map.entry("inspect", this::inspect)
+        /*Map.entry("move", this::move),
         Map.entry("changelane", this::changeLane),
         Map.entry("equip", this::equip),
         Map.entry("buy", this::buy)*/
