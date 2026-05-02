@@ -15,11 +15,7 @@ public abstract class Vehicle implements Inspectable {
     }
 
     public void enter(Lane lane) {
-        TestUtil.enterFunction("Vehicle:enter(Lane lane)");
-        
         location = lane;
-
-        TestUtil.exitFunction("entered lane");
     }
 
     public void enterApartment(Apartment apartment) {
@@ -39,33 +35,26 @@ public abstract class Vehicle implements Inspectable {
     }
 
     public boolean canEnter(Lane lane) {
-        TestUtil.enterFunction("Vehicle:canEnter()");
 
         if (lane.isBlocked()){
-            TestUtil.exitFunction("cant enter lane is blocked");
             return false;
         }
 
         if (lane.isSnowy()){
-            TestUtil.exitFunction("cant enter lane is snowy");
             return false;
         }
 
         if (lane.isDebrisFilled()){
-            TestUtil.exitFunction("cant enter lane is full of debris");
             return false;
         }
 
-        TestUtil.exitFunction("lane can be entered");
         return true;
     }
 
     public boolean canSlip() {
-        TestUtil.enterFunction("canSlip()");
     
         boolean slip = TestUtil.askUserYesNo("Can the vehicle slip?");
 
-        TestUtil.exitFunction(String.valueOf(slip));
         return slip;
     }
 }

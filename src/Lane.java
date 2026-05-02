@@ -46,7 +46,6 @@ public class Lane implements Updatable, Inspectable {
      * If the lane is already iced, driving over it will reset the icing progress, but it will remain iced.
      */
     public void driveOver() {
-        TestUtil.enterFunction("Lane:driveOver()");
         if (snowHeight >= SNOW_COMPRESS_RATE){
             snowHeight -= SNOW_COMPRESS_RATE;
             icingProgress++;

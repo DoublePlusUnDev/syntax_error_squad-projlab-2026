@@ -23,23 +23,18 @@ public class SnowPlow extends Vehicle{
 
     @Override
     public void enter(Lane lane) {
-        TestUtil.enterFunction("SnowPlow:enter(lane)");
-
         location = lane;
 
-        if (plowHead != null) {
+        if (plowHead != null) 
             plowHead.clean(lane);
-        }
-        TestUtil.exitFunction("lane entered and cleaned");
+        
     }
     
     public void equip(PlowHead head) {
-        TestUtil.enterFunction("SnowPlow:equip()");
         if (plowHead != null)
             plowHead.unequip();
         this.plowHead = head;
         plowHead.equip();
-        TestUtil.exitFunction("equipped");
     }
 
     @Override

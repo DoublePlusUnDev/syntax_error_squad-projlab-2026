@@ -22,90 +22,61 @@ public class Inventory implements Inspectable{
         ObjectRegistry.register(id, this);
     }
 
-    public boolean tryConsumeSalt() {
-        TestUtil.enterFunction("Inventory:tryConsumeSalt()");
-    
+    public boolean tryConsumeSalt() {    
         boolean canConsume = salt > 0;
 
-        if (!canConsume) {
-            TestUtil.exitFunction("no salt to consume");
+        if (!canConsume) 
             return false;
-        }
+        
 
-        TestUtil.exitFunction("salt consumed");
         return true;
     }
 
-    public boolean tryConsumeGravel() {
-        TestUtil.enterFunction("Inventory:tryConsumeGravel()");
-    
+    public boolean tryConsumeGravel() {    
         boolean canConsume = gravel > 0;
 
-        if (!canConsume) {
-            TestUtil.exitFunction("no gravel to consume");
+        if (!canConsume) 
             return false;
-        }
-
-        TestUtil.exitFunction("gravel consumed");
+        
         return true;
     }
 
-    public boolean tryConsumeKerosene() {
-        TestUtil.enterFunction("Inventory:tryConsumeKerosene()");
-    
+    public boolean tryConsumeKerosene() {    
         boolean canConsume = bioKerosene > 0;
 
-        if (!canConsume) {
-            TestUtil.exitFunction("no kerosene to consume");
+        if (!canConsume) 
             return false;
-        }
-
-        TestUtil.exitFunction("kerosene consumed");
+        
         return true;
     }
 
     public void addSalt(int amount) {
-        TestUtil.enterFunction("Inventory:addSalt(amount)");
-        
         if (salt + amount > MAX_SALT) {
             salt = MAX_SALT;
         } else {
             salt += amount;
         }
-
-        TestUtil.exitFunction("salt added");
     }
 
     public void addGravel(int amount) {
-        TestUtil.enterFunction("Inventory:addGravel(amount)");
-
-        if (gravel + amount > MAX_GRAVEL) {
+        if (gravel + amount > MAX_GRAVEL)
             gravel = MAX_GRAVEL;
-        } else {
+        else 
             gravel += amount;
-        }
-
-        TestUtil.exitFunction("gravel added");
+        
     }
 
     public void addKerosene(int amount) {
-        TestUtil.enterFunction("Inventory:addKerosene(amount)");
-    
-        if (bioKerosene + amount > MAX_BIO_KEROSENE) {
+        if (bioKerosene + amount > MAX_BIO_KEROSENE)
             bioKerosene = MAX_BIO_KEROSENE;
-        } else {
+        else 
             bioKerosene += amount;
-        }
-
-        TestUtil.exitFunction("kerosene added");
     }
 
     
 
     public void addHead(PlowHead plowHead) {
-        TestUtil.enterFunction("Inventory:addHead(plowHead)");
         plowHeads.add(plowHead);
-        TestUtil.exitFunction("head added");
     }
 
     @Override

@@ -16,14 +16,10 @@ public class SnowPlowPlayer extends Player {
 
     @Override
     public void takeTurn() {
-        TestUtil.enterFunction("SnowPlow:takeTurn()");
-        if (!roads.tryMoveTowardsNode(snowPlows.get(0), null)) {
-            TestUtil.exitFunction("turn failed");    
+        if (!roads.tryMoveTowardsNode(snowPlows.get(0), null)) 
             return;
-        }
-        
-        TestUtil.exitFunction("turn done");        
-    }
+    }      
+    
 
     public List<SnowPlow> getSnowPlows() {
         return snowPlows;
