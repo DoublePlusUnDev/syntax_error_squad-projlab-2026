@@ -1,0 +1,3 @@
+/loadGame -path resources/init/Init3.txt
+/start
+buy -buyable salt -inventory snowPlowPlayer.snowPlow1.inventory -bank snowPlowPlayer.bank

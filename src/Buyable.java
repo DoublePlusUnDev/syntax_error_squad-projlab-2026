@@ -12,6 +12,12 @@ public abstract class Buyable implements Inspectable {
     }
 
     boolean buy(Inventory inventory, MoneyBank bank){
-        return bank.payMoney(price);
+        if (bank.payMoney(price)) {
+            Logger.logLine("BUYABLE [" + id + "] BOUGHT BY [" + inventory.id + "] FOR [" + price + "]");
+            return true;
+        }
+
+        Logger.logLine("BUYABLE [" + id + "] COULD NOT BE BOUGHT BY [" + inventory.id + "] FOR [" + price + "]");
+        return false;
     }
 }

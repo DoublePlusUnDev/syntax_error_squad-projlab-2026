@@ -144,6 +144,7 @@ public class Lane implements Updatable, Inspectable {
         if (iced) {
             setIced(false);
             setIceDebris(true);
+            Logger.logLine("LANE [" + id + "] ICE BROKEN");
         }
     }
 
@@ -165,6 +166,7 @@ public class Lane implements Updatable, Inspectable {
      */
     public void destroyIce() {
         setIced(false);
+        Logger.logLine("LANE [" + id + "] ICE DESTROYED");
     }
 
     /**

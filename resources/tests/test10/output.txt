@@ -1,0 +1,9 @@
+SNOWPLOW [snowPlowPlayer.snowPlow1] EQUIPPED [iceBreakerHead]
+Lane road1.lane2 details:
+Snow Height: 0.1
+Gravel Height: 0.0
+Icing Progress: 0
+Iced: no
+Vehicle Block: no
+Ice Debris: no
+Salted Timer: 0
