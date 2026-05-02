@@ -4,9 +4,9 @@
 /addNode -id node2 -net net
 /addNode -id node3 -net net
 /addNode -id node4 -net net
-/addRoad -id road1 -start node1 -end node2 -lanes 1 -type road
-/addRoad -id road2 -start node2 -end node3 -lanes 1 -type road
-/addRoad -id road3 -start node3 -end node4 -lanes 1 -type road
-/addPlayer -id busPlayer -type bus -lane road1.lane1
-/addVehicle -id car -lane road3.lane1 -type car
+/addRoad -id road1 -start node1 -end node2 -lanes 1 -type road -net net
+/addRoad -id road2 -start node2 -end node3 -lanes 1 -type road -net net
+/addRoad -id road3 -start node3 -end node4 -lanes 1 -type road -net net
+/addPlayer -id busPlayer -type bus -lane road1.lane1 -net net
+/addVehicle -id car -lane road3.lane1 -type car -net net
 /logging -enable true
