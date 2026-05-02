@@ -9,17 +9,21 @@ public class CommandInterpreter {
         
     }
 
-    Map<String, Command> commands = Map.of(
-        "/help", this::help, 
-        "/random", this::random, 
-        "/seed", this::seed, 
-        "/logging", this::logging,
-        "/addnet", this::addNet, 
-        "/generate", this::generate,
-        "/addnode", this::addNode,
-        "/addroad", this::addRoad, 
-        "/modlane", this::modLane,
-        "inspect", this::inspect
+    Map<String, Command> commands = Map.ofEntries(
+        Map.entry("/help", this::help),
+        Map.entry("/random", this::random),
+        Map.entry("/seed", this::seed),
+        Map.entry("/logging", this::logging),
+        Map.entry("/addnet", this::addNet),
+        Map.entry("/generate", this::generate),
+        Map.entry("/addnode", this::addNode),
+        Map.entry("/addroad", this::addRoad),
+        Map.entry("/modlane", this::modLane),
+        Map.entry("/modplow", this::modPlow),
+        Map.entry("/modbus", this::modBus),
+        Map.entry("/modcar", this::modCar),
+        Map.entry("/listroots", this::listRoots),
+        Map.entry("inspect", this::inspect)
     );
 
     public CommandInterpreter() {
@@ -304,7 +308,90 @@ public class CommandInterpreter {
         }
     }
 
-    
+    public void modBus(Map<String, String> args) {
+        if (!args.containsKey("-id")) {
+            System.out.println("Error: Missing -id argument for modbus command.");
+            return;
+        }
+
+        Bus bus = ObjectRegistry.get(args.get("-id"), Bus.class);
+        if (bus == null) {
+            System.out.println("Error: Bus with id " + args.get("-id") + " does not exist.");
+            return;
+        }
+
+        if (args.containsKey("-start")) {
+            BusStop start = ObjectRegistry.get(args.get("-start"), BusStop.class);
+            if (start == null) {
+                System.out.println("Error: Start node with id " + args.get("-start") + " does not exist.");
+                return;
+            }
+            bus.setStartStop(start);
+        }
+
+        if (args.containsKey("-end")) {
+            BusStop end = ObjectRegistry.get(args.get("-end"), BusStop.class);
+            if (end == null) {
+                System.out.println("Error: End node with id " + args.get("-end") + " does not exist.");
+                return;
+            }
+            bus.setEndStop(end);
+        }
+
+        if (args.containsKey("-inactive")) {
+            int inactive = Integer.parseInt(args.get("-inactive"));
+            bus.setInactiveTimer(inactive);
+        }
+    }
+
+    public void modCar(Map<String, String> args) {
+        if (!args.containsKey("-id")) {
+            System.out.println("Error: Missing -id argument for modcar command.");
+            return;
+        }
+
+        Car car = ObjectRegistry.get(args.get("-id"), Car.class);
+        if (car == null) {
+            System.out.println("Error: Car with id " + args.get("-id") + " does not exist.");
+            return;
+        }
+
+        if (args.containsKey("-apartment")) {
+            Apartment apartment = ObjectRegistry.get(args.get("-apartment"), Apartment.class);
+            if (apartment == null) {
+                System.out.println("Error: Apartment with id " + args.get("-apartment") + " does not exist.");
+                return;
+            }
+            car.setApartment(apartment);
+        }
+
+        if (args.containsKey("-workplace")) {
+            Workplace workplace = ObjectRegistry.get(args.get("-workplace"), Workplace.class);
+            if (workplace == null) {
+                System.out.println("Error: Workplace with id " + args.get("-workplace") + " does not exist.");
+                return;
+            }
+            car.setWorkplace(workplace);
+        }
+    }
+
+    public void listRoots(Map<String, String> args) {
+        Logger.logLine("Root objects details:");
+        Logger.logLine("Road networks:");
+        for (RoadNetwork road : GameLogic.getInstance().getRoads()) {
+            Logger.logLine("- " + road.id);
+        }
+
+        Logger.logLine("Cars:");
+        for (Car car : GameLogic.getInstance().getCars()) {
+            Logger.logLine("- " + car.id);
+        }
+
+        Logger.logLine("Players:");
+        for (Player player : GameLogic.getInstance().getPlayers()) {
+            Logger.logLine("- " + player.id);
+        }
+    }
 
     public void inspect(Map<String, String> args) {
         if (!args.containsKey("-id")) {

@@ -28,4 +28,16 @@ public class GameLogic {
 
         return instance;
     }
+
+    public List<RoadNetwork> getRoads() {
+        return roads;
+    }
+
+    public List<Car> getCars() {
+        return cars;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
 }

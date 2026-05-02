@@ -9,7 +9,7 @@ import java.util.List;
  * Snow can be added to in a radius of a node.
  */
 public class RoadNetwork implements Inspectable {
-    private String id;
+    String id;
     private RoadGenerationParameters generationParameters;
 
     private List<Node> nodes;

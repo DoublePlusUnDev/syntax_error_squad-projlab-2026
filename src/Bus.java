@@ -39,6 +39,18 @@ public class Bus extends Vehicle implements Updatable {
         this.endStop = endStop;
     }
 
+    public void setStartStop(BusStop startStop) {
+        this.startStop = startStop;
+    }
+
+    public void setEndStop(BusStop endStop) {
+        this.endStop = endStop;
+    }
+
+    void setInactiveTimer(int time) {
+        this.inactiveTimer = time;
+    }
+
     @Override
     public void crash(Lane lane) {
         inactiveTimer = CRASH_TIMEOUT; 

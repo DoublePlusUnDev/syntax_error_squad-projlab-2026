@@ -7,6 +7,8 @@
  */
 public class Car extends Vehicle {
     boolean isDestroyed = false;
+    Apartment home;
+    Workplace workplace;
 
     public Car(String id){
         super(id);
@@ -20,6 +22,14 @@ public class Car extends Vehicle {
     
     public boolean canSlip() {
         return true;
+    }
+
+    public void setApartment(Apartment apartment) {
+        this.home = apartment;
+    }
+
+    public void setWorkplace(Workplace workplace) {
+        this.workplace = workplace;
     }
 
     public boolean isDestroyed() {
