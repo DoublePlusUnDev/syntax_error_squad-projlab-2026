@@ -11,7 +11,7 @@ public class SnowPlowPlayer extends Player {
     public SnowPlowPlayer(String id, RoadNetwork roads, Lane startingLane) {
         super(id, roads);
         snowPlows = new ArrayList<>();
-        snowPlows.add(new SnowPlow(""));
+        snowPlows.add(new SnowPlow(id + ".snowPlow1"));
     }
 
     @Override
@@ -32,7 +32,6 @@ public class SnowPlowPlayer extends Player {
     @Override
     public void inspect() {
         Logger.logLine("SnowPlowPlayer " + id + " details:");
-        Logger.logLine("Inventory: " + inventory.id);
         for (int i = 0; i < snowPlows.size(); i++) {
             Logger.logLine("Snowplow " + i + ": " + snowPlows.get(i).id);
         }

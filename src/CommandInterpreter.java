@@ -1,4 +1,5 @@
-import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -40,8 +41,8 @@ public class CommandInterpreter {
         Map.entry("listRoots", this::listRoots),
         Map.entry("inspect", this::inspect),
         /*Map.entry("move", this::move),
-        Map.entry("changelane", this::changeLane),
-        Map.entry("equip", this::equip),/* */
+        Map.entry("changelane", this::changeLane),*/
+        Map.entry("equip", this::equip),
         Map.entry("buy", this::buy)
     );
 
@@ -70,9 +71,9 @@ public class CommandInterpreter {
     }
     
     public void help(Map<String, String> args) {
-        File helpFile = new File("resources/help.txt");
-        
-        try (Scanner scanner = new Scanner(helpFile)) {
+        Path helpPath = Paths.get("resources", "help.txt");
+
+        try (Scanner scanner = new Scanner(helpPath.toFile())) {
             while (scanner.hasNextLine()) {
                 Logger.logLine(scanner.nextLine());
             }
@@ -133,7 +134,7 @@ public class CommandInterpreter {
             System.out.println("Error: Missing -path argument for savelog command.");
             return;
         }
-        Logger.saveLog(args.get("-path"));
+        Logger.saveLog(Paths.get(args.get("-path")));
     }
 
     public void savegame(Map<String, String> args) {
@@ -141,7 +142,9 @@ public class CommandInterpreter {
             System.out.println("Error: Missing -path argument for savelog command.");
             return;
         }
-        // TODO: Implement logic to save game state to a file   
+        // TODO: Implement logic to save game state to a file
+        Path target = Paths.get(args.get("-path"));
+        // Use target.toString() or target.toFile() when implementing save logic
     }
 
     public void loadgame(Map<String, String> args) {
@@ -150,7 +153,7 @@ public class CommandInterpreter {
             return;
         }
         
-        try (Scanner fileScanner = new Scanner(new File(args.get("-path")))) {
+        try (Scanner fileScanner = new Scanner(Paths.get(args.get("-path")).toFile())) {
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine().trim();
                 
@@ -611,6 +614,27 @@ public class CommandInterpreter {
         } else {
             Logger.logError("Object with id " + args.get("-id") + " is not inspectable or does not exist.");
         }
+    }
+
+    public void equip(Map<String, String> args) {
+        if (!args.containsKey("-vehicle") || !args.containsKey("-head")) {
+            Logger.logError("Error: Missing arguments for equip command. Required: -vehicle, -head.");
+            return;
+        }
+
+        SnowPlow plow = ObjectRegistry.get(args.get("-vehicle"), SnowPlow.class);
+        if (plow == null) {
+            Logger.logError("Error: Snow plow with id " + args.get("-vehicle") + " does not exist.");
+            return;
+        }
+
+        PlowHead head = ObjectRegistry.get(args.get("-head"), PlowHead.class);
+        if (head == null) {
+            Logger.logError("Error: Plow head with id " + args.get("-head") + " does not exist.");
+            return;
+        }
+
+        plow.equip(head);
     }
 
     public void buy(Map<String, String> args) {

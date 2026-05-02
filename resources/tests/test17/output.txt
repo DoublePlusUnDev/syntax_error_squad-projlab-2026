@@ -1,0 +1,5 @@
+SNOWPLOW [snowPlowPlayer.snowPlow1] EQUIPPED [gravelHead]
+SnowPlow snowPlowPlayer.snowPlow1 details:
+Location: none
+PlowHead: gravelHead
+Inventory: snowPlowPlayer.snowPlow1.inventory

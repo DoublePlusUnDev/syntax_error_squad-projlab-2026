@@ -22,7 +22,6 @@ public class BusPlayer extends Player {
     @Override
     public void inspect() {
         Logger.logLine("BusPlayer " + id + " details:");
-        Logger.logLine("Inventory: " + inventory.id);
         Logger.logLine("Bus: " + bus.id);
     }
     

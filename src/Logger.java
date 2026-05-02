@@ -1,3 +1,4 @@
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -6,6 +7,11 @@ public class Logger {
 
     static List<String> logMessages = new ArrayList<>();
     static List<String> commands = new ArrayList<>();
+
+    public static void clearLogs() {
+        logMessages.clear();
+        commands.clear();
+    }
 
     public static void log(String message) {
         System.out.print(message);
@@ -35,8 +41,14 @@ public class Logger {
         Logger.enabled = enabled;
     }
 
-    public static void saveLog(String filepath) {
-        //TODO: Implement logic to save log to a file
+    public static void saveLog(Path filepath) {
+        try (java.io.PrintWriter writer = new java.io.PrintWriter(filepath.toFile())) {
+            for (String message : logMessages) {
+                writer.println(message);
+            }
+        } catch (java.io.IOException e) {
+            System.err.println("Error saving log: " + e.getMessage());
+        }
     }
     
 }

@@ -1,0 +1,3 @@
+/loadGame -path resources/init/Init3.txt
+equip -vehicle snowPlowPlayer.snowPlow1 -head gravelHead
+inspect -id snowPlowPlayer.snowPlow1
