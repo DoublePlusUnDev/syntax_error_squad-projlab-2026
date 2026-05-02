@@ -34,6 +34,9 @@ public class CommandInterpreter {
         Map.entry("/createBuyable", this::createBuyable),
         /*Map.entry("/addmoney", this::addMoney),
         Map.entry("/setmoney", this::setMoney),
+        */
+        Map.entry("/clean", this::clean),
+       /* 
         Map.entry("/movevehicle", this::moveVehicle),
         Map.entry("/enter", this::enter),
         Map.entry("/slip", this::slip),
@@ -142,7 +145,7 @@ public class CommandInterpreter {
             System.out.println("Error: Missing -path argument for savelog command.");
             return;
         }
-        // TODO: Implement logic to save game state to a file
+
         Path target = Paths.get(args.get("-path"));
         // Use target.toString() or target.toFile() when implementing save logic
     }
@@ -582,6 +585,27 @@ public class CommandInterpreter {
             case "icebreakerhead" -> buyable = new IceBreakerHead(args.get("-id"), price);
             default -> Logger.logError("Error: Invalid buyable type.");
         }
+    }
+
+    public void clean(Map<String, String> args){
+        if (!args.containsKey("-head") || !args.containsKey("-target")) {
+            Logger.logError("Error: Missing arguments for clean command. Required: -head, -target.");
+            return;
+        }
+        
+        PlowHead head = ObjectRegistry.get(args.get("-head"), PlowHead.class);
+        if (head == null) {
+            Logger.logError("Error: Plow head with id " + args.get("-head") + " does not exist.");
+            return;
+        }
+
+        Lane target = ObjectRegistry.get(args.get("-target"), Lane.class);
+        if (target == null) {
+            Logger.logError("Error: Lane with id " + args.get("-target") + " does not exist.");
+            return;
+        }
+
+        head.clean(target);
     }
 
     public void listRoots(Map<String, String> args) {

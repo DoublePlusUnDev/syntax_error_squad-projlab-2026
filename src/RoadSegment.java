@@ -93,10 +93,13 @@ public class RoadSegment implements Inspectable {
     public void sweep(Lane lane){
         float snowLevel = lane.getSnow();
         lane.destroySnow();
+        float gravelLevel = lane.getGravel();
+        lane.destroyGravel();
 
         if (!isRightLane(lane)) {
             Lane laneToTheRight = lanes.get(lanes.indexOf(lane) + 1);
             laneToTheRight.addSnow(snowLevel);
+            laneToTheRight.addGravel(gravelLevel);
         }
     }
 

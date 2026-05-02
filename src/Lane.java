@@ -92,11 +92,15 @@ public class Lane implements Updatable, Inspectable {
      * @param snowLevel the amount of snow to add
      */
     public void addSnow(float snowLevel) {
-        snowHeight += snowLevel;
+        setSnowHeight(snowHeight + snowLevel);
+    }
+
+    public void addGravel(float gravelLevel) {
+        setGravelHeight(gravelHeight + gravelLevel);
     }
 
     public void throwGravel() {
-        gravelHeight = snowHeight + GRAVEL_OVER_SNOW_BUFFER;
+        setGravelHeight(snowHeight + GRAVEL_OVER_SNOW_BUFFER);
     }
 
     /**
@@ -106,16 +110,16 @@ public class Lane implements Updatable, Inspectable {
      */
     public void driveOver() {
         if (snowHeight >= SNOW_COMPRESS_RATE) {
-            snowHeight -= SNOW_COMPRESS_RATE;
-            icingProgress++;
+            setSnowHeight(snowHeight - SNOW_COMPRESS_RATE);
+            setIcingProgress(icingProgress + 1);
         }
 
         if (icingProgress >= ICE_STEPS) {
-            iced = true;
+            setIced(true);
         }
 
         if (iced) {
-            icingProgress = 0;
+            setIcingProgress(0);
         }
     }
 
@@ -123,14 +127,14 @@ public class Lane implements Updatable, Inspectable {
      * Records that a crash has occurred on this lane, blocking it.
      */
     public void crashOccured() {
-        vehicleBlock = true;
+        setVehicleBlock(true);
     }
 
     /**
      * Applies salt to the lane. Reduces snow over time and eventually destroys ice.
      */
     public void salt() {
-        saltedTimer = 5;
+        setSaltedTimer(5);
     }
 
     /**
@@ -138,8 +142,8 @@ public class Lane implements Updatable, Inspectable {
      */
     public void breakIce() {
         if (iced) {
-            iced = false;
-            iceDebris = true;
+            setIced(false);
+            setIceDebris(true);
         }
     }
 
@@ -147,14 +151,20 @@ public class Lane implements Updatable, Inspectable {
      * Completely removes all snow from the lane.
      */
     public void destroySnow() {
-        snowHeight = 0;
+        setSnowHeight(0);
+        Logger.logLine("LANE [" + id + "] SNOW DESTROYED");
+    }
+
+    public void destroyGravel() {
+        setGravelHeight(0);
+        Logger.logLine("LANE [" + id + "] GRAVEL DESTROYED");
     }
 
     /**
      * Removes the ice from the lane without creating debris.
      */
     public void destroyIce() {
-        iced = false;
+        setIced(false);
     }
 
     /**
@@ -177,6 +187,10 @@ public class Lane implements Updatable, Inspectable {
         return snowHeight;
     }
 
+    public float getGravel() {
+        return gravelHeight;
+    }
+
     public int getIcingProgress() {
         return icingProgress;
     }
@@ -196,30 +210,58 @@ public class Lane implements Updatable, Inspectable {
     // ==================== Mutators (for restoration/testing) ====================
 
     public void setSnowHeight(float height) {
-        snowHeight = height;
+        if (height == this.snowHeight)
+            return;
+
+        Logger.logLine("LANE [" + id + "] CHANGED [snowHeight] FROM [" + this.snowHeight + "] TO [" + height + "]");
+        this.snowHeight = height;
     }
 
     public void setIcingProgress(int progress) {
-        icingProgress = progress;
+        if (progress == this.icingProgress)
+            return;
+        
+        Logger.logLine("LANE [" + id + "] CHANGED [icingProgress] FROM [" + this.icingProgress + "] TO [" + progress + "]");
+        this.icingProgress = progress;
     }
 
     public void setIced(boolean iced) {
+        if (iced == this.iced)
+            return;
+        
+        Logger.logLine("LANE [" + id + "] CHANGED [iced] FROM [" + this.iced + "] TO [" + iced + "]");
         this.iced = iced;
     }
 
     public void setVehicleBlock(boolean vehicleBlock) {
+        if (vehicleBlock == this.vehicleBlock)
+            return;
+        
+        Logger.logLine("LANE [" + id + "] CHANGED [vehicleBlock] FROM [" + this.vehicleBlock + "] TO [" + vehicleBlock + "]");
         this.vehicleBlock = vehicleBlock;
     }
 
     public void setIceDebris(boolean iceDebris) {
+        if (iceDebris == this.iceDebris)
+            return;
+        
+        Logger.logLine("LANE [" + id + "] CHANGED [iceDebris] FROM [" + this.iceDebris + "] TO [" + iceDebris + "]");
         this.iceDebris = iceDebris;
     }
 
     public void setSaltedTimer(int saltedTimer) {
+        if (saltedTimer == this.saltedTimer)
+            return;
+        
+        Logger.logLine("LANE [" + id + "] CHANGED [saltedTimer] FROM [" + this.saltedTimer + "] TO [" + saltedTimer + "]");
         this.saltedTimer = saltedTimer;
     }
 
     public void setGravelHeight(float gravelHeight) {
+        if (gravelHeight == this.gravelHeight)
+            return; 
+
+        Logger.logLine("LANE [" + id + "] CHANGED [gravelHeight] FROM [" + this.gravelHeight + "] TO [" + gravelHeight + "]");
         this.gravelHeight = gravelHeight;
     }
 
