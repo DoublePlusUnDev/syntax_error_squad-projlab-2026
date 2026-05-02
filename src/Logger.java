@@ -16,5 +16,9 @@ public class Logger {
     public static void setEnabled(boolean enabled) {
         Logger.enabled = enabled;
     }
+
+    public static void saveLog(String filepath) {
+        //TODO: Implement logic to save log to a file
+    }
     
 }

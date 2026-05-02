@@ -29,6 +29,10 @@ public class SnowPlowPlayer extends Player {
         return snowPlows;
     }
 
+    public void addSnowPlow(SnowPlow snowPlow) {
+        snowPlows.add(snowPlow);
+    }
+
     @Override
     public void inspect() {
         Logger.logLine("SnowPlowPlayer " + id + " details:");

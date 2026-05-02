@@ -50,5 +50,9 @@ public class Workplace extends Node implements Updatable {
             Logger.logLine("-" + car.id);
         }
     }
+
+    public void setSpawnTimer(int spawnTimer) {
+        this.spawnTimer = spawnTimer;
+    }
     
 }
