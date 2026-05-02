@@ -41,4 +41,8 @@ public class Apartment extends Node implements Updatable {
         Logger.logLine("Apartment " + id + "details:");
         Logger.logLine("Spawn timer: " + spawnTimer);
     }
+
+    public void setSpawnTimer(int spawnTimer) {
+        this.spawnTimer = spawnTimer;
+    }
 }

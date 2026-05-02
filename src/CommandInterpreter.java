@@ -15,6 +15,10 @@ public class CommandInterpreter {
         Map.entry("/seed", this::seed),
         Map.entry("/logging", this::logging),
         Map.entry("/addnet", this::addNet),
+        Map.entry("/start", this::start),
+        Map.entry("/savelog", this::savelog),
+        Map.entry("/savegame", this::savegame),
+        Map.entry("/loadgame", this::loadgame),
         Map.entry("/generate", this::generate),
         Map.entry("/addnode", this::addNode),
         Map.entry("/addroad", this::addRoad),
@@ -22,8 +26,23 @@ public class CommandInterpreter {
         Map.entry("/modplow", this::modPlow),
         Map.entry("/modbus", this::modBus),
         Map.entry("/modcar", this::modCar),
-        Map.entry("/listroots", this::listRoots),
-        Map.entry("inspect", this::inspect)
+        Map.entry("/modapartment", this::modApartment),
+        Map.entry("/modworkplace", this::modWorkplace),
+        Map.entry("/addplayer", this::addPlayer),
+        Map.entry("/addvehicle", this::addVehicle),
+        Map.entry("/createbuyable", this::createBuyable),
+        Map.entry("/addmoney", this::addMoney),
+        Map.entry("/setmoney", this::setMoney),
+        Map.entry("/movevehicle", this::moveVehicle),
+        Map.entry("/enter", this::enter),
+        Map.entry("/slip", this::slip),
+      
+        Map.entry("listroots", this::listRoots),
+        Map.entry("inspect", this::inspect),
+        Map.entry("move", this::move),
+        Map.entry("changelane", this::changeLane),
+        Map.entry("equip", this::equip),
+        Map.entry("buy", this::buy)
     );
 
     public CommandInterpreter() {
@@ -103,6 +122,34 @@ public class CommandInterpreter {
         }
 
         GameLogic.getInstance().roads.add(new RoadNetwork(args.get("-id")));
+    }
+
+    public void start(Map<String, String> args) {
+        GameLogic.getInstance().start();
+    }
+
+    public void savelog(Map<String, String> args) {
+        if (!args.containsKey("-path")) {
+            System.out.println("Error: Missing -path argument for savelog command.");
+            return;
+        }
+        Logger.saveLog(args.get("-path"));
+    }
+
+    public void savegame(Map<String, String> args) {
+        if (!args.containsKey("-path")) {
+            System.out.println("Error: Missing -path argument for savelog command.");
+            return;
+        }
+        // TODO: Implement logic to save game state to a file   
+    }
+
+    public void loadgame(Map<String, String> args) {
+        if (!args.containsKey("-path")) {
+            System.out.println("Error: Missing -path argument for loadgame command.");
+            return;
+        }
+        // TODO: Implement logic to load game state from a file
     }
 
     public void generate(Map<String, String> args) {
@@ -368,6 +415,114 @@ public class CommandInterpreter {
                 return;
             }
             car.setWorkplace(workplace);
+        }
+    }
+
+    public void modApartment(Map<String, String> args) {
+        if (!args.containsKey("-id")) {
+            System.out.println("Error: Missing -id argument for modapartment command.");
+            return;
+        }
+        Apartment apartment = ObjectRegistry.get(args.get("-id"), Apartment.class);
+        if (apartment == null) {
+            System.out.println("Error: Apartment with id " + args.get("-id") + " does not exist.");
+            return;
+        }
+        if (args.containsKey("-spawn")) {
+            int spawnTimer = Integer.parseInt(args.get("-spawn"));
+            apartment.setSpawnTimer(spawnTimer);
+        }
+    }
+     
+    public void modWorkplace(Map<String, String> args) {
+        if (!args.containsKey("-id")) {
+            System.out.println("Error: Missing -id argument for modworkplace command.");
+            return;
+        }
+        Workplace workplace = ObjectRegistry.get(args.get("-id"), Workplace.class);
+        if (workplace == null) {
+            System.out.println("Error: Workplace with id " + args.get("-id") + " does not exist.");
+            return;
+        }
+
+        if (args.containsKey("-spawn")) {
+            int spawnTimer = Integer.parseInt(args.get("-spawn"));
+            workplace.setSpawnTimer(spawnTimer);
+        }
+
+    }
+
+    public void addPlayer(Map<String, String> args) {
+        if (!args.containsKey("-id")) {
+            System.out.println("Error: Missing -id argument for addplayer command.");
+            return;
+        }
+        if (!args.containsKey("-lane")) {
+            System.out.println("Error: Missing -lane argument for addplayer command.");
+            return;
+        }
+        if (!args.containsKey("-type")) {
+            System.out.println("Error: Missing -type argument for addplayer command.");
+            return;
+        }
+        String playerType = args.get("-type");
+        Lane lane = ObjectRegistry.get(args.get("-lane"), Lane.class);
+
+        switch (playerType) {
+            case "bus":
+                Player newPlayer = new BusPlayer(args.get("-id"), /* TODO: Roadnetwork*/);
+                ObjectRegistry.register(args.get("-id"), newPlayer);
+                GameLogic.getInstance().players.add(newPlayer);
+                //TODO: A járművét a lane-hez adni.
+                break;
+            case "snowplow":
+                Player newPlayer = new SnowPlowPlayer(args.get("-id"), /* TODO: Roadnetwork*/);
+                ObjectRegistry.register(args.get("-id"), newPlayer);
+                GameLogic.getInstance().players.add(newPlayer);
+                //TODO: A járművét a lane-hez adni. 
+                break;
+            default:
+                System.out.println("Error: Invalid player type. Use bus or snowplow.");
+                return;
+        }
+    }
+
+    public void addVehicle(Map<String, String> args) {
+        if (!args.containsKey("-id")) {
+            System.out.println("Error: Missing -id argument for addplayer command.");
+            return;
+        }
+        if (!args.containsKey("-lane")) {
+            System.out.println("Error: Missing -lane argument for addplayer command.");
+            return;
+        }
+        if (!args.containsKey("-type")) {
+            System.out.println("Error: Missing -type argument for addplayer command.");
+            return;
+        }
+
+        String vehicleType = args.get("-type");
+        switch (vehicleType) {
+            case "car":
+                Car newCar = new Car(args.get("-id"));
+                ObjectRegistry.register(args.get("-id"), newCar);
+                GameLogic.getInstance().cars.add(newCar);
+                //TODO: A járművét a lane-hez adni. 
+                break;
+            case "snowplow":
+                if !args.containsKey("-player") {
+                    System.out.println("Error: Missing -player argument for adding snowplow. A snowplow must be assigned to a player.");
+                    return;
+                }
+                SnowPlow newPlow = new SnowPlow(args.get("-id"));
+                ObjectRegistry.register(args.get("-id"), newPlow);
+                SnowPlowPlayer player = ObjectRegistry.get(args.get("-player"), SnowPlowPlayer.class);
+                player.addSnowPlow(newPlow);
+                //TODO: A járművét a lane-hez adni. 
+                break;
+            default:
+                System.out.println("Error: Invalid vehicle type. Use snowplow, bus or car.");
+                return;
         }
     }
 
