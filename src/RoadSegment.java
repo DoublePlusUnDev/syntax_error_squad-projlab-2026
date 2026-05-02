@@ -24,6 +24,24 @@ public class RoadSegment implements Inspectable {
 
         this.startPoint = startPoint;
         this.endPoint = endPoint;
+        if (startPoint != null && endPoint != null) {
+            startPoint.addNeighbour(endPoint, this);
+            endPoint.addNeighbour(startPoint, this);
+        }
+    }
+
+    private void addNodeNeighbours(){
+        if (startPoint != null && endPoint != null) {
+            startPoint.addNeighbour(endPoint, this);
+            endPoint.addNeighbour(startPoint, this);
+        }
+    }
+
+    private void removeNodeNeighbours(){
+        if (startPoint != null && endPoint != null) {
+            startPoint.removeNeighbour(endPoint, this);
+            endPoint.removeNeighbour(startPoint, this);
+        }
     }
 
     public void addSnow(int snowLevel) {
@@ -59,11 +77,15 @@ public class RoadSegment implements Inspectable {
     }
 
     public void setStartPoint(Node startPoint) {
+        removeNodeNeighbours();
         this.startPoint = startPoint;
+        addNodeNeighbours();
     }
 
     public void setEndPoint(Node endPoint) {
+        removeNodeNeighbours();
         this.endPoint = endPoint;
+        addNodeNeighbours();
     }
 
     @Override

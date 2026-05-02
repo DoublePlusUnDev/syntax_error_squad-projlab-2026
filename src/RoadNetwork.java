@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
 
 /**
  * A collections of different types of nodes, connected by road segments, which may have several lanes.
@@ -23,12 +26,74 @@ public class RoadNetwork implements Inspectable {
         roadSegments = new ArrayList<>();
     }
 
+    /**
+     * Does a Dijkstra search to find the best path towards the destination node through the road network 
+     * And returns the next lane the vehicle should move to
+     * @param vehicle
+     * @param destination
+     * @return
+     */
+    Lane findNextLaneInPath(Vehicle vehicle, Node destination){
+        Map<Node, Float> distances = new HashMap<>();
+        distances.put(vehicle.location.getSegment().startPoint, 0f);
+        distances.put(vehicle.location.getSegment().endPoint, 0f);
+        Map<Node, Node> previousNodes = new HashMap<>();
+        previousNodes.put(vehicle.location.getSegment().startPoint, null);
+        previousNodes.put(vehicle.location.getSegment().endPoint, null);
+
+        PriorityQueue<Node> queue = new PriorityQueue<>((a, b) -> Float.compare(distances.get(a), distances.get(b)));
+        queue.add(vehicle.location.getSegment().startPoint);
+        queue.add(vehicle.location.getSegment().endPoint);
+
+        while (!distances.containsKey(destination)){
+            Node current = queue.poll();
+            for (Neighbour neighbour : current.getNeighbours()){
+                float alt = distances.get(current) + calculateLaneWeight(neighbour.getRoadSegment().lanes.get(0), vehicle);
+                if (alt < distances.getOrDefault(neighbour.getNode(), Float.MAX_VALUE)) {
+                    distances.put(neighbour.getNode(), alt);
+                    previousNodes.put(neighbour.getNode(), current);
+                    queue.add(neighbour.getNode());
+                }
+            }   
+        }
+
+        return null;
+    }
+
+    private float getClearestLane(RoadSegment segment, Vehicle vehicle) {
+        float clearest = Float.MAX_VALUE;
+        Lane bestLane = null;
+
+        for (Lane lane : segment.lanes) {
+            float weight = calculateLaneWeight(lane, vehicle);
+            if (weight < clearest || bestLane == null) {
+                clearest = weight;
+                bestLane = lane;
+            }
+        }
+        return clearest;
+    }
+
+    private float calculateLaneWeight(Lane lane, Vehicle vehicle) {
+        if (!vehicle.canEnter(lane))
+            return Float.MAX_VALUE; // Avoid lanes that the vehicle cannot enter
+
+        float base = 1.0f;
+        float snow = lane.getSnow() * 5f;
+        float ice = lane.isIced() ? 2f : 0f;
+        float icingProgress = lane.getIcingProgress() * 0.1f;
+        float gravel = lane.getGravelHeight() * -4f;
+
+        return base + snow + ice + icingProgress + gravel;
+    }
+
     public boolean tryMoveTowardsNode(Vehicle vehicle, Node node) {
-        TestUtil.enterFunction("Roadnetwork: tryMoveTowardsNode(vehicle, node)");
+        Lane nextLane; //figure out later
  
+
         RoadSegment segment = new RoadSegment("segment1", 1, null, null);
         if (!vehicle.canEnter(segment.lanes.get(0))){
-            TestUtil.exitFunction("Failed to find suitable lane to enter");
+
             return false;
         }
 
@@ -89,16 +154,13 @@ public class RoadNetwork implements Inspectable {
     }
 
     public boolean changeLane(Vehicle vehicle, Lane lane) {
-        TestUtil.enterFunction("changeLane(vehicle, lane)");
         boolean result = vehicle.canEnter(lane);
 
         if (!result){
-            TestUtil.exitFunction("false");
             return false;
         }
 
         vehicle.enter(lane);
-        TestUtil.exitFunction("true");
         return true;
     }
 

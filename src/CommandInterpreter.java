@@ -36,7 +36,6 @@ public class CommandInterpreter {
             
             Map<String, String> args = new HashMap<>(); 
             for (int i = 1; i + 1 < parts.length; i+=2) {
-                //System.out.println(parts[i] + ": " + parts[i+1]);
                 String argName = parts[i];
                 String argValue = parts[i+1];
                 args.put(argName, argValue);
@@ -46,8 +45,8 @@ public class CommandInterpreter {
             if (cmd != null) {
                 cmd.execute(args);
             } else {
-                System.out.println("Unknown command: " + commandName);
-                System.out.println("Run help for list of available commands.");
+                Logger.logError("Unknown command: " + commandName);
+                Logger.logError("Run help for list of available commands.");
             }
     }
     
@@ -56,33 +55,30 @@ public class CommandInterpreter {
         
         try (Scanner scanner = new Scanner(helpFile)) {
             while (scanner.hasNextLine()) {
-                System.out.println(scanner.nextLine());
+                Logger.logLine(scanner.nextLine());
             }
         } catch (Exception e) {
-            System.out.println("Error reading help file: " + e.getMessage());
+            Logger.logError("Error reading help file: " + e.getMessage());
         }
     }
 
     public void random(Map<String, String> args) {
         if (!args.containsKey("-mode")) {
-            System.out.println("Error: Missing -mode argument for random command.");
+            Logger.logError("Error: Missing -mode argument for random command.");
             return;
         }
         String mode = args.get("-mode");
-        if (mode.equals("always")) {
-            RandomGenerator.setMode(RandomGeneratorMode.ALWAYS);
-        } else if (mode.equals("never")) {
-            RandomGenerator.setMode(RandomGeneratorMode.NEVER);
-        } else if (mode.equals("random")) {
-            RandomGenerator.setMode(RandomGeneratorMode.RANDOM);
-        } else {
-            System.out.println("Error: Invalid mode for random command. Use always, never, or random.");
+        switch (mode) {
+            case "always" -> RandomGenerator.setMode(RandomGeneratorMode.ALWAYS);
+            case "never" -> RandomGenerator.setMode(RandomGeneratorMode.NEVER);
+            case "random" -> RandomGenerator.setMode(RandomGeneratorMode.RANDOM);
+            default -> Logger.logError("Error: Invalid mode for random command. Use always, never, or random.");
         }
     }
 
     public void seed(Map<String, String> args) {
         if (!args.containsKey("-seed")) {
-            System.out.println("Error: Missing -seed argument for seed command.");
+            Logger.logError("Error: Missing -seed argument for seed command.");
             return;
         }
 
@@ -92,7 +88,7 @@ public class CommandInterpreter {
 
     public void logging(Map<String, String> args) {
         if (!args.containsKey("-enable")) {
-            System.out.println("Error: Missing -enable argument for logging command.");
+            Logger.logError("Error: Missing -enable argument for logging command.");
             return;
         }
 
@@ -102,7 +98,7 @@ public class CommandInterpreter {
 
     public void addNet(Map<String, String> args) {
         if (!args.containsKey("-id")) {
-            System.out.println("Error: Missing -id argument for addnet command.");
+            Logger.logError("Error: Missing -id argument for addnet command.");
             return;
         }
 
@@ -150,13 +146,13 @@ public class CommandInterpreter {
 
     public void addNode(Map<String, String> args) {
         if (!args.containsKey("-id") || !args.containsKey("-net")) {
-            System.out.println("Error: Missing arguments for addnode command. Required: -id, -net.");
+            Logger.logError("Error: Missing arguments for addnode command. Required: -id, -net.");
             return;
         }
         
         RoadNetwork net = ObjectRegistry.get(args.get("-net"), RoadNetwork.class);
         if (net == null) {
-            System.out.println("Error: Road network with id " + args.get("-net") + " does not exist.");
+            Logger.logError("Error: Road network with id " + args.get("-net") + " does not exist.");
             return;
         }
 
@@ -172,7 +168,7 @@ public class CommandInterpreter {
                 net.addNode(new Apartment(args.get("-id")));
             }
             else {
-                System.out.println("Error: Invalid node type. Use busstop, workplace, or apartment. Using default type of busstop.");
+                Logger.logError("Error: Invalid node type. Use busstop, workplace, or apartment. Using default type of busstop.");
                 net.addNode(new BusStop(args.get("-id")));
             }
         }
@@ -185,25 +181,25 @@ public class CommandInterpreter {
 
     public void addRoad(Map<String, String> args) {
         if (!args.containsKey("-id") || !args.containsKey("-net") || !args.containsKey("-start") || !args.containsKey("-end")) {
-            System.out.println("Error: Missing arguments for addroad command. Required: -id, -net, -start, -end.");
+            Logger.logError("Error: Missing arguments for addroad command. Required: -id, -net, -start, -end.");
             return;
         }
         
         RoadNetwork net = ObjectRegistry.get(args.get("-net"), RoadNetwork.class);
         if (net == null) {
-            System.out.println("Error: Road network with id " + args.get("-net") + " does not exist.");
+            Logger.logError("Error: Road network with id " + args.get("-net") + " does not exist.");
             return;
         }
 
         Node start = ObjectRegistry.get(args.get("-start"), Node.class);
         if (start == null) {
-            System.out.println("Error: Start node with id " + args.get("-start") + " does not exist.");
+            Logger.logError("Error: Start node with id " + args.get("-start") + " does not exist.");
             return;
         }
 
         Node end = ObjectRegistry.get(args.get("-end"), Node.class);
         if (end == null) {
-            System.out.println("Error: End node with id " + args.get("-end") + " does not exist.");
+            Logger.logError("Error: End node with id " + args.get("-end") + " does not exist.");
             return;
         }
 
@@ -212,7 +208,7 @@ public class CommandInterpreter {
             try {
                 lanes = Integer.parseInt(args.get("-lanes"));
             } catch (NumberFormatException e) {
-                System.out.println("Error: Invalid number format for lanes. Using default value of 1.");
+                Logger.logError("Error: Invalid number format for lanes. Using default value of 1.");
             }
         }
 
@@ -229,7 +225,7 @@ public class CommandInterpreter {
                 road = new Tunnel(args.get("-id"), lanes, start, end);
             }
             else {
-                System.out.println("Error: Invalid road type. Use road, bridge, or tunnel. Using default type of road.");
+                Logger.logError("Error: Invalid road type. Use road, bridge, or tunnel. Using default type of road.");
                 road = new RoadSegment(args.get("-id"), lanes, start, end);
             }
         }
@@ -243,13 +239,13 @@ public class CommandInterpreter {
 
     public void modLane(Map<String, String> args) {
         if (!args.containsKey("-id")) {
-            System.out.println("Error: Missing -id argument for modlane command.");
+            Logger.logError("Error: Missing -id argument for modlane command.");
             return;
         }
 
         Lane lane = ObjectRegistry.get(args.get("-id"), Lane.class);
         if (lane == null) {
-            System.out.println("Error: Lane with id " + args.get("-id") + " does not exist.");
+            Logger.logError("Error: Lane with id " + args.get("-id") + " does not exist.");
             return;
         }
 
@@ -291,13 +287,13 @@ public class CommandInterpreter {
 
     public void modPlow(Map<String, String> args) {
         if (!args.containsKey("-id")) {
-            System.out.println("Error: Missing -id argument for modplow command.");
+            Logger.logError("Error: Missing -id argument for modplow command.");
             return;
         }
 
         SnowPlow plow = ObjectRegistry.get(args.get("-id"), SnowPlow.class);
         if (plow == null) {
-            System.out.println("Error: Snow plow with id " + args.get("-id") + " does not exist.");
+            Logger.logError("Error: Snow plow with id " + args.get("-id") + " does not exist.");
             return;
         }
 
@@ -310,20 +306,20 @@ public class CommandInterpreter {
 
     public void modBus(Map<String, String> args) {
         if (!args.containsKey("-id")) {
-            System.out.println("Error: Missing -id argument for modbus command.");
+            Logger.logError("Error: Missing -id argument for modbus command.");
             return;
         }
 
         Bus bus = ObjectRegistry.get(args.get("-id"), Bus.class);
         if (bus == null) {
-            System.out.println("Error: Bus with id " + args.get("-id") + " does not exist.");
+            Logger.logError("Error: Bus with id " + args.get("-id") + " does not exist.");
             return;
         }
 
         if (args.containsKey("-start")) {
             BusStop start = ObjectRegistry.get(args.get("-start"), BusStop.class);
             if (start == null) {
-                System.out.println("Error: Start node with id " + args.get("-start") + " does not exist.");
+                Logger.logError("Error: Start node with id " + args.get("-start") + " does not exist.");
                 return;
             }
             bus.setStartStop(start);
@@ -332,7 +328,7 @@ public class CommandInterpreter {
         if (args.containsKey("-end")) {
             BusStop end = ObjectRegistry.get(args.get("-end"), BusStop.class);
             if (end == null) {
-                System.out.println("Error: End node with id " + args.get("-end") + " does not exist.");
+                Logger.logError("Error: End node with id " + args.get("-end") + " does not exist.");
                 return;
             }
             bus.setEndStop(end);
@@ -346,20 +342,20 @@ public class CommandInterpreter {
 
     public void modCar(Map<String, String> args) {
         if (!args.containsKey("-id")) {
-            System.out.println("Error: Missing -id argument for modcar command.");
+            Logger.logError("Error: Missing -id argument for modcar command.");
             return;
         }
 
         Car car = ObjectRegistry.get(args.get("-id"), Car.class);
         if (car == null) {
-            System.out.println("Error: Car with id " + args.get("-id") + " does not exist.");
+            Logger.logError("Error: Car with id " + args.get("-id") + " does not exist.");
             return;
         }
 
         if (args.containsKey("-apartment")) {
             Apartment apartment = ObjectRegistry.get(args.get("-apartment"), Apartment.class);
             if (apartment == null) {
-                System.out.println("Error: Apartment with id " + args.get("-apartment") + " does not exist.");
+                Logger.logError("Error: Apartment with id " + args.get("-apartment") + " does not exist.");
                 return;
             }
             car.setApartment(apartment);
@@ -368,12 +364,50 @@ public class CommandInterpreter {
         if (args.containsKey("-workplace")) {
             Workplace workplace = ObjectRegistry.get(args.get("-workplace"), Workplace.class);
             if (workplace == null) {
-                System.out.println("Error: Workplace with id " + args.get("-workplace") + " does not exist.");
+                Logger.logError("Error: Workplace with id " + args.get("-workplace") + " does not exist.");
                 return;
             }
             car.setWorkplace(workplace);
         }
     }
+
+    public void addPlayer(Map<String, String> args) {
+        if (!args.containsKey("-id") || !args.containsKey("-net") || !args.containsKey("-net")) {
+            Logger.logError("Error: Missing -id argument for addplayer command.");
+            return;
+        }
+
+        RoadNetwork net = ObjectRegistry.get(args.get("-net"), RoadNetwork.class);
+        if (net == null) {
+            Logger.logError("Error: Road network with id " + args.get("-net") + " does not exist.");
+            return;
+        }
+
+        Lane lane = ObjectRegistry.get(args.get("-lane"), Lane.class);
+        if (lane == null) {
+            Logger.logError("Error: Lane with id " + args.get("-lane") + " does not exist.");
+            return;
+        }
+
+        if (args.containsKey("-type")) {
+            String type = args.get("-type");
+            if (type.equals("snowplow")) {
+                SnowPlowPlayer player = new SnowPlowPlayer(args.get("-id"), net, lane);
+            }
+            else if (type.equals("bus")){
+                BusPlayer player = new BusPlayer(args.get("-id"), net, lane);
+            }
+            else {
+                Logger.logError("Error: Invalid player type. Use snowplow or bus. Using default type of snowplow.");
+                SnowPlowPlayer player = new SnowPlowPlayer(args.get("-id"), net, lane);     
+            }
+        }else{
+            Logger.logError("Error: Missing -type argument for addplayer command. Using default type of snowplow.");
+        }
+
+    }
+
+        
 
     public void listRoots(Map<String, String> args) {
         Logger.logLine("Root objects details:");
@@ -395,7 +429,7 @@ public class CommandInterpreter {
 
     public void inspect(Map<String, String> args) {
         if (!args.containsKey("-id")) {
-            System.out.println("Error: Missing -id argument for inspect command.");
+            Logger.logError("Error: Missing -id argument for inspect command.");
             return;
         }
 
@@ -403,7 +437,7 @@ public class CommandInterpreter {
         if (inspectable != null) {
             inspectable.inspect();
         } else {
-            System.out.println("Object with id " + args.get("-id") + " is not inspectable or does not exist.");
+            Logger.logError("Object with id " + args.get("-id") + " is not inspectable or does not exist.");
         }
     }
 }

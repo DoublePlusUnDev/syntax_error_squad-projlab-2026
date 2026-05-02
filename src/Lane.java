@@ -16,10 +16,10 @@ public class Lane implements Updatable, Inspectable {
     private boolean vehicleBlock;
     private int saltedTimer;
 
-    private static final float snowCompressRate = 0.02f;
-    private static final int iceSteps = 5; 
-    private static final float snowThreshold = 0.2f;
-    private static final float snowRemovedBySalt = 0.01f;
+    private static final float SNOW_COMPRESS_RATE = 0.02f;
+    private static final int ICE_STEPS = 5; 
+    private static final float SNOW_THRESHOLD = 0.2f;
+    private static final float SNOW_REMOVED_BY_SALT = 0.01f;
 
     public Lane(String id, RoadSegment roadSegment){
         this.id = id;
@@ -44,12 +44,12 @@ public class Lane implements Updatable, Inspectable {
      */
     public void driveOver() {
         TestUtil.enterFunction("Lane:driveOver()");
-        if (snowHeight >= snowCompressRate){
-            snowHeight -= snowCompressRate;
+        if (snowHeight >= SNOW_COMPRESS_RATE){
+            snowHeight -= SNOW_COMPRESS_RATE;
             icingProgress++;
         }
 
-        if (icingProgress >= iceSteps) {
+        if (icingProgress >= ICE_STEPS) {
             iced = true;
         }
 
@@ -101,7 +101,7 @@ public class Lane implements Updatable, Inspectable {
     }
 
     public boolean isSnowy() {
-        return snowHeight > snowThreshold;
+        return snowHeight > SNOW_THRESHOLD;
     }
 
     public boolean isBlocked() {
@@ -139,11 +139,24 @@ public class Lane implements Updatable, Inspectable {
     public void setGravelHeight(float gravelHeight) {
     }
 
+    public int getIcingProgress() {
+        return icingProgress;
+    }
+
+    public boolean isIced() {
+        return iced;
+    }
+
+    public float getGravelHeight() {
+        return 0;
+    }
+
+
     @Override
     public void update() {
         if (saltedTimer > 0) {
             
-            snowHeight = Math.max(0, snowHeight - snowRemovedBySalt);
+            snowHeight = Math.max(0, snowHeight - SNOW_REMOVED_BY_SALT);
 
             saltedTimer--;
 

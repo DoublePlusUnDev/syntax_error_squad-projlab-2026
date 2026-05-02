@@ -8,7 +8,7 @@ public class SnowPlowPlayer extends Player {
     
     private List<SnowPlow> snowPlows;
 
-    public SnowPlowPlayer(String id, RoadNetwork roads) {
+    public SnowPlowPlayer(String id, RoadNetwork roads, Lane startingLane) {
         super(id, roads);
         snowPlows = new ArrayList<>();
         snowPlows.add(new SnowPlow(""));

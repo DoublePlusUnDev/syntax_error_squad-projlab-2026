@@ -5,7 +5,7 @@ public class BusPlayer extends Player {
 
     private Bus bus;
 
-    public BusPlayer(String id, RoadNetwork roads) {
+    public BusPlayer(String id, RoadNetwork roads, Lane startingLane) {
         super(id, roads);
         bus = new Bus("");
     }
