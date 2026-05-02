@@ -5,8 +5,8 @@
  */
 public class SalterHead extends PlowHead {
 
-    public SalterHead(String id) {
-        super(id);
+    public SalterHead(String id, int price) {
+        super(id, price);
     }
 
     @Override

@@ -3,8 +3,8 @@
  */
 public class DragonHead extends PlowHead {
 
-    public DragonHead() {
-        super(null);
+    public DragonHead(String id, int price) {
+        super(id, price);
     }
 
     @Override

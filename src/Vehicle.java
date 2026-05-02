@@ -35,9 +35,7 @@ public abstract class Vehicle implements Inspectable {
     }
 
     public void crash(Lane lane) {
-        TestUtil.enterFunction("Vehicle:crash()");
-        
-        TestUtil.exitFunction("crashed");
+
     }
 
     public boolean canEnter(Lane lane) {

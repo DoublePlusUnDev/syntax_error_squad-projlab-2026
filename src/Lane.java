@@ -9,6 +9,8 @@ public class Lane implements Updatable, Inspectable {
     String id;
 
     private RoadSegment roadSegment;
+    private int laneCount;
+
     private float snowHeight = 0;
     private boolean iceDebris = false;
     private int icingProgress = 0;
@@ -21,10 +23,11 @@ public class Lane implements Updatable, Inspectable {
     private static final float SNOW_THRESHOLD = 0.2f;
     private static final float SNOW_REMOVED_BY_SALT = 0.01f;
 
-    public Lane(String id, RoadSegment roadSegment){
+    public Lane(String id, RoadSegment roadSegment, int laneCount){
         this.id = id;
         ObjectRegistry.register(id, this);
         this.roadSegment = roadSegment;
+        this.laneCount = laneCount;
         GameLogic.getInstance().registerUpdatable(this);
     }
 
@@ -69,6 +72,10 @@ public class Lane implements Updatable, Inspectable {
 
     public RoadSegment getSegment() {
         return roadSegment;
+    }
+
+    public int getCount() {
+        return laneCount;
     }
 
     public void sweep() {

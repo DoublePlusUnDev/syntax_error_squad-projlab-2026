@@ -19,7 +19,7 @@ public class RoadSegment implements Inspectable {
 
         lanes = new ArrayList<>();
         for (int i = 0; i < laneCount; i++) {
-            lanes.add(new Lane( id + ".lane" + (i + 1), this));
+            lanes.add(new Lane( id + ".lane" + (i + 1), this, laneCount));
         }
 
         this.startPoint = startPoint;
@@ -51,7 +51,6 @@ public class RoadSegment implements Inspectable {
     }
 
     public void enter(Vehicle vehicle, int lane) {
-        TestUtil.enterFunction("RoadSegment:enter");
         Lane selectedLane = lanes.get(lane);
         selectedLane.driveOver();
         vehicle.enter(selectedLane);
@@ -86,6 +85,10 @@ public class RoadSegment implements Inspectable {
         removeNodeNeighbours();
         this.endPoint = endPoint;
         addNodeNeighbours();
+    }
+
+    public int getLaneCount() {
+        return lanes.size();
     }
 
     @Override

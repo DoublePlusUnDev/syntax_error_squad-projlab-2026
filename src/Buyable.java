@@ -5,8 +5,9 @@ public abstract class Buyable implements Inspectable {
     String id;
     protected int price;
 
-    public Buyable(String id) {
+    public Buyable(String id, int price) {
         this.id = id;
+        this.price = price;
         ObjectRegistry.register(id, this);
     }
 

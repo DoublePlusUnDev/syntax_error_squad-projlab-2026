@@ -9,8 +9,8 @@ public class SweeperHead extends PlowHead {
         lane.sweep();
     }
     
-    public SweeperHead(String id) {
-        super(id);
+    public SweeperHead(String id, int price) {
+        super(id, price);
     }
 
     @Override

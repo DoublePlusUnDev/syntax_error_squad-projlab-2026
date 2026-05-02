@@ -4,8 +4,8 @@
  */
 public class BlowerHead extends PlowHead {
 
-    public BlowerHead(String id) {
-        super(id);
+    public BlowerHead(String id, int price) {
+        super(id, price);
     }
 
     @Override

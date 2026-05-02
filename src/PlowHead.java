@@ -7,8 +7,8 @@ public abstract class PlowHead extends Buyable{
     protected Inventory inventory; 
     protected boolean equipped = false;
 
-    public PlowHead(String id) {
-        super(id);
+    public PlowHead(String id, int price) {
+        super(id, price);
     }
 
     /**

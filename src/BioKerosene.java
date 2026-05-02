@@ -4,8 +4,8 @@
 public class BioKerosene extends Buyable{
     private int amount;
 
-    public BioKerosene(String id, int amount) {
-        super(id);
+    public BioKerosene(String id, int amount, int price) {
+        super(id, price);
         this.amount = amount;
     }
 

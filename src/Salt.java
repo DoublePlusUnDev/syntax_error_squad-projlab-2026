@@ -4,8 +4,8 @@
 public class Salt extends Buyable {
     private int amount;
 
-    public Salt(String id, int amount) {
-        super(id);
+    public Salt(String id, int amount, int price) {
+        super(id, price);
         this.amount = amount;
     }
 

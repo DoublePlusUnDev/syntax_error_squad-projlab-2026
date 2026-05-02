@@ -17,6 +17,7 @@ public class RoadNetwork implements Inspectable {
 
     private List<Node> nodes;
     private List<RoadSegment> roadSegments;
+    private List<Vehicle> vehicles;
 
     public RoadNetwork(String id){
         this.id = id;
@@ -24,6 +25,60 @@ public class RoadNetwork implements Inspectable {
 
         nodes = new ArrayList<>();
         roadSegments = new ArrayList<>();
+    }
+
+    public boolean tryMoveTowardsNode(Vehicle vehicle, Node node) {
+        Lane nextLane = findNextLaneInPath(vehicle, node); //figure out later
+ 
+        if (nextLane == null){
+            return false;
+        }
+
+        if (!vehicle.canEnter(nextLane))
+            return false;
+        
+
+        nextLane.getSegment().enter(vehicle, nextLane.getCount());
+
+        if (vehicle.canSlip() && nextLane.willSlip()){
+            List<RoadSegment> potentialDestinations = new ArrayList<>();
+            for (Neighbour neighbour : nextLane.getSegment().startPoint.getNeighbours()){
+                if (neighbour.getRoadSegment() != nextLane.getSegment())
+                    potentialDestinations.add(neighbour.getRoadSegment());
+            }
+            for (Neighbour neighbour : nextLane.getSegment().endPoint.getNeighbours()){
+                if (neighbour.getRoadSegment() != nextLane.getSegment())
+                    potentialDestinations.add(neighbour.getRoadSegment());
+            }
+
+            RoadSegment newDestination = potentialDestinations.get(RandomGenerator.getRandomInt(0, potentialDestinations.size() - 1));
+            Lane destinationLane = newDestination.lanes.get(RandomGenerator.getRandomInt(0, newDestination.getLaneCount() - 1)); 
+            newDestination.enter(vehicle, destinationLane.getCount()); // Slip into the first lane of the new road
+
+            slip(vehicle, destinationLane);
+            
+            nextLane = destinationLane;
+
+        }
+    
+        // Visit the nodes next to our final place
+        nextLane.getSegment().startPoint.accept(vehicle);
+        nextLane.getSegment().endPoint.accept(vehicle);
+        return true;
+    } 
+
+    public void slip(Vehicle vehicle, Lane lane) {
+        boolean crashedIntoVehicle = false;
+        for (Vehicle other : vehicles){
+            if (other.location.getSegment() == lane.getSegment()){
+                other.crash(lane);
+                crashedIntoVehicle = true;
+            }
+        }
+
+        if (crashedIntoVehicle){
+            vehicle.crash(lane);
+        }
     }
 
     /**
@@ -34,21 +89,24 @@ public class RoadNetwork implements Inspectable {
      * @return
      */
     Lane findNextLaneInPath(Vehicle vehicle, Node destination){
+        Node startNode = vehicle.location.getSegment().startPoint;
+        Node endNode = vehicle.location.getSegment().endPoint;
+
         Map<Node, Float> distances = new HashMap<>();
-        distances.put(vehicle.location.getSegment().startPoint, 0f);
-        distances.put(vehicle.location.getSegment().endPoint, 0f);
+        distances.put(startNode, 0f);
+        distances.put(endNode, 0f);
         Map<Node, Node> previousNodes = new HashMap<>();
-        previousNodes.put(vehicle.location.getSegment().startPoint, null);
-        previousNodes.put(vehicle.location.getSegment().endPoint, null);
+        previousNodes.put(startNode, null);
+        previousNodes.put(endNode, null);
 
         PriorityQueue<Node> queue = new PriorityQueue<>((a, b) -> Float.compare(distances.get(a), distances.get(b)));
-        queue.add(vehicle.location.getSegment().startPoint);
-        queue.add(vehicle.location.getSegment().endPoint);
+        queue.add(startNode);
+        queue.add(endNode);
 
         while (!distances.containsKey(destination)){
             Node current = queue.poll();
             for (Neighbour neighbour : current.getNeighbours()){
-                float alt = distances.get(current) + calculateLaneWeight(neighbour.getRoadSegment().lanes.get(0), vehicle);
+                float alt = distances.get(current) + calculateLaneWeight(getClearestLane(neighbour.getRoadSegment(), vehicle), vehicle);
                 if (alt < distances.getOrDefault(neighbour.getNode(), Float.MAX_VALUE)) {
                     distances.put(neighbour.getNode(), alt);
                     previousNodes.put(neighbour.getNode(), current);
@@ -57,10 +115,25 @@ public class RoadNetwork implements Inspectable {
             }   
         }
 
+        if (distances.get(destination) == Float.MAX_VALUE){
+            return null; // No path found
+        }
+        
+        Node current = destination;
+        Node nextNode = null;
+        while (previousNodes.get(current) != startNode){
+            current = previousNodes.get(current);
+            nextNode = current;
+        }
+        for (Neighbour neighbour : startNode.getNeighbours()){
+            if (neighbour.getNode() == nextNode){
+                return getClearestLane(neighbour.getRoadSegment(), vehicle);
+            }
+        }
         return null;
     }
 
-    private float getClearestLane(RoadSegment segment, Vehicle vehicle) {
+    private Lane getClearestLane(RoadSegment segment, Vehicle vehicle) {
         float clearest = Float.MAX_VALUE;
         Lane bestLane = null;
 
@@ -71,7 +144,7 @@ public class RoadNetwork implements Inspectable {
                 bestLane = lane;
             }
         }
-        return clearest;
+        return bestLane;
     }
 
     private float calculateLaneWeight(Lane lane, Vehicle vehicle) {
@@ -87,71 +160,7 @@ public class RoadNetwork implements Inspectable {
         return base + snow + ice + icingProgress + gravel;
     }
 
-    public boolean tryMoveTowardsNode(Vehicle vehicle, Node node) {
-        Lane nextLane; //figure out later
- 
-
-        RoadSegment segment = new RoadSegment("segment1", 1, null, null);
-        if (!vehicle.canEnter(segment.lanes.get(0))){
-
-            return false;
-        }
-
-
-        if  (!TestUtil.askUserYesNo("Can the vehicle find a way toward its destination?"))
-        {
-            TestUtil.exitFunction("Failed to pathfind");
-            return false;
-        }
-
-        int roadType = TestUtil.askUserNumberedOptions("What type of road the vehicle enters:", new String[]{"Road", "Bridge", "Tunnel"});
-        
-        RoadSegment chosenSegment;
-        if (roadType == 1)
-            chosenSegment = new RoadSegment("segment1", 1, null, null);
-        else if (roadType == 2)
-            chosenSegment = new Bridge("bridge1", 1, null, null);
-        else
-            chosenSegment = new Tunnel("tunnel1", 1, null, null);
-
-        chosenSegment.enter(vehicle, 0);
-
-        if (vehicle.canSlip() && chosenSegment.lanes.get(0).willSlip()){
-            Lane newDestination = chosenSegment.lanes.get(0);
-
-            boolean crash = TestUtil.askUserYesNo("Has the vehicle crashed into another vehicle as the result of the slip?");
-
-            if (crash){
-                vehicle.crash(newDestination);
-                int crashedVehicle = TestUtil.askUserNumberedOptions("What type of vehicle it's crashed into?", new String[]{"SnowPlow", "Bus", "Car"});
-            
-                if (crashedVehicle == 1)
-                    new SnowPlow("").crash(newDestination);
-                else if (crashedVehicle == 2)
-                    new Bus("").crash(newDestination);
-                else
-                    new Car("").crash(newDestination);
-            }
-            
-        }
     
-        //try to enter both neighbours
-        for (int i = 0; i < 2; i++)
-        {
-            int neighboursNodes = TestUtil.askUserNumberedOptions("What kind of node is the lane next to?", new String[]{"Node", "Apartment", "Workplace", "Bus stop"});
-            if (neighboursNodes == 1)
-                new Node("").accept(vehicle);
-            else if (neighboursNodes == 2)
-                new Apartment("").accept(vehicle);
-            else if (neighboursNodes == 3)
-                new Workplace("").accept(vehicle);
-            else 
-                new BusStop("").accept(vehicle);
-        }
-        
-        TestUtil.exitFunction("Move towards target succesfully");
-        return true;
-    }
 
     public boolean changeLane(Vehicle vehicle, Lane lane) {
         boolean result = vehicle.canEnter(lane);

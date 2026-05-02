@@ -4,8 +4,8 @@
  */
 public class IceBreakerHead extends PlowHead {
 
-    public IceBreakerHead(String id) {
-        super(id);
+    public IceBreakerHead(String id, int price) {
+        super(id, price);
     }
 
     @Override
