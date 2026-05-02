@@ -1,3 +1,4 @@
 VEHICLE [busPlayer.bus] SLIPPED ONTO LANE [road3.lane1]
-VEHICLE [snowplow.snowPlow1] CRASHED AT [road3.lane1]
+VEHICLE [car] CRASHED AT [road3.lane1]
+LANE [road3.lane1] CHANGED [vehicleBlock] FROM [false] TO [true]
 VEHICLE [busPlayer.bus] CRASHED AT [road3.lane1]

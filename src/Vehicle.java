@@ -31,7 +31,7 @@ public abstract class Vehicle implements Inspectable {
     }
 
     public void crash(Lane lane) {
-
+        Logger.logLine("VEHICLE [" + id + "] CRASHED AT [" + lane.id + "]");
     }
 
     public boolean canEnter(Lane lane) {

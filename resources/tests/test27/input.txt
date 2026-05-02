@@ -1,0 +1,2 @@
+/loadGame -path resources/init/Init6.txt
+/slip -vehicle busPlayer.bus -target road3.lane1 -net net

@@ -485,13 +485,23 @@ public class CommandInterpreter {
             return;
         }
 
+        if (!args.containsKey("-net")) {
+            System.out.println("Error: Missing -net argument for addVehicle command.");
+            return;
+        }
+
+        RoadNetwork net = ObjectRegistry.get(args.get("-net"), RoadNetwork.class);
+        if (net == null) {
+            System.out.println("Error: Road network with id " + args.get("-net") + " does not exist.");
+            return;
+        }
+
         String vehicleType = args.get("-type");
         switch (vehicleType) {
             case "car":
                 Car newCar = new Car(args.get("-id"));
                 ObjectRegistry.register(args.get("-id"), newCar);
-                GameLogic.getInstance().cars.add(newCar);
-                //TODO: A járművét a lane-hez adni. 
+                GameLogic.getInstance().addCar(newCar, ObjectRegistry.get(args.get("-lane"), Lane.class), net); 
                 break;
             case "snowplow":
                 if (!args.containsKey("-player")) {
@@ -501,8 +511,8 @@ public class CommandInterpreter {
                 SnowPlow newPlow = new SnowPlow(args.get("-id"));
                 ObjectRegistry.register(args.get("-id"), newPlow);
                 SnowPlowPlayer player = ObjectRegistry.get(args.get("-player"), SnowPlowPlayer.class);
-                player.addSnowPlow(newPlow);
-                //TODO: A járművét a lane-hez adni. 
+                player.addSnowPlow(newPlow, ObjectRegistry.get(args.get("-lane"), Lane.class));
+
                 break;
             default:
                 System.out.println("Error: Invalid vehicle type. Use snowplow, bus or car.");

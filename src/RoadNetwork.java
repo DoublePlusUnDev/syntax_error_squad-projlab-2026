@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -25,6 +24,7 @@ public class RoadNetwork implements Inspectable {
 
         nodes = new ArrayList<>();
         roadSegments = new ArrayList<>();
+        vehicles = new ArrayList<>();
     }
 
     public boolean tryMoveTowardsNode(Vehicle vehicle, Node node) {
@@ -68,6 +68,7 @@ public class RoadNetwork implements Inspectable {
     } 
 
     public void slip(Vehicle vehicle, Lane lane) {
+        Logger.logLine("VEHICLE [" + vehicle.id + "] SLIPPED ONTO LANE [" + lane.id + "]");
         boolean crashedIntoVehicle = false;
         for (Vehicle other : vehicles){
             if (other.location.getSegment() == lane.getSegment()){
@@ -188,15 +189,15 @@ public class RoadNetwork implements Inspectable {
     }
 
     public void placeCar(Car car){
-
+        vehicles.add(car);
     }
 
     public void placeBus(Bus bus){
-
+        vehicles.add(bus);
     }
 
     public void placeSnowPlow(SnowPlow snowPlow) {
-        
+        vehicles.add(snowPlow);
     }
 
     public void generate() {

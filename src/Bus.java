@@ -85,6 +85,7 @@ public class Bus extends Vehicle implements Updatable {
 
     @Override
     public void crash(Lane lane) {
+        super.crash(lane);
         inactiveTimer = CRASH_TIMEOUT; 
     }
 

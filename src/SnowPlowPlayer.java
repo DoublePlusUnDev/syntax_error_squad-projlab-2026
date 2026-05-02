@@ -11,7 +11,7 @@ public class SnowPlowPlayer extends Player {
     public SnowPlowPlayer(String id, RoadNetwork roads, Lane startingLane) {
         super(id, roads);
         snowPlows = new ArrayList<>();
-        snowPlows.add(new SnowPlow(id + ".snowPlow1"));
+        addSnowPlow(new SnowPlow(id + ".snowPlow1"), startingLane);
     }
 
     @Override
@@ -25,8 +25,10 @@ public class SnowPlowPlayer extends Player {
         return snowPlows;
     }
 
-    public void addSnowPlow(SnowPlow snowPlow) {
+    public void addSnowPlow(SnowPlow snowPlow, Lane location) {
         snowPlows.add(snowPlow);
+        snowPlow.location = location;
+        roads.placeSnowPlow(snowPlow);
     }
 
     @Override

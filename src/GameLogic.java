@@ -40,4 +40,10 @@ public class GameLogic {
     public List<Player> getPlayers() {
         return players;
     }
+
+    public void addCar(Car car, Lane lane, RoadNetwork road) {
+        cars.add(car);
+        car.location = lane;
+        road.placeCar(car);
+    }
 }

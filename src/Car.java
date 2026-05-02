@@ -71,6 +71,7 @@ public class Car extends Vehicle {
 
     @Override
     public void crash(Lane lane) {
+        super.crash(lane);
         lane.crashOccured();
         isDestroyed = true;
     }

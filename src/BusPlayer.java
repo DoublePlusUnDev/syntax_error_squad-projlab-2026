@@ -7,7 +7,9 @@ public class BusPlayer extends Player {
 
     public BusPlayer(String id, RoadNetwork roads, Lane startingLane) {
         super(id, roads);
-        bus = new Bus("");
+        bus = new Bus(id + ".bus");
+        bus.location = startingLane;
+        roads.placeBus(bus);
     }
 
     @Override
