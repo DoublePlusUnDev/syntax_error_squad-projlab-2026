@@ -29,8 +29,8 @@ public class CommandInterpreter {
         Map.entry("/modapartment", this::modApartment),
         Map.entry("/modworkplace", this::modWorkplace),
         Map.entry("/addplayer", this::addPlayer),
-        Map.entry("/addvehicle", this::addVehicle),
-        Map.entry("/createbuyable", this::createBuyable),
+        Map.entry("/addvehicle", this::addVehicle)//,
+        /*Map.entry("/createbuyable", this::createBuyable),
         Map.entry("/addmoney", this::addMoney),
         Map.entry("/setmoney", this::setMoney),
         Map.entry("/movevehicle", this::moveVehicle),
@@ -42,7 +42,7 @@ public class CommandInterpreter {
         Map.entry("move", this::move),
         Map.entry("changelane", this::changeLane),
         Map.entry("equip", this::equip),
-        Map.entry("buy", this::buy)
+        Map.entry("buy", this::buy)*/
     );
 
     public CommandInterpreter() {
@@ -125,7 +125,7 @@ public class CommandInterpreter {
     }
 
     public void start(Map<String, String> args) {
-        GameLogic.getInstance().start();
+        //GameLogic.getInstance().start();
     }
 
     public void savelog(Map<String, String> args) {
@@ -452,41 +452,6 @@ public class CommandInterpreter {
 
     }
 
-    public void addPlayer(Map<String, String> args) {
-        if (!args.containsKey("-id")) {
-            System.out.println("Error: Missing -id argument for addplayer command.");
-            return;
-        }
-        if (!args.containsKey("-lane")) {
-            System.out.println("Error: Missing -lane argument for addplayer command.");
-            return;
-        }
-        if (!args.containsKey("-type")) {
-            System.out.println("Error: Missing -type argument for addplayer command.");
-            return;
-        }
-        String playerType = args.get("-type");
-        Lane lane = ObjectRegistry.get(args.get("-lane"), Lane.class);
-
-        switch (playerType) {
-            case "bus":
-                Player newPlayer = new BusPlayer(args.get("-id"), /* TODO: Roadnetwork*/);
-                ObjectRegistry.register(args.get("-id"), newPlayer);
-                GameLogic.getInstance().players.add(newPlayer);
-                //TODO: A járművét a lane-hez adni.
-                break;
-            case "snowplow":
-                Player newPlayer = new SnowPlowPlayer(args.get("-id"), /* TODO: Roadnetwork*/);
-                ObjectRegistry.register(args.get("-id"), newPlayer);
-                GameLogic.getInstance().players.add(newPlayer);
-                //TODO: A járművét a lane-hez adni. 
-                break;
-            default:
-                System.out.println("Error: Invalid player type. Use bus or snowplow.");
-                return;
-        }
-    }
-
     public void addVehicle(Map<String, String> args) {
         if (!args.containsKey("-id")) {
             System.out.println("Error: Missing -id argument for addplayer command.");
@@ -510,7 +475,7 @@ public class CommandInterpreter {
                 //TODO: A járművét a lane-hez adni. 
                 break;
             case "snowplow":
-                if !args.containsKey("-player") {
+                if (!args.containsKey("-player")) {
                     System.out.println("Error: Missing -player argument for adding snowplow. A snowplow must be assigned to a player.");
                     return;
                 }
