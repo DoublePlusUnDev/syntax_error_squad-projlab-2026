@@ -4,6 +4,26 @@ Admin parancsok:
 /help
 Leírás: Parancsok kiíratása.
 
+/random
+Leírás: A véletlen események sorsolásának módját állítja, a random az eredeti esélyekkel dolgozik, az always esetében mindig bekövetkezik az esemény, a never esetében sohasem.
+Opciók: 
+-mode [“random”/”always”/”never”]: Sorsolás módja
+
+/seed
+Leírás: Random seed beállítása, ezt használja a játék mindenhol ahol random döntést hoz
+Opciók: 
+-seed [seed]: Random seed
+
+/logging
+Leírás: Engedélyezi a kimeneti események listázását, alapvetően be van kapcsolva.
+Opciók: 
+-enable [“true”/”false”] be van e kapcsolva a naplózás.
+
+/addnet
+Leírás: Létrehoz egy üres úthálózatot
+Opciók: 
+-id [ID] létrehozott úthálózat id-je
+
 /start
 Elindítja a játékosok köreinek végrehajtását
 
@@ -21,27 +41,6 @@ Opciók:
 Leírás: Betölti a játékot egy fájlból.
 Opciók: 
 -path [PATH]: Fájlhoz vezető út
-
-/random
-Leírás: A véletlen események sorsolásának módját állítja, a random az eredeti esélyekkel dolgozik, az always esetében mindig bekövetkezik az esemény, a never esetében sohasem.
-Opciók: 
--mode [“random”/”always”/”never”]: Sorsolás módja
-
-
-/seed
-Leírás: Random seed beállítása, ezt használja a játék mindenhol ahol random döntést hoz
-Opciók: 
--seed [seed]: Random seed
-
-/logging
-Leírás: Engedélyezi a kimeneti események listázását, alapvetően be van kapcsolva.
-Opciók: 
--enable [“true”/”false”] be van e kapcsolva a naplózás.
-
-/addnet
-Leírás: Létrehoz egy üres úthálózatot
-Opciók: 
--id [ID] létrehozott úthálózat id-je
 
 /generate
 Leírás: Létrehoz egy utakkal benépesített úthálózatot. Csak random módban használható.
@@ -63,13 +62,11 @@ Opciók:
 -apartmentsMin [UINT]
 -apartmentsMax [UINT]
 
-
 /addnode
 Leírás: Létrehoz egy csomópontot.
 Opciók: 
 -id [ID]: létrehozott node id-je
 -net [ID]: melyik úthálózathoz tartozik
-
 
 /addroad
 Leírás: Létrehoz egy utat.
@@ -125,7 +122,6 @@ Leírás: Munkahely tulajdonságok beállítása.
 Opciók: 
 -id [ID]: módosítandó munkahely id-je
 -spawn [UINT]: autó spawn időzítő
--car [UINT]: hány autó vár spawnolásra
 
 /addplayer
 Leírás: Létrehoz egy játékost.
@@ -140,7 +136,7 @@ Opciók:
 -id [ID]: Létrehozott jármű id-ja
 -player [ID]: Melyik játékoshoz tartozik
 -lane [ID]: Melyik sávon tartózkodik.
--type [“snowplow”/”bus”/”car”]: Milyen típusú
+-type [“snowplow”/”car”]: Milyen típusú
 
 /createbuyable
 Leírás: Létrehoz egy megvásárolható tárgyat.
@@ -180,8 +176,8 @@ Opciók:
 -vehicle [ID]
 -target [ID]
 
-Játékos parancsok:
 
+Játékos parancsok:
 
 listroots
 Leírás: Kilistázza a gyökér objektumokat(játékosok, autók, úthálózatok listája), ezeken keresztül minden más objektum megkereshető.
@@ -204,7 +200,6 @@ Opciók:
 -vehicle [ID]
 -net [ID]
 -lane [UINT]
-
 
 equip
 Leírás: Egy járműre rárak egy kotrófejet.
