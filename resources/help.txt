@@ -175,6 +175,12 @@ Opciók:
 -head [STRING]:	A tisztításhoz használt fej id-ja
 -target [STRING]: Melyik sávot tisztítja
 
+/moveVehicle
+Leírás: Mozgat egy járművet egy megadott sávba.
+-vehicle [STRING]: Jármű id-ja
+-lane [STRING]: Cél sáv id-ja
+-net [STRING]: Melyik úthálózaton tartózkodik a sáv
+
 /enter
 Leírás: Belép egy járművel egy csomópontba akkor is, hogyha ehhez a járművet esetleg teleportálni kell.
 Opciók: 
