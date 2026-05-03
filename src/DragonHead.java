@@ -7,6 +7,12 @@ public class DragonHead extends PlowHead {
         super(id, price);
     }
 
+    /**
+     * Cleans the given lane by destroying ice and snow.
+     * @param lane the lane to clean
+     * 
+     * If the inventory does not have enough kerosene, the lane will not be cleaned.
+     */
     @Override
     public void clean(Lane lane) {
         if (!inventory.tryConsumeKerosene())

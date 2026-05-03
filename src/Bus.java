@@ -74,6 +74,9 @@ public class Bus extends Vehicle implements Updatable {
             inactiveTimer--;
     }
 
+    /**
+     * Handles the bus entering a bus stop. If the bus enters its target stop, it will earn money and switch targets.
+     */
     @Override
     public void enterBusStop(BusStop busStop) {
         if (busStop == endStop) {

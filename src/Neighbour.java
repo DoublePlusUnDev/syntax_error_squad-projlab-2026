@@ -1,3 +1,7 @@
+/**
+ * Represents a neighboring node and the road segment connecting to it.
+ * This class is used to store information about the neighbors of a node in the graph.
+ */
 public class Neighbour {
     private Node node;
     private RoadSegment roadSegment;

@@ -1,6 +1,11 @@
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A registry for managing objects by their IDs.
+ * Objects can be registered with a unique ID and later retrieved by that ID.
+ * This is useful for keeping track of game objects and allowing them to be accessed for running commands.
+ */
 public class ObjectRegistry {
     static Map<String, Object> objects = new HashMap<>();
 

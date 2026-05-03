@@ -16,6 +16,10 @@ public class Car extends Vehicle {
         super(id);
     }
 
+    /**
+     * Moves the car towards its current target (workplace or home) using the provided road network.
+     * @param road
+     */
     public void move(RoadNetwork road) {
         if (isDestroyed) {
             return; // Cannot move if destroyed

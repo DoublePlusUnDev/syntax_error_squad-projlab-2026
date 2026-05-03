@@ -1,3 +1,6 @@
+/**
+ * A buyable item that will add gravel to it's buyer's inventory.
+ */
 public class Gravel extends Buyable {
     private int amount;
 
@@ -14,9 +17,6 @@ public class Gravel extends Buyable {
         inventory.addGravel(amount);
         return true;
     }
-
-
-
 
     @Override
     public void inspect() {

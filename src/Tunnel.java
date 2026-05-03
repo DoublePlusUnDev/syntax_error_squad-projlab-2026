@@ -7,9 +7,14 @@ public class Tunnel extends RoadSegment {
         super(id, laneCount, startPoint, endPoint);
     }
 
+    /**
+     * Adds snow to the tunnel.
+     *
+     * @param snowLevel The level of snow to add.
+     */
     @Override
     public void addSnow(float snowLevel) {
-        
+        // Tunnels are immune to snowfall, so this method does nothing.
     }
 
     @Override

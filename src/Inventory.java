@@ -22,6 +22,12 @@ public class Inventory implements Inspectable{
         ObjectRegistry.register(id, this);
     }
 
+    /**
+     * Attempts to consume one unit of salt from the inventory.
+     * @return
+     * 
+     * If the inventory has at least one unit of salt, it will be consumed and the method will return true.
+     */
     public boolean tryConsumeSalt() {    
         boolean canConsume = salt > 0;
 
@@ -32,6 +38,12 @@ public class Inventory implements Inspectable{
         return true;
     }
 
+    /**
+     * Attempts to consume one unit of gravel from the inventory.
+     * @return
+     * 
+     * If the inventory has at least one unit of gravel, it will be consumed and the method will return true.
+     */
     public boolean tryConsumeGravel() {    
         boolean canConsume = gravel > 0;
 
@@ -42,6 +54,12 @@ public class Inventory implements Inspectable{
         return true;
     }
 
+    /**
+     * Attempts to consume one unit of biokerosene from the inventory.
+     * @return
+     * 
+     * If the inventory has at least one unit of biokerosene, it will be consumed and the method will return true.
+     */
     public boolean tryConsumeKerosene() {    
         boolean canConsume = bioKerosene > 0;
 
@@ -52,6 +70,12 @@ public class Inventory implements Inspectable{
         return true;
     }
 
+    /**
+     * Adds the given amount of salt to the inventory, up to the maximum capacity.
+     * @param amount
+     * 
+     * If adding the full amount would exceed the maximum capacity, the inventory will be filled to the maximum and the excess will be discarded.
+     */
     public void addSalt(int amount) {
         if (salt + amount > MAX_SALT) {
             salt = MAX_SALT;
@@ -60,6 +84,12 @@ public class Inventory implements Inspectable{
         }
     }
 
+    /**
+     * Adds the given amount of gravel to the inventory, up to the maximum capacity.
+     * @param amount
+     * 
+     * If adding the full amount would exceed the maximum capacity, the inventory will be filled to the maximum and the excess will be discarded.
+     */
     public void addGravel(int amount) {
         if (gravel + amount > MAX_GRAVEL)
             gravel = MAX_GRAVEL;
@@ -68,6 +98,12 @@ public class Inventory implements Inspectable{
         
     }
 
+    /**
+     * Adds the given amount of biokerosene to the inventory, up to the maximum capacity.
+     * @param amount
+     * 
+     * If adding the full amount would exceed the maximum capacity, the inventory will be filled to the maximum and the excess will be discarded.
+     */
     public void addKerosene(int amount) {
         if (bioKerosene + amount > MAX_BIO_KEROSENE)
             bioKerosene = MAX_BIO_KEROSENE;
@@ -75,8 +111,12 @@ public class Inventory implements Inspectable{
             bioKerosene += amount;
     }
 
-    
-
+    /**
+     * Adds the given plow head to the inventory.
+     * @param plowHead
+     * 
+     * There is no maximum capacity for plow heads, so the given plow head will always be added to the inventory.
+     */
     public void addHead(PlowHead plowHead) {
         plowHeads.add(plowHead);
     }

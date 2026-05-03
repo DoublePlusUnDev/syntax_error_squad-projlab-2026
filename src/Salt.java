@@ -9,6 +9,13 @@ public class Salt extends Buyable {
         this.amount = amount;
     }
 
+    /**
+     * Attempts to purchase the salt item.
+     *
+     * @param inventory The player's inventory.
+     * @param bank The player's money bank.
+     * @return true if the purchase is successful, false otherwise.
+     */
     @Override
     boolean buy(Inventory inventory, MoneyBank bank) {
         

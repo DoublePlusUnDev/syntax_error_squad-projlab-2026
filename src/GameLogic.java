@@ -1,6 +1,11 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The main class that holds the state of the game and handles the game logic.
+ * It manages the players, cars, roads and updatables in the game.
+ * It also handles the turn-based system and the interactions between the different entities in the game.
+ */
 public class GameLogic {
     List<RoadNetwork> roads;
     List<Car> cars;

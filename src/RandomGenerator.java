@@ -2,6 +2,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * A generator for creating random numbers and making random decisions.
+ * Can operate in different modes to allow for deterministic behavior during testing.
+ * In ALWAYS mode, all random decisions will return true and all random numbers will be the minimum value.
+ * In NEVER mode, all random decisions will return false and all random numbers will be the maximum value.
+ * In RANDOM mode, random numbers and decisions will be generated normally.
+ */
 public class RandomGenerator {
     static Random random = new Random();
     private static RandomGeneratorMode mode = RandomGeneratorMode.RANDOM;

@@ -17,6 +17,11 @@ public class Apartment extends Node implements Updatable {
         GameLogic.getInstance().registerUpdatable(this);
     }
 
+    /**
+     * Updates the apartment's state.
+     * 
+     * Decrements the spawn timer and attempts to spawn a car when the timer reaches zero.
+     */
     @Override
     public void update() {
         spawnTimer--;

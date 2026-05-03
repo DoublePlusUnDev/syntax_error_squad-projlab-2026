@@ -4,6 +4,10 @@ public class GravelThrowerHead extends PlowHead {
         super(id, price);
     }
 
+    /**
+     * Prevents ice from forming on a given lane by throwing gravel on it.
+     * @param lane the lane to clean
+     */
     @Override
     public void clean(Lane lane) {
         if (inventory.tryConsumeGravel())

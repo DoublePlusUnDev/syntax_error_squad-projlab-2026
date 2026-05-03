@@ -11,6 +11,14 @@ public class Bridge extends RoadSegment {
         super(id, laneCount, startPoint, endPoint);
     }
 
+    /**
+     * Sweeps snow from the given lane.
+     * 
+     * @param lane the lane to sweep
+     * 
+     * If the lane is the rightmost lane, the snow will not be swept and will stay there.
+     * Otherwise, the snow will be moved to the next lane on the right.
+     */
     @Override
     public void sweep(Lane lane) {
         if (isRightLane(lane))
@@ -23,6 +31,14 @@ public class Bridge extends RoadSegment {
         nextLane.addSnow(snowLevel);
     }
 
+    /**
+     * Blows snow from the given lane.
+     * 
+     * @param lane the lane to blow
+     * 
+     * If the lane is the rightmost lane, the snow will not be blown and will stay there.
+     * Otherwise, the snow will be moved to the rightmost lane.
+     */
     @Override
     public void blow(Lane lane) {
         if (isRightLane(lane))

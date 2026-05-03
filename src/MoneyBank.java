@@ -1,3 +1,7 @@
+/**
+ * Represents a money bank in the game, which can hold a certain amount of money.
+ * Players can use the money in the bank to buy items, and the bank can be inspected to see how much money it currently holds.
+ */
 public class MoneyBank implements Inspectable {
     String id;
     private int money;
