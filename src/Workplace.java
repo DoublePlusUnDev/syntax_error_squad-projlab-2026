@@ -36,7 +36,7 @@ public class Workplace extends Node implements Updatable {
         vehicle.enterWorkPlace(this);
     }
 
-    public void carParked(Car car){
+    public void parkCar(Car car){
         restingCars.add(car);
     }
     

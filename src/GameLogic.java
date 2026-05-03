@@ -35,6 +35,10 @@ public class GameLogic {
     public void endTurn() {
         Logger.logLine("PLAYER " + currentPlayer.id + " TURN ENDED");
         int currentIndex = players.indexOf(currentPlayer);
+        if (currentPlayer == players.getLast()){
+            Logger.logLine("ROUND ENDED");
+            updateAll();
+        }
         currentPlayer = players.get((currentIndex + 1) % players.size());
         startTurn();
     }
@@ -45,6 +49,10 @@ public class GameLogic {
 
     public void registerUpdatable(Updatable updatable) {
         updatables.add(updatable);
+    }
+
+    private void updateAll() {
+        updatables.forEach(Updatable::update);
     }
 
     public static GameLogic getInstance(){
@@ -75,5 +83,10 @@ public class GameLogic {
 
     public void addPlayer(Player player) {
         players.add(player);
+    }
+
+    public void removeCar(Car car) {
+        cars.remove(car);
+        
     }
 }

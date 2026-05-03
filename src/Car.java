@@ -16,7 +16,7 @@ public class Car extends Vehicle {
         super(id);
     }
 
-    public void move() {
+    public void move(RoadNetwork road) {
         if (isDestroyed) {
             return; // Cannot move if destroyed
         }
@@ -25,10 +25,8 @@ public class Car extends Vehicle {
 
         if (target == null)
             return; // No target to move towards
-        
-        
 
-
+        road.tryMoveTowardsNode(this, target);
     }
 
     // Getters
@@ -74,11 +72,56 @@ public class Car extends Vehicle {
         super.crash(lane);
         lane.crashOccured();
         isDestroyed = true;
+        GameLogic.getInstance().removeCar(this);
     }
 
+    /**
+     * Handles the event when the car enters a workplace.
+     *
+     * @param workplace the workplace to enter
+     * 
+     * If the car is already headed home, it cannot enter the workplace again. 
+     * If the workplace is the car's assigned workplace, it will park there and set itself to head home after working. 
+     * The car is then removed from the game logic.
+     */
     @Override
     public void enterWorkPlace(Workplace workplace) {
-        workplace.carParked(this);
+        if (headedHome) {
+            return; // Already at home, cannot enter workplace
+        }
+
+        if (workplace != this.workplace) {
+            return;
+        }
+
+        Logger.logLine("Car " + id + " has entered its workplace.");
+        workplace.parkCar(this);
+        headedHome = true; // Set to head home after working
+        GameLogic.getInstance().removeCar(this);
+    }
+
+    
+    /**
+     * Handles the event when the car enters an apartment. 
+     * 
+     * @param apartment the apartment to enter
+     * 
+     * If the car is not headed home, it cannot enter the apartment.
+     * If the apartment is not the car's assigned home, it cannot enter.
+     * If the car successfully enters its home apartment, it is removed from the game logic.
+     */
+    @Override
+    public void enterApartment(Apartment apartment) {
+        if (!headedHome) {
+            return; // Not headed home yet, cannot enter apartment
+        }
+
+        if (apartment != this.home) {
+            return;
+        }
+
+        Logger.logLine("Car " + id + " has returned to its home apartment.");
+        GameLogic.getInstance().removeCar(this);
     }
 
     @Override
