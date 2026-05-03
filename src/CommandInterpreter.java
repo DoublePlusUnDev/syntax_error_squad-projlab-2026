@@ -45,8 +45,8 @@ public class CommandInterpreter {
         Map.entry("/slip", this::slip),
         Map.entry("listRoots", this::listRoots),
         Map.entry("inspect", this::inspect),
-        /*Map.entry("move", this::move),
-        Map.entry("changelane", this::changeLane),*/
+        /*Map.entry("move", this::move),*/
+        Map.entry("changeLane", this::changeLane),
         Map.entry("equip", this::equip),
         Map.entry("buy", this::buy)
     );
@@ -140,7 +140,7 @@ public class CommandInterpreter {
     }
 
     public void start(Map<String, String> args) {
-        //GameLogic.getInstance().start();
+        GameLogic.getInstance().start();
     }
 
     public void savelog(Map<String, String> args) {
@@ -553,7 +553,7 @@ public class CommandInterpreter {
         if (args.containsKey("-type")) {
             String type = args.get("-type");
             if (type.equals("snowplow")) {
-                SnowPlowPlayer player = new SnowPlowPlayer(args.get("-id"), net, lane);
+                GameLogic.getInstance().addPlayer(new SnowPlowPlayer(args.get("-id"), net, lane));
             }
             else if (type.equals("bus")){
                 BusPlayer player = new BusPlayer(args.get("-id"), net, lane);
@@ -707,6 +707,35 @@ public class CommandInterpreter {
         } else {
             Logger.logError("Object with id " + args.get("-id") + " is not inspectable or does not exist.");
         }
+    }
+
+    public void changeLane(Map<String, String> args) {
+        if (!args.containsKey("-vehicle") || !args.containsKey("-lane") || !args.containsKey("-net")) {
+            Logger.logError("Error: Missing arguments for changelane command. Required: -vehicle, -lane, -net.");
+            return;
+        }
+
+        Vehicle vehicle = ObjectRegistry.get(args.get("-vehicle"), Vehicle.class);
+        if (vehicle == null) {
+            Logger.logError("Error: Vehicle with id " + args.get("-vehicle") + " does not exist.");
+            return;
+        }
+
+        int laneNumber = 0;
+        try {
+            laneNumber = Integer.parseInt(args.get("-lane"));
+        } catch (NumberFormatException e) {
+            Logger.logError("Error: Invalid number format for lane. Please provide a valid integer.");
+            return;
+        }
+
+        RoadNetwork net = ObjectRegistry.get(args.get("-net"), RoadNetwork.class);
+        if (net == null) {
+            Logger.logError("Error: Road network with id " + args.get("-net") + " does not exist.");
+            return;
+        }
+
+        GameLogic.getInstance().changeLane(vehicle, net, laneNumber);
     }
 
     public void equip(Map<String, String> args) {

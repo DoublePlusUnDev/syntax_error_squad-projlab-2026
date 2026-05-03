@@ -163,7 +163,13 @@ public class RoadNetwork implements Inspectable {
 
     
 
-    public boolean changeLane(Vehicle vehicle, Lane lane) {
+    public boolean changeLane(Vehicle vehicle, int laneNum) {
+        if (laneNum < 1 || laneNum > vehicle.location.getSegment().lanes.size()) {
+            Logger.logError("Error: Lane number " + laneNum + " is out of bounds for this road.");
+            return false;
+        }
+        Lane lane = vehicle.location.getSegment().lanes.get(laneNum - 1);
+
         boolean result = vehicle.canEnter(lane);
 
         if (!result){
@@ -171,7 +177,7 @@ public class RoadNetwork implements Inspectable {
         }
 
 
-
+        Logger.logLine("VEHICLE [ " + vehicle.id + " ] CHANGED LANE FROM [" + vehicle.location.id + "] TO [" + lane.id + "]");
         vehicle.enter(lane);
         return true;
     }

@@ -7,6 +7,7 @@ public class GameLogic {
     List<Player> players;
     List<Updatable> updatables;
 
+    Player currentPlayer;
     static GameLogic instance;
 
     public GameLogic() {
@@ -15,6 +16,31 @@ public class GameLogic {
         players = new ArrayList<>();
         updatables = new ArrayList<>();
         
+    }
+
+    public void start() {
+        if (players.isEmpty()) {
+            Logger.logError("NO PLAYERS! FAILING TO START GAME.");
+            return;
+        }
+
+        currentPlayer = players.get(0);
+        startTurn();
+    }
+
+    public void startTurn() {
+        Logger.logLine("PLAYER " + currentPlayer.id + " TURN STARTED");
+    }
+
+    public void endTurn() {
+        Logger.logLine("PLAYER " + currentPlayer.id + " TURN ENDED");
+        int currentIndex = players.indexOf(currentPlayer);
+        currentPlayer = players.get((currentIndex + 1) % players.size());
+        startTurn();
+    }
+
+    public void changeLane(Vehicle vehicle, RoadNetwork road, int targetLane) {
+        road.changeLane(vehicle, targetLane);
     }
 
     public void registerUpdatable(Updatable updatable) {
@@ -45,5 +71,9 @@ public class GameLogic {
         cars.add(car);
         car.location = lane;
         road.placeCar(car);
+    }
+
+    public void addPlayer(Player player) {
+        players.add(player);
     }
 }
