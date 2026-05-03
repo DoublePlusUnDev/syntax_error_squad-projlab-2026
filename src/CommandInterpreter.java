@@ -560,11 +560,11 @@ public class CommandInterpreter {
                 GameLogic.getInstance().addPlayer(new SnowPlowPlayer(args.get("-id"), net, lane));
             }
             else if (type.equals("bus")){
-                BusPlayer player = new BusPlayer(args.get("-id"), net, lane);
+                GameLogic.getInstance().addPlayer(new BusPlayer(args.get("-id"), net, lane));
             }
             else {
                 Logger.logError("Error: Invalid player type. Use snowplow or bus. Using default type of snowplow.");
-                SnowPlowPlayer player = new SnowPlowPlayer(args.get("-id"), net, lane);     
+                GameLogic.getInstance().addPlayer(new SnowPlowPlayer(args.get("-id"), net, lane));
             }
         }else{
             Logger.logError("Error: Missing -type argument for addplayer command. Using default type of snowplow.");

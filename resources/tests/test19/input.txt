@@ -1,0 +1,3 @@
+/loadGame -path resources/init/Init2.txt
+/start
+move -vehicle busPlayer.bus -net net -target node3
