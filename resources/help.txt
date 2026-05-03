@@ -185,7 +185,7 @@ Leírás: Mozgat egy járművet egy megadott sávba.
 Leírás: Belép egy járművel egy csomópontba akkor is, hogyha ehhez a járművet esetleg teleportálni kell.
 Opciók: 
 -vehicle [STRING]: Jármű id-ja
--node [STRING]: Csomópont id-ja
+-target [STRING]: Csomópont id-ja
 
 /slip
 Leírás: Becsúszik egy járművel egy sávba, akkor is, hogyha ehhez a járművet esetleg teleportálni kell.
