@@ -68,7 +68,7 @@ public class RoadNetwork implements Inspectable {
         // Visit the nodes next to our final place
         nextLane.getSegment().startPoint.accept(vehicle);
         nextLane.getSegment().endPoint.accept(vehicle);
-        Logger.logLine("VEHICLE [ " + vehicle.id + " ] SUCCESSFULLY MOVED TOWARDS NODE [" + node.id + "] THROUGH LANE [" + nextLane.id + "]");
+        Logger.logLine("VEHICLE [" + vehicle.id + "] SUCCESSFULLY MOVED TOWARDS NODE [" + node.id + "] THROUGH LANE [" + nextLane.id + "]");
         return true;
     } 
 

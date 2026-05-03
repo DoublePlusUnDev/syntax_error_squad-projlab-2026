@@ -1,2 +1,2 @@
 PLAYER snowPlowPlayer TURN STARTED
-VEHICLE [ snowPlowPlayer.snowPlow1 ] CHANGED LANE FROM [road1.lane1] TO [road1.lane2]
+VEHICLE [snowPlowPlayer.snowPlow1] CHANGED LANE FROM [road1.lane1] TO [road1.lane2]

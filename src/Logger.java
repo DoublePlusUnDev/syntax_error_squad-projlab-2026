@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Logger {
     static boolean enabled = true;
+    static boolean outputEnabled = true;
 
     static List<String> logMessages = new ArrayList<>();
     static List<String> commands = new ArrayList<>();
@@ -14,14 +15,19 @@ public class Logger {
     }
 
     public static void log(String message) {
-        System.out.print(message);
+        if (outputEnabled) {
+            System.out.print(message);
+        }
         if (enabled) {
             logMessages.add(message);
         }
     }
 
     public static void logLine(String message) {
-        System.out.println(message);
+        if (outputEnabled) {
+            System.out.println(message);
+        }
+        
         if (enabled) {
             logMessages.add(message);
         }
@@ -39,6 +45,10 @@ public class Logger {
 
     public static void setEnabled(boolean enabled) {
         Logger.enabled = enabled;
+    }
+
+    public static void setOutputEnabled(boolean enabled) {
+        outputEnabled = enabled;
     }
 
     public static void saveLog(Path filepath) {

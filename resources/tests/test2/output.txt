@@ -1,2 +1,0 @@
-PLAYER snowPlowPlayer TURN STARTED
-VEHICLE [ snowPlowPlayer.snowPlow1 ] FAILED TO MOVE TOWARDS NODE [node3] - NO PATH FOUND

@@ -14,7 +14,7 @@ public class CommandInterpreter {
 
     Map<String, Command> commands = Map.ofEntries(
         Map.entry("/test", this::test),
-        Map.entry("/testall", this::testAll),
+        Map.entry("/testAll", this::testAll),
         Map.entry("/help", this::help),
         Map.entry("/random", this::random),
         Map.entry("/seed", this::seed),
@@ -82,11 +82,21 @@ public class CommandInterpreter {
             return;
         }
 
-        testRunner.runTest(args.get("-name"));
+        boolean output = false;
+        if (args.containsKey("-output")) {
+            output = Boolean.parseBoolean(args.get("-output"));
+        }
+
+        testRunner.runTest(args.get("-name"), output);
     }
     
     public void testAll(Map<String, String> args) {
-        testRunner.runAllTests();
+        boolean output = false;
+        if (args.containsKey("-output")) {
+            output = Boolean.parseBoolean(args.get("-output"));
+        }
+
+        testRunner.runAllTests(output);
     }
 
     public void help(Map<String, String> args) {
