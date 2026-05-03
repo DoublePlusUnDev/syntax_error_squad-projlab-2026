@@ -19,7 +19,7 @@ public class RoadSegment implements Inspectable {
 
         lanes = new ArrayList<>();
         for (int i = 0; i < laneCount; i++) {
-            lanes.add(new Lane( id + ".lane" + (i + 1), this, laneCount));
+            lanes.add(new Lane( id + ".lane" + (i + 1), this, i));
         }
 
         this.startPoint = startPoint;

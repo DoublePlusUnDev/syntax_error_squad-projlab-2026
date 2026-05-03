@@ -45,7 +45,7 @@ public class CommandInterpreter {
         Map.entry("/slip", this::slip),
         Map.entry("listRoots", this::listRoots),
         Map.entry("inspect", this::inspect),
-        /*Map.entry("move", this::move),*/
+        Map.entry("move", this::move),
         Map.entry("changeLane", this::changeLane),
         Map.entry("equip", this::equip),
         Map.entry("buy", this::buy)
@@ -255,7 +255,7 @@ public class CommandInterpreter {
             }
         }
         else {
-            net.addNode(new BusStop(args.get("-id")));
+            net.addNode(new Node(args.get("-id")));
         }
     }
 
@@ -757,6 +757,33 @@ public class CommandInterpreter {
         } else {
             Logger.logError("Object with id " + args.get("-id") + " is not inspectable or does not exist.");
         }
+    }
+
+    public void move(Map<String, String> args) {
+        if (!args.containsKey("-vehicle") || !args.containsKey("-target") || !args.containsKey("-net")) {
+            Logger.logError("Error: Missing arguments for move command. Required: -vehicle, -target, -net.");
+            return;
+        }
+
+        Vehicle vehicle = ObjectRegistry.get(args.get("-vehicle"), Vehicle.class);
+        if (vehicle == null) {
+            Logger.logError("Error: Vehicle with id " + args.get("-vehicle") + " does not exist.");
+            return;
+        }
+
+        Node target = ObjectRegistry.get(args.get("-target"), Node.class);
+        if (target == null) {
+            Logger.logError("Error: Node with id " + args.get("-target") + " does not exist.");
+            return;
+        }
+
+        RoadNetwork net = ObjectRegistry.get(args.get("-net"), RoadNetwork.class);
+        if (net == null) {
+            Logger.logError("Error: Road network with id " + args.get("-net") + " does not exist.");
+            return;
+        }
+        
+        GameLogic.getInstance().moveVehicle(vehicle, net, target);
     }
 
     public void changeLane(Map<String, String> args) {

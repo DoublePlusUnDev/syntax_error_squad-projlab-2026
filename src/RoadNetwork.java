@@ -1,8 +1,11 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Set;
 
 /**
  * A collections of different types of nodes, connected by road segments, which may have several lanes.
@@ -29,8 +32,9 @@ public class RoadNetwork implements Inspectable {
 
     public boolean tryMoveTowardsNode(Vehicle vehicle, Node node) {
         Lane nextLane = findNextLaneInPath(vehicle, node); //figure out later
- 
+
         if (nextLane == null){
+            Logger.logLine("VEHICLE [ " + vehicle.id + " ] FAILED TO MOVE TOWARDS NODE [" + node.id + "] - NO PATH FOUND");
             return false;
         }
 
@@ -64,6 +68,7 @@ public class RoadNetwork implements Inspectable {
         // Visit the nodes next to our final place
         nextLane.getSegment().startPoint.accept(vehicle);
         nextLane.getSegment().endPoint.accept(vehicle);
+        Logger.logLine("VEHICLE [ " + vehicle.id + " ] SUCCESSFULLY MOVED TOWARDS NODE [" + node.id + "] THROUGH LANE [" + nextLane.id + "]");
         return true;
     } 
 
@@ -92,41 +97,69 @@ public class RoadNetwork implements Inspectable {
     Lane findNextLaneInPath(Vehicle vehicle, Node destination){
         Node startNode = vehicle.location.getSegment().startPoint;
         Node endNode = vehicle.location.getSegment().endPoint;
-
+        // Standard Dijkstra with a visited set and safe path reconstruction
+        final float INF = Float.MAX_VALUE;
         Map<Node, Float> distances = new HashMap<>();
+        Map<Node, Node> previousNodes = new HashMap<>();
+        Set<Node> visited = new HashSet<>();
+
+        // initialize
         distances.put(startNode, 0f);
         distances.put(endNode, 0f);
-        Map<Node, Node> previousNodes = new HashMap<>();
         previousNodes.put(startNode, null);
         previousNodes.put(endNode, null);
 
-        PriorityQueue<Node> queue = new PriorityQueue<>((a, b) -> Float.compare(distances.get(a), distances.get(b)));
+        PriorityQueue<Node> queue = new PriorityQueue<>((a, b) -> Float.compare(distances.getOrDefault(a, INF), distances.getOrDefault(b, INF)));
         queue.add(startNode);
         queue.add(endNode);
 
-        while (!distances.containsKey(destination)){
+        while (!queue.isEmpty()) {
             Node current = queue.poll();
+            if (current == null) break;
+            // skip already finalized nodes
+            if (visited.contains(current)) continue;
+            visited.add(current);
+
+            if (current == destination) break; // reached target
+
             for (Neighbour neighbour : current.getNeighbours()){
-                float alt = distances.get(current) + calculateLaneWeight(getClearestLane(neighbour.getRoadSegment(), vehicle), vehicle);
-                if (alt < distances.getOrDefault(neighbour.getNode(), Float.MAX_VALUE)) {
-                    distances.put(neighbour.getNode(), alt);
-                    previousNodes.put(neighbour.getNode(), current);
-                    queue.add(neighbour.getNode());
+                Node neighNode = neighbour.getNode();
+                if (visited.contains(neighNode)) continue;
+
+                Lane clearest = getClearestLane(neighbour.getRoadSegment(), vehicle);
+                float edgeWeight = calculateLaneWeight(clearest, vehicle);
+                if (edgeWeight == INF) continue; // cannot enter this road
+
+                float alt = distances.getOrDefault(current, INF) + edgeWeight;
+                if (alt < distances.getOrDefault(neighNode, INF)) {
+                    distances.put(neighNode, alt);
+                    previousNodes.put(neighNode, current);
+                    queue.add(neighNode);
                 }
-            }   
+            }
         }
 
-        if (distances.get(destination) == Float.MAX_VALUE){
+        if (!distances.containsKey(destination) || distances.get(destination) == INF){
             return null; // No path found
         }
-        
-        Node current = destination;
-        Node nextNode = null;
-        while (previousNodes.get(current) != startNode){
-            current = previousNodes.get(current);
-            nextNode = current;
+
+        // Reconstruct path from destination back to one of the start nodes
+        List<Node> revPath = new ArrayList<>();
+        Node cur = destination;
+        while (cur != null){
+            revPath.add(cur);
+            cur = previousNodes.get(cur);
         }
-        for (Neighbour neighbour : startNode.getNeighbours()){
+
+        if (revPath.size() < 2) return null; // destination is the same as start
+
+        // reverse to get forward path: first element will be a start node (startNode or endNode)
+        Collections.reverse(revPath);
+        Node pathStart = revPath.get(0);
+        Node nextNode = revPath.get(1);
+
+        // find the road segment connecting the start used to the next node
+        for (Neighbour neighbour : pathStart.getNeighbours()){
             if (neighbour.getNode() == nextNode){
                 return getClearestLane(neighbour.getRoadSegment(), vehicle);
             }

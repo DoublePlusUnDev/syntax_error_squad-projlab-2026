@@ -51,10 +51,5 @@ public abstract class Vehicle implements Inspectable {
         return true;
     }
 
-    public boolean canSlip() {
-    
-        boolean slip = TestUtil.askUserYesNo("Can the vehicle slip?");
-
-        return slip;
-    }
+    public abstract  boolean canSlip();
 }

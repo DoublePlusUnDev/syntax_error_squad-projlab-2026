@@ -26,7 +26,7 @@ public class TestUtil {
         tabulatePrintln("<-" + exitMessage);
     }
 
-    public static boolean askUserYesNo(String question){
+    /*public static boolean askUserYesNo(String question){
         tabulatePrintln("? " + question + " (yes/no)");
         tabulatePrint("> ");
 
@@ -44,7 +44,7 @@ public class TestUtil {
 
         String input = scanner.nextLine();
         return Integer.parseInt(input);
-    }
+    }*/
  
     private static void tabulatePrint(String message) {
         System.out.print("\t".repeat(chainDepth) + message);

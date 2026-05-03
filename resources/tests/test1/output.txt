@@ -1,0 +1,7 @@
+PLAYER snowPlowPlayer TURN STARTED
+LANE [road2.lane1] CHANGED [snowHeight] FROM [0.1] TO [0.08]
+LANE [road2.lane1] CHANGED [icingProgress] FROM [0] TO [1]
+hey
+VEHICLE [snowPlowPlayer.snowPlow1] ENTERED [node2] NODE
+VEHICLE [snowPlowPlayer.snowPlow1] ENTERED [node3] NODE
+VEHICLE [ snowPlowPlayer.snowPlow1 ] SUCCESSFULLY MOVED TOWARDS NODE [node3] THROUGH LANE [road2.lane1]

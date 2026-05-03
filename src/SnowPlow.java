@@ -40,6 +40,13 @@ public class SnowPlow extends Vehicle{
         plowHead.equip();
     }
 
+    
+
+    @Override
+    public boolean canSlip() {
+        return false;
+    }
+
     @Override
     public void inspect() {
         Logger.logLine("SnowPlow " + id + " details:");

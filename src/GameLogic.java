@@ -43,6 +43,10 @@ public class GameLogic {
         startTurn();
     }
 
+    public void moveVehicle(Vehicle vehicle, RoadNetwork road, Node targetNode) {
+        road.tryMoveTowardsNode(vehicle, targetNode);
+    }
+
     public void changeLane(Vehicle vehicle, RoadNetwork road, int targetLane) {
         road.changeLane(vehicle, targetLane);
     }
