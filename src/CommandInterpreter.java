@@ -36,9 +36,8 @@ public class CommandInterpreter {
         Map.entry("/addPlayer", this::addPlayer),
         Map.entry("/addVehicle", this::addVehicle),
         Map.entry("/createBuyable", this::createBuyable),
-        /*Map.entry("/addmoney", this::addMoney),
-        Map.entry("/setmoney", this::setMoney),
-        */
+        Map.entry("/addMoney", this::addMoney),
+        Map.entry("/setMoney", this::setMoney),
         Map.entry("/clean", this::clean),
        /* 
         Map.entry("/movevehicle", this::moveVehicle),*/
@@ -611,6 +610,52 @@ public class CommandInterpreter {
             case "icebreakerhead" -> buyable = new IceBreakerHead(args.get("-id"), price);
             default -> Logger.logError("Error: Invalid buyable type.");
         }
+    }
+
+    public void addMoney(Map<String, String> args) {
+        if (!args.containsKey("-bank") || !args.containsKey("-amount")) {
+            Logger.logError("Error: Missing arguments for addmoney command. Required: -bank, -amount.");
+            return;
+        }
+
+        MoneyBank bank = ObjectRegistry.get(args.get("-bank"), MoneyBank.class);
+        if (bank == null) {
+            Logger.logError("Error: Money bank with id " + args.get("-bank") + " does not exist.");
+            return;
+        }
+
+        int amount = 0;
+        try {
+            amount = Integer.parseInt(args.get("-amount"));
+        } catch (NumberFormatException e) {
+            Logger.logError("Error: Invalid number format for amount. Please provide a valid integer.");
+            return;
+        }
+
+        bank.addMoney(amount);
+    }
+
+    public void setMoney(Map<String, String> args) {
+        if (!args.containsKey("-bank") || !args.containsKey("-amount")) {
+            Logger.logError("Error: Missing arguments for setmoney command. Required: -bank, -amount.");
+            return;
+        }
+
+        MoneyBank bank = ObjectRegistry.get(args.get("-bank"), MoneyBank.class);
+        if (bank == null) {
+            Logger.logError("Error: Money bank with id " + args.get("-bank") + " does not exist.");
+            return;
+        }
+
+        int amount = 0;
+        try {
+            amount = Integer.parseInt(args.get("-amount"));
+        } catch (NumberFormatException e) {
+            Logger.logError("Error: Invalid number format for amount. Please provide a valid integer.");
+            return;
+        }
+
+        bank.setMoney(amount);
     }
 
     public void clean(Map<String, String> args){
