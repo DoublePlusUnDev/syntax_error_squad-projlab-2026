@@ -67,7 +67,7 @@ public class RoadSegment implements Inspectable {
      *
      * @param snowLevel the amount of snow to add
      */
-    public void addSnow(int snowLevel) {
+    public void addSnow(float snowLevel) {
         for (Lane lane : lanes){
             lane.addSnow(snowLevel);
         }

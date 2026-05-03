@@ -8,7 +8,7 @@ public class Tunnel extends RoadSegment {
     }
 
     @Override
-    public void addSnow(int snowLevel) {
+    public void addSnow(float snowLevel) {
         
     }
 

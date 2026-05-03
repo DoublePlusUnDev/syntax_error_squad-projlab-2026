@@ -34,7 +34,7 @@ public class RoadNetwork implements Inspectable {
         Lane nextLane = findNextLaneInPath(vehicle, node); //figure out later
 
         if (nextLane == null){
-            Logger.logLine("VEHICLE [ " + vehicle.id + " ] FAILED TO MOVE TOWARDS NODE [" + node.id + "] - NO PATH FOUND");
+            Logger.logLine("VEHICLE [" + vehicle.id + "] FAILED TO MOVE TOWARDS NODE [" + node.id + "] - NO PATH FOUND");
             return false;
         }
 
@@ -210,13 +210,29 @@ public class RoadNetwork implements Inspectable {
         }
 
 
-        Logger.logLine("VEHICLE [ " + vehicle.id + " ] CHANGED LANE FROM [" + vehicle.location.id + "] TO [" + lane.id + "]");
+        Logger.logLine("VEHICLE [" + vehicle.id + "] CHANGED LANE FROM [" + vehicle.location.id + "] TO [" + lane.id + "]");
         vehicle.enter(lane);
         return true;
     }
 
     public void addSnow(){
+        List<Node> selectedNodes = new ArrayList<>();
+        for (Node node : nodes){
+            if (RandomGenerator.decide(0.1f)) {
+                selectedNodes.add(node);
+            }
+        }
 
+        List<RoadSegment> affectedSegments = new ArrayList<>();
+        for (Node node : selectedNodes){
+            for (Neighbour neighbour : node.getNeighbours()){
+                RoadSegment segment = neighbour.getRoadSegment();
+                if (!affectedSegments.contains(segment)){
+                    affectedSegments.add(segment);
+                    segment.addSnow(0.02f);
+                }
+            }
+        }
     }
 
     
