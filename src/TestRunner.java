@@ -1,6 +1,7 @@
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,18 +16,23 @@ public class TestRunner {
             "test26", "test27", "test28");
 
     public void runAllTests(boolean output) {
+        int passedCount = 0;
         for (String test : tests) {
-            runTest(test, output);
+            if (runTest(test, output)) {
+                passedCount++;
+            }
         }
+        System.out.println("Tests passed: " + passedCount + "/" + tests.size());
     }
 
-    public void runTest(String testName, boolean output) {
+    public boolean runTest(String testName, boolean output) {
         Path inputFile = Paths.get(testFolder.toString(), testName, "input.txt");
         Path outputFile = Paths.get(testFolder.toString(), testName, "output.txt");
         Path expectedFile = Paths.get(testFolder.toString(), testName, "expected.txt");
         System.out.println("Running test: " + inputFile.toString());
         Logger.setOutputEnabled(output);
         CommandInterpreter ci = new CommandInterpreter();
+        boolean testPassed = false;
         try (Scanner scanner = new Scanner(inputFile.toFile())) {
             Logger.clearLogs();
             while (scanner.hasNextLine()) {
@@ -34,11 +40,65 @@ public class TestRunner {
                 ci.execute(command);
             }
             Logger.saveLog(outputFile);
+
+            if (expectedFile.toFile().exists()) {
+                try (Scanner expectedScanner = new Scanner(expectedFile.toFile())) {
+                    List<String> expectedLines = readNormalizedLines(expectedScanner);
+                    List<String> actualLines = readNormalizedLines(Logger.logMessages);
+                    if (expectedLines.equals(actualLines)) {
+                        System.out.println("Test " + testName + " passed.");
+                        testPassed = true;
+                    } else {
+                        System.out.println("Test " + testName + " failed. Output does not match expected.");
+                    }
+                } catch (FileNotFoundException e) {
+                    Logger.logError("Expected output file not found for test: " + testName);
+                }
+            } else {
+                System.out.println("No expected output file found for test: " + testName);
+            }
+
         } catch (FileNotFoundException e) {
             Logger.logError("Test file not found: " + testName);
         }
         finally {
             Logger.setOutputEnabled(true);
+        }
+        return testPassed;
+    }
+
+    private List<String> readNormalizedLines(Scanner scanner) {
+        List<String> lines = new ArrayList<>();
+        while (scanner.hasNextLine()) {
+            String line = normalizeLine(scanner.nextLine());
+            if (!line.isEmpty()) {
+                lines.add(line);
+            }
+        }
+        return lines;
+    }
+
+    private List<String> readNormalizedLines(List<String> rawLines) {
+        List<String> lines = new ArrayList<>();
+        for (String rawLine : rawLines) {
+            String line = normalizeLine(rawLine);
+            if (!line.isEmpty()) {
+                lines.add(line);
+            }
+        }
+        return lines;
+    }
+
+    private String normalizeLine(String line) {
+        return line.trim().replaceAll("\\s+", " ");
+    }
+
+    public void removeTestOutputs() {
+        for (String test : tests) {
+            Path outputFile = Paths.get(testFolder.toString(), test, "output.txt");
+            if (outputFile.toFile().exists()) {
+                outputFile.toFile().delete();
+            }
         }
     }
 }

@@ -15,6 +15,7 @@ public class CommandInterpreter {
     Map<String, Command> commands = Map.ofEntries(
         Map.entry("/test", this::test),
         Map.entry("/testAll", this::testAll),
+        Map.entry("/removeTestOutputs", this::removeTestOutputs),
         Map.entry("/help", this::help),
         Map.entry("/random", this::random),
         Map.entry("/seed", this::seed),
@@ -97,6 +98,10 @@ public class CommandInterpreter {
         }
 
         testRunner.runAllTests(output);
+    }
+
+    public void removeTestOutputs(Map<String, String> args) {
+        testRunner.removeTestOutputs();
     }
 
     public void help(Map<String, String> args) {
