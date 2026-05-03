@@ -50,5 +50,15 @@ public class Logger {
             System.err.println("Error saving log: " + e.getMessage());
         }
     }
+
+    public static void saveGameState(Path filepath) {
+        try (java.io.PrintWriter writer = new java.io.PrintWriter(filepath.toFile())) {
+            for (String command : commands) {
+                writer.println(command);
+            }
+        } catch (java.io.IOException e) {
+            System.err.println("Error saving game state: " + e.getMessage());
+        }
+    }
     
 }

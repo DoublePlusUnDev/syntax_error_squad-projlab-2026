@@ -8,9 +8,9 @@ Vehicle Block: no
 Ice Debris: no
 Salted Timer: 0
 Inventory snowPlowPlayer.snowPlow1.inventory details:
-Salt: 0/20
-Gravel: 0/20
-Bio-Kerosene: 0/20
+Salt: 0/10
+Gravel: 0/10
+Bio-Kerosene: 0/10
 Plow heads: 6
 - sweeperHead
 - blowerHead

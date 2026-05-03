@@ -1,1 +1,2 @@
+PLAYER snowPlowPlayer TURN STARTED
 BUYABLE [salt] BOUGHT BY [snowPlowPlayer.snowPlow1.inventory] FOR [0]

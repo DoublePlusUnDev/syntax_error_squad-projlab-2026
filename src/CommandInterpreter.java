@@ -14,15 +14,16 @@ public class CommandInterpreter {
 
     Map<String, Command> commands = Map.ofEntries(
         Map.entry("/test", this::test),
+        Map.entry("/testall", this::testAll),
         Map.entry("/help", this::help),
         Map.entry("/random", this::random),
         Map.entry("/seed", this::seed),
         Map.entry("/logging", this::logging),
         Map.entry("/addNet", this::addNet),
         Map.entry("/start", this::start),
-        Map.entry("/saveLog", this::savelog),
-        Map.entry("/saveGame", this::savegame),
-        Map.entry("/loadGame", this::loadgame),
+        Map.entry("/saveLog", this::saveLog),
+        Map.entry("/saveGame", this::saveGame),
+        Map.entry("/loadGame", this::loadGame),
         Map.entry("/generate", this::generate),
         Map.entry("/addNode", this::addNode),
         Map.entry("/addRoad", this::addRoad),
@@ -69,6 +70,7 @@ public class CommandInterpreter {
             Command cmd = commands.get(commandName);
             if (cmd != null) {
                 cmd.execute(args);
+                Logger.logCommand(command);
             } else {
                 Logger.logError("Unknown command: " + commandName);
                 Logger.logError("Run help for list of available commands.");
@@ -84,6 +86,10 @@ public class CommandInterpreter {
         testRunner.runTest(args.get("-name"));
     }
     
+    public void testAll(Map<String, String> args) {
+        testRunner.runAllTests();
+    }
+
     public void help(Map<String, String> args) {
         Path helpPath = Paths.get("resources", "help.txt");
 
@@ -143,7 +149,7 @@ public class CommandInterpreter {
         GameLogic.getInstance().start();
     }
 
-    public void savelog(Map<String, String> args) {
+    public void saveLog(Map<String, String> args) {
         if (!args.containsKey("-path")) {
             System.out.println("Error: Missing -path argument for savelog command.");
             return;
@@ -151,17 +157,16 @@ public class CommandInterpreter {
         Logger.saveLog(Paths.get(args.get("-path")));
     }
 
-    public void savegame(Map<String, String> args) {
+    public void saveGame(Map<String, String> args) {
         if (!args.containsKey("-path")) {
             System.out.println("Error: Missing -path argument for savelog command.");
             return;
         }
 
-        Path target = Paths.get(args.get("-path"));
-        // Use target.toString() or target.toFile() when implementing save logic
+        Logger.saveGameState(Paths.get(args.get("-path")));
     }
 
-    public void loadgame(Map<String, String> args) {
+    public void loadGame(Map<String, String> args) {
         if (!args.containsKey("-path")) {
             System.out.println("Error: Missing -path argument for loadgame command.");
             return;
@@ -174,7 +179,7 @@ public class CommandInterpreter {
                 if (line.isBlank() || line.startsWith("#")) {
                     continue; // Skip empty lines and comments
                 }
-                System.out.println(line);
+                //System.out.println(line);
 
                 execute(line);
             }
