@@ -7,7 +7,7 @@ Lane road1.lane1 details:
 Snow Height: 0.0
 Gravel Height: 0.0
 Icing Progress: 0
-Iced: no
+Iced: yes
 Vehicle Block: no
 Ice Debris: no
 Salted Timer: 0

@@ -5,12 +5,15 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class CommandInterpreter {
+    private final TestRunner testRunner;
+
     public interface Command {
         void execute(Map<String, String> args);
         
     }
 
     Map<String, Command> commands = Map.ofEntries(
+        Map.entry("/test", this::test),
         Map.entry("/help", this::help),
         Map.entry("/random", this::random),
         Map.entry("/seed", this::seed),
@@ -49,7 +52,7 @@ public class CommandInterpreter {
     );
 
     public CommandInterpreter() {
-
+        testRunner = new TestRunner();
     }
 
     public void execute(String command) {
@@ -70,6 +73,15 @@ public class CommandInterpreter {
                 Logger.logError("Unknown command: " + commandName);
                 Logger.logError("Run help for list of available commands.");
             }
+    }
+
+    public void test(Map<String, String> args) {
+        if (!args.containsKey("-name")) {
+            Logger.logError("Error: Missing -name argument for test command.");
+            return;
+        }
+
+        testRunner.runTest(args.get("-name"));
     }
     
     public void help(Map<String, String> args) {

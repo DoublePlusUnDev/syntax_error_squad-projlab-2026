@@ -5,10 +5,6 @@ public class Prototype {
         CommandInterpreter ci = new CommandInterpreter();
         
         Scanner scanner = new Scanner(System.in);
-        TestRunner testRunner = new TestRunner();
-        testRunner.runTest(scanner.nextLine());
-
-
         
         while (true) {
             System.out.print("> ");

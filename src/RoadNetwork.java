@@ -170,6 +170,8 @@ public class RoadNetwork implements Inspectable {
             return false;
         }
 
+
+
         vehicle.enter(lane);
         return true;
     }
@@ -299,6 +301,11 @@ public class RoadNetwork implements Inspectable {
         Logger.logLine("Contains the following " + roadSegments.size() + " road segments:");
         for (RoadSegment segment : roadSegments) {
             Logger.logLine("-" + segment.id);
+        }
+
+        Logger.logLine("Contains the following " + vehicles.size() + " vehicles:");
+        for (Vehicle vehicle : vehicles) {
+            Logger.logLine("-" + vehicle.id + " at lane " + vehicle.location.id);
         }
     }
 }
