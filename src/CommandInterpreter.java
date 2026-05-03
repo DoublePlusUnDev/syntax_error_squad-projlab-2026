@@ -16,6 +16,7 @@ public class CommandInterpreter {
         Map.entry("/test", this::test),
         Map.entry("/testAll", this::testAll),
         Map.entry("/removeTestOutputs", this::removeTestOutputs),
+        Map.entry("help", this::help),
         Map.entry("/help", this::help),
         Map.entry("/random", this::random),
         Map.entry("/seed", this::seed),
