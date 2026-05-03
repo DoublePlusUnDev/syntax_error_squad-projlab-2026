@@ -40,8 +40,7 @@ public class CommandInterpreter {
         Map.entry("/addMoney", this::addMoney),
         Map.entry("/setMoney", this::setMoney),
         Map.entry("/clean", this::clean),
-       /* 
-        Map.entry("/movevehicle", this::moveVehicle),*/
+        Map.entry("/movevehicle", this::moveVehicle),
         Map.entry("/enter", this::enter),
         Map.entry("/slip", this::slip),
         Map.entry("listRoots", this::listRoots),
@@ -692,6 +691,34 @@ public class CommandInterpreter {
         }
 
         head.clean(target);
+    }
+
+    public void moveVehicle(Map<String, String> args) {
+        if (!args.containsKey("-vehicle") || !args.containsKey("-lane") || !args.containsKey("-net")) {
+            Logger.logError("Error: Missing arguments for movevehicle command. Required: -vehicle, -lane, -net.");
+            return;
+        }
+
+        Vehicle vehicle = ObjectRegistry.get(args.get("-vehicle"), Vehicle.class);
+        if (vehicle == null) {
+            Logger.logError("Error: Vehicle with id " + args.get("-vehicle") + " does not exist.");
+            return;
+        }
+
+        Lane target = ObjectRegistry.get(args.get("-lane"), Lane.class);
+        if (target == null) {
+            Logger.logError("Error: Lane with id " + args.get("-lane") + " does not exist.");
+            return;
+        }
+
+        RoadNetwork net = ObjectRegistry.get(args.get("-net"), RoadNetwork.class);
+        if (net == null) {
+            Logger.logError("Error: Road network with id " + args.get("-net") + " does not exist.");
+            return;
+        }
+
+        vehicle.location = target;
+        
     }
 
     public void enter(Map<String, String> args) {
