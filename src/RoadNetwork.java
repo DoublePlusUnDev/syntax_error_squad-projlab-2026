@@ -319,7 +319,7 @@ public class RoadNetwork implements Inspectable {
                 nodeConnections.put(i-1, i);
             }
         }
-        roadSegments.get(0).setStartPoint(nodes.getLast());
+        roadSegments.get(0).setStartPoint(nodes.get(nodes.size() - 1));
         nodeConnections.put(0, numberOfNodes - 1);
         nodeConnections.put(numberOfNodes - 1, 0);
 

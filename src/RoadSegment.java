@@ -140,6 +140,6 @@ public class RoadSegment implements Inspectable {
     }
 
     protected boolean isRightLane(Lane lane){
-        return lanes.getLast() == lane;
+        return lanes.get(lanes.size() - 1) == lane;
     }
 }

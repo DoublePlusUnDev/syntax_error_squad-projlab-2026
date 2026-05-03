@@ -35,7 +35,7 @@ public class GameLogic {
     public void endTurn() {
         Logger.logLine("PLAYER " + currentPlayer.id + " TURN ENDED");
         int currentIndex = players.indexOf(currentPlayer);
-        if (currentPlayer == players.getLast()){
+        if (currentPlayer == players.get(players.size() - 1)) {
             Logger.logLine("ROUND ENDED");
             updateAll();
         }

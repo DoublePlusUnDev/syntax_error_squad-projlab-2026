@@ -17,7 +17,7 @@ public class Bridge extends RoadSegment {
             return;
         
 
-        Lane nextLane = lanes.getFirst();
+        Lane nextLane = lanes.get(lane.getCount() + 1);
         float snowLevel = lane.getSnow();
         lane.destroySnow();
         nextLane.addSnow(snowLevel);
@@ -29,7 +29,7 @@ public class Bridge extends RoadSegment {
             return;
         
 
-        Lane rightMostLane = lanes.getLast();
+        Lane rightMostLane = lanes.get(lanes.size() - 1);
         float snowLevel = lane.getSnow();
         lane.destroySnow();
         rightMostLane.addSnow(snowLevel);
