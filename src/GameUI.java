@@ -9,6 +9,7 @@ public class GameUI extends JFrame {
 
     private static GameUI instance;
     public final static String MAIN_MENU = "MainMenu";
+    public final static String SETTINGS_MENU = "SettingsMenu";
     
     public static GameUI getInstance() {
         if (instance == null) {
@@ -28,6 +29,9 @@ public class GameUI extends JFrame {
         MainMenuPanel mainMenuPanel = new MainMenuPanel();
         cards.add(MAIN_MENU, mainMenuPanel);
 
+        SettingsPanel settingsPanel = new SettingsPanel();
+        cards.add(SETTINGS_MENU, settingsPanel);
+
         add(cards);
         setVisible(true);
     }
@@ -38,5 +42,9 @@ public class GameUI extends JFrame {
     
     public void quitApplication() {
         dispose();
+    }
+
+    public void showSettingsMenu() {
+        cardLayout.show(cards, SETTINGS_MENU);
     }
 }
