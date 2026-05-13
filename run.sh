@@ -1,2 +1,2 @@
 javac -d out src/*.java
-java -cp out Prototype
+java -cp out Game
