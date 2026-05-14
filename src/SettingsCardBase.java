@@ -13,7 +13,7 @@ public abstract class SettingsCardBase extends JPanel {
 
     public SettingsCardBase(String title) {
         setBackground(UIStyles.buttonBackgroundColor);
-        setBorder(BorderFactory.createLineBorder(UIStyles.buttonBorderColor, 2));
+        setBorder(BorderFactory.createLineBorder(UIStyles.borderColor, 2));
         setPreferredSize(new Dimension(240, 40));
 
         setLayout(new BorderLayout());

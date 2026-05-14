@@ -13,7 +13,7 @@ public class UIFactory {
         JButton button = new JButton(text);
         button.setBackground(UIStyles.buttonBackgroundColor);
         button.setForeground(UIStyles.textColor);
-        button.setBorder(BorderFactory.createLineBorder(UIStyles.buttonBorderColor, 2));
+        button.setBorder(BorderFactory.createLineBorder(UIStyles.borderColor, 2));
         button.addActionListener(action);
         return button;
     }

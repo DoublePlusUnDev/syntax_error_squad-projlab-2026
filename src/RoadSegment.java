@@ -39,6 +39,24 @@ public class RoadSegment implements Inspectable {
     }
 
     /**
+     * Gets the start node of this road segment.
+     *
+     * @return the start node
+     */
+    public Node getStartPoint() {
+        return startPoint;
+    }
+
+    /**
+     * Gets the end node of this road segment.
+     *
+     * @return the end node
+     */
+    public Node getEndPoint() {
+        return endPoint;
+    }
+
+    /**
      * Sets the start point of this road segment.
      *
      * @param startPoint the new start node

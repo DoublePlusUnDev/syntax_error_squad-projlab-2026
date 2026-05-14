@@ -12,13 +12,8 @@ public class GameUI extends JFrame {
     public final static String SETTINGS_MENU = "SettingsMenu";
     public final static String GAME_PANEL = "GamePanel";
     
-    public static GameUI getInstance() {
-        if (instance == null) {
-            instance = new GameUI();
-        }
-        return instance;
-    }
-    private GameUI() {
+    
+    public GameUI(CommandInterpreter commandInterpreter) {
         setTitle("Projlab Traffic Game ");
         setSize(1280, 720);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -27,13 +22,13 @@ public class GameUI extends JFrame {
         cardLayout = new CardLayout();
         cards = new JPanel(cardLayout);
 
-        MainMenuPanel mainMenuPanel = new MainMenuPanel();
+        MainMenuPanel mainMenuPanel = new MainMenuPanel(this);
         cards.add(MAIN_MENU, mainMenuPanel);
 
-        SettingsPanel settingsPanel = new SettingsPanel();
+        SettingsPanel settingsPanel = new SettingsPanel(this);
         cards.add(SETTINGS_MENU, settingsPanel);
 
-        GamePanel gamePanel = new GamePanel();
+        GamePanel gamePanel = new GamePanel(commandInterpreter);
         cards.add(GAME_PANEL, gamePanel);
 
         add(cards);

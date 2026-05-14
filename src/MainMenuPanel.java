@@ -16,7 +16,7 @@ public class MainMenuPanel extends JPanel {
 
     
 
-    public MainMenuPanel() {
+    public MainMenuPanel(GameUI gameUI) {
         this.setBackground(UIStyles.backgroundColor);
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -27,12 +27,12 @@ public class MainMenuPanel extends JPanel {
 
         add(Box.createRigidArea(new Dimension(0, 10)));
 
-        creatorLabel = UIFactory.createLabel("--- SYNTAX ERROR SQUAD ---", 18.0f, UIStyles.buttonBorderColor, CENTER_ALIGNMENT);
+        creatorLabel = UIFactory.createLabel("--- SYNTAX ERROR SQUAD ---", 18.0f, UIStyles.borderColor, CENTER_ALIGNMENT);
         add(creatorLabel);
 
         add(Box.createRigidArea(new Dimension(0, 40)));
 
-        newGameButton = UIFactory.createButton("Új játék", 18.0f, 240, 40, CENTER_ALIGNMENT, e -> GameUI.getInstance().showGamePanel());
+        newGameButton = UIFactory.createButton("Új játék", 18.0f, 240, 40, CENTER_ALIGNMENT, e -> gameUI.showGamePanel());
         add(newGameButton);
 
         add(Box.createRigidArea(new Dimension(0, 10)));
@@ -42,12 +42,12 @@ public class MainMenuPanel extends JPanel {
 
         add(Box.createRigidArea(new Dimension(0, 10)));
 
-        settingsButton = UIFactory.createButton("Beállítások", 18.0f, 240, 40, CENTER_ALIGNMENT, e -> GameUI.getInstance().showSettingsMenu());
+        settingsButton = UIFactory.createButton("Beállítások", 18.0f, 240, 40, CENTER_ALIGNMENT, e -> gameUI.showSettingsMenu());
         add(settingsButton);
 
         add(Box.createRigidArea(new Dimension(0, 10)));
 
-        exitButton = UIFactory.createButton("Kilépés", 18.0f, 240, 40, CENTER_ALIGNMENT, e -> GameUI.getInstance().quitApplication());
+        exitButton = UIFactory.createButton("Kilépés", 18.0f, 240, 40, CENTER_ALIGNMENT, e -> gameUI.quitApplication());
         add(exitButton);
 
         add(Box.createVerticalGlue());

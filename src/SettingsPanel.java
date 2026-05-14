@@ -27,7 +27,7 @@ public class SettingsPanel extends JPanel{
         }
     }
 
-    public SettingsPanel() {
+    public SettingsPanel(GameUI gameUI) {
         setLayout(new BorderLayout());
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
@@ -86,10 +86,10 @@ public class SettingsPanel extends JPanel{
         backButton.setFont(backButton.getFont().deriveFont(14.0f));
         backButton.setFocusPainted(false);
         backButton.addActionListener(e -> {
-            GameUI.getInstance().showMainMenu();
+            gameUI.showMainMenu();
         });
         backButton.setPreferredSize(new Dimension(backButton.getPreferredSize().width, 40));
-        backButton.setBorder(BorderFactory.createLineBorder(UIStyles.buttonBorderColor, 2));
+        backButton.setBorder(BorderFactory.createLineBorder(UIStyles.borderColor, 2));
         add(backButton, BorderLayout.SOUTH);
     }
 }

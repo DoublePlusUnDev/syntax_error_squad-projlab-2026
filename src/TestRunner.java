@@ -22,14 +22,14 @@ public class TestRunner {
                 passedCount++;
             }
         }
-        System.out.println("Tests passed: " + passedCount + "/" + tests.size());
+        Logger.logLine("Tests passed: " + passedCount + "/" + tests.size());
     }
 
     public boolean runTest(String testName, boolean output) {
         Path inputFile = Paths.get(testFolder.toString(), testName, "input.txt");
         Path outputFile = Paths.get(testFolder.toString(), testName, "output.txt");
         Path expectedFile = Paths.get(testFolder.toString(), testName, "expected.txt");
-        System.out.println("Running test: " + inputFile.toString());
+        Logger.logLine("Running test: " + inputFile.toString());
         Logger.setOutputEnabled(output);
         CommandInterpreter ci = new CommandInterpreter();
         boolean testPassed = false;
@@ -46,16 +46,16 @@ public class TestRunner {
                     List<String> expectedLines = readNormalizedLines(expectedScanner);
                     List<String> actualLines = readNormalizedLines(Logger.logMessages);
                     if (expectedLines.equals(actualLines)) {
-                        System.out.println("Test " + testName + " passed.");
+                        Logger.logLine("Test " + testName + " passed.");
                         testPassed = true;
                     } else {
-                        System.out.println("Test " + testName + " failed. Output does not match expected.");
+                        Logger.logLine("Test " + testName + " failed. Output does not match expected.");
                     }
                 } catch (FileNotFoundException e) {
                     Logger.logError("Expected output file not found for test: " + testName);
                 }
             } else {
-                System.out.println("No expected output file found for test: " + testName);
+                Logger.logLine("No expected output file found for test: " + testName);
             }
 
         } catch (FileNotFoundException e) {

@@ -167,6 +167,14 @@ public class RoadNetwork implements Inspectable {
         return null;
     }
 
+    public List<Node> getNodes() {
+        return nodes;
+    }
+
+    public List<RoadSegment> getRoadSegments() {
+        return roadSegments;
+    }
+
     private Lane getClearestLane(RoadSegment segment, Vehicle vehicle) {
         float clearest = Float.MAX_VALUE;
         Lane bestLane = null;

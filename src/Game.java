@@ -8,7 +8,7 @@ public class Game {
     public static void main(String[] args) {
         CommandInterpreter commandInterpreter = new CommandInterpreter();
         
-        GameUI.getInstance().showMainMenu();
+        GameUI gameUI = new GameUI(commandInterpreter);
 
         settings = new HashMap<>();
     }

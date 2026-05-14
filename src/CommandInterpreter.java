@@ -147,7 +147,7 @@ public class CommandInterpreter {
         }
 
         boolean enable = Boolean.parseBoolean(args.get("-enable"));
-        Logger.setEnabled(enable);
+        Logger.setHistoryEnabled(enable);
     }
 
     public void addNet(Map<String, String> args) {
