@@ -121,6 +121,22 @@ public class Inventory implements Inspectable{
         plowHeads.add(plowHead);
     }
 
+    public int getSalt() {
+        return salt;
+    }
+
+    public int getGravel() {
+        return gravel;
+    }
+
+    public int getKerosene() {
+        return bioKerosene;
+    }
+
+    public List<PlowHead> getPlowHeads() {
+        return plowHeads;
+    }
+
     @Override
     public void inspect() {
         Logger.logLine("Inventory " + id + " details:");
