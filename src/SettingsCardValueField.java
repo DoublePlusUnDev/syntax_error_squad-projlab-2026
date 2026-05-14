@@ -7,9 +7,9 @@ import javax.swing.JTextField;
 public class SettingsCardValueField extends SettingsCardBase {
     private JTextField valueField;
 
-    public SettingsCardValueField(String title, String value, SettingChangeListener listener) {
+    public SettingsCardValueField(String title, int value, SettingChangeListener listener) {
         super(title);
-        valueField = new JTextField(value);
+        valueField = new JTextField(String.valueOf(value));
         valueField.setEditable(true);
         valueField.setBackground(UIStyles.buttonBackgroundColor);
         valueField.setForeground(UIStyles.textColor);
