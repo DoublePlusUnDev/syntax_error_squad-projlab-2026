@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.BorderFactory;
 import javax.swing.JTextField;
 
@@ -17,14 +18,42 @@ public class SettingsCardValueField extends SettingsCardBase {
         valueField.setHorizontalAlignment(JTextField.LEFT);
         valueField.setPreferredSize(new Dimension(80, 30));
         this.add(valueField, BorderLayout.EAST);
-        valueField.addActionListener(e -> {
-            String newValue = valueField.getText();
-            if (listener != null && !listener.onSettingChanged(newValue)) {
-                valueField.setText(value);
-                valueField.setForeground(UIStyles.textColor);
+        final AtomicBoolean isEdited = new AtomicBoolean(false);
+        
+        valueField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                update();
             }
-            else{
-                valueField.setForeground(UIStyles.invalidColor);
+
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                update();
+            }
+
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                update();
+            }
+
+            private void update() {
+                if (isEdited.get() || listener == null) return;
+
+                String newValue = valueField.getText();
+                System.out.println("Value changed: " + newValue);
+                
+                boolean ok = listener.onSettingChanged(newValue);
+                if (ok) {
+                    valueField.setForeground(UIStyles.textColor);
+                } else {
+                    javax.swing.SwingUtilities.invokeLater(() -> {
+                        isEdited.set(true);
+                        //valueField.setText(value);
+                        isEdited.set(false);
+                        valueField.setForeground(UIStyles.invalidColor);
+                    });
+                }
+                
             }
         });
     }

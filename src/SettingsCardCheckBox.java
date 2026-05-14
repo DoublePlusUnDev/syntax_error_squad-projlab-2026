@@ -11,7 +11,7 @@ public class SettingsCardCheckBox extends SettingsCardBase {
         checkBox.setBackground(UIStyles.buttonBackgroundColor);
         checkBox.setForeground(UIStyles.textColor);
         this.add(checkBox, java.awt.BorderLayout.EAST);
-        checkBox.addActionListener(e -> {
+        checkBox.addChangeListener(e -> {
             boolean newValue = checkBox.isSelected();
             if (listener != null && !listener.onSettingChanged(Boolean.toString(newValue))) {
                 checkBox.setSelected(!newValue);

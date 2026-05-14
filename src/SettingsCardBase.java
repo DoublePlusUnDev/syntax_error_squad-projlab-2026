@@ -19,6 +19,8 @@ public abstract class SettingsCardBase extends JPanel {
         setLayout(new BorderLayout());
 
         JLabel titleLabel = new JLabel(title);
+        titleLabel.setForeground(UIStyles.textColor);
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         add(titleLabel, BorderLayout.WEST);
     }
