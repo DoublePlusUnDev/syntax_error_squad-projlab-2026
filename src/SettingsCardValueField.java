@@ -6,10 +6,12 @@ import javax.swing.JTextField;
 
 public class SettingsCardValueField extends SettingsCardBase {
     private JTextField valueField;
+    private String latestValidValue;
 
     public SettingsCardValueField(String title, int value, SettingChangeListener listener) {
         super(title);
-        valueField = new JTextField(String.valueOf(value));
+        valueField = new JTextField();
+        latestValidValue = String.valueOf(value);
         valueField.setEditable(true);
         valueField.setBackground(UIStyles.buttonBackgroundColor);
         valueField.setForeground(UIStyles.textColor);
@@ -40,21 +42,30 @@ public class SettingsCardValueField extends SettingsCardBase {
                 if (isEdited.get() || listener == null) return;
 
                 String newValue = valueField.getText();
-                System.out.println("Value changed: " + newValue);
                 
-                boolean ok = listener.onSettingChanged(newValue);
-                if (ok) {
+                boolean valid = listener.onSettingChanged(newValue);
+                if (valid) {
                     valueField.setForeground(UIStyles.textColor);
+                    latestValidValue = newValue;
                 } else {
-                    javax.swing.SwingUtilities.invokeLater(() -> {
-                        isEdited.set(true);
-                        //valueField.setText(value);
-                        isEdited.set(false);
-                        valueField.setForeground(UIStyles.invalidColor);
-                    });
+                    valueField.setForeground(UIStyles.invalidColor);
                 }
-                
             }
         });
+
+        valueField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (isEdited.get())
+                    return;
+                
+                isEdited.set(true);
+                valueField.setText(latestValidValue);
+                valueField.setForeground(UIStyles.textColor);
+                isEdited.set(false);
+            }
+        });
+
+        valueField.setText(String.valueOf(value));
     }
 }

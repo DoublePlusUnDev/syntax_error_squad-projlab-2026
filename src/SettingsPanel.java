@@ -1,7 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -20,7 +19,9 @@ public class SettingsPanel extends JPanel{
     private static boolean integerSetter(String key, String newValue) {
         try {
             int value = Integer.parseInt(newValue);
+            System.out.println("Parsed integer: " + value);
             Game.setSetting(key, value);
+            System.out.println("Setting updated: " + key + " = " + value);
             return true;
         } catch (Exception e) {
             return false;
@@ -80,16 +81,10 @@ public class SettingsPanel extends JPanel{
 
         add(contentPanel, BorderLayout.CENTER);
 
-        JButton backButton = new JButton("Vissza");
-        backButton.setBackground(UIStyles.buttonBackgroundColor);
-        backButton.setForeground(UIStyles.textColor);
+        JButton backButton = UIFactory.createButton("Vissza", e -> gameUI.showMainMenu());
         backButton.setFont(backButton.getFont().deriveFont(14.0f));
-        backButton.setFocusPainted(false);
-        backButton.addActionListener(e -> {
-            gameUI.showMainMenu();
-        });
         backButton.setPreferredSize(new Dimension(backButton.getPreferredSize().width, 40));
-        backButton.setBorder(BorderFactory.createLineBorder(UIStyles.borderColor, 2));
+        
         add(backButton, BorderLayout.SOUTH);
     }
 }
