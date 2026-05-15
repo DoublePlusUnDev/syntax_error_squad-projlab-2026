@@ -6,27 +6,30 @@ import javax.swing.JPanel;
 
 public class SettingsPanel extends JPanel{
 
-    private static boolean booleanSetter(String key, String newValue) {
+    private SettingsManager settingsManager;
+
+    private boolean booleanSetter(String key, String newValue) {
         try {
             boolean value = Boolean.parseBoolean(newValue);
-            Game.setSetting(key, value);
+            settingsManager.setSetting(key, value);
             return true;
         } catch (Exception e) {
             return false;
         }
     }
 
-    private static boolean integerSetter(String key, String newValue) {
+    private boolean integerSetter(String key, String newValue) {
         try {
             int value = Integer.parseInt(newValue);
-            Game.setSetting(key, value);
+            settingsManager.setSetting(key, value);
             return true;
         } catch (Exception e) {
             return false;
         }
     }
 
-    public SettingsPanel(GameUI gameUI) {
+    public SettingsPanel(GameUI gameUI, SettingsManager settingsManager) {
+        this.settingsManager = settingsManager;
         setLayout(new BorderLayout());
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));

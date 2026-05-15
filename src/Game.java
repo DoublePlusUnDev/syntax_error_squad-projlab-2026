@@ -1,20 +1,10 @@
-import java.util.HashMap;
-import java.util.Map;
 
 public class Game {
-
-    static Map<String, Object> settings = new HashMap<>();
-
-
+    
     public static void main(String[] args) {
         CommandInterpreter commandInterpreter = new CommandInterpreter();
-        
+        SettingsManager settingsManager = new SettingsManager();
 
-        GameUI gameUI = new GameUI(commandInterpreter, GameLogic.getInstance());
-    }
-
-
-    public static void setSetting(String key, Object value) {
-        settings.put(key, value);
+        GameUI gameUI = new GameUI(commandInterpreter, GameLogic.getInstance(), settingsManager);
     }
 }

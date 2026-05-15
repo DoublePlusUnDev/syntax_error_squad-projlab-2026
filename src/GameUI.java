@@ -13,10 +13,12 @@ public class GameUI extends JFrame {
 
     private CommandInterpreter commandInterpreter;
     private GameLogic gameLogic;
-    
-    public GameUI(CommandInterpreter commandInterpreter, GameLogic gameLogic) {
+    private SettingsManager settingsManager;
+
+    public GameUI(CommandInterpreter commandInterpreter, GameLogic gameLogic, SettingsManager settingsManager) {
         this.commandInterpreter = commandInterpreter;
         this.gameLogic = gameLogic;
+        this.settingsManager = settingsManager;
 
         setTitle("Projlab Traffic Game ");
         setSize(1280, 720);
@@ -29,7 +31,7 @@ public class GameUI extends JFrame {
         MainMenuPanel mainMenuPanel = new MainMenuPanel(this);
         cards.add(MAIN_MENU, mainMenuPanel);
 
-        SettingsPanel settingsPanel = new SettingsPanel(this);
+        SettingsPanel settingsPanel = new SettingsPanel(this, settingsManager);
         cards.add(SETTINGS_MENU, settingsPanel);
 
         GamePanel gamePanel = new GamePanel(commandInterpreter, gameLogic);
