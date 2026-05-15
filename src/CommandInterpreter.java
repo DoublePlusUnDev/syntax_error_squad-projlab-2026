@@ -45,11 +45,17 @@ public class CommandInterpreter {
         Map.entry("/enter", this::enter),
         Map.entry("/slip", this::slip),
         Map.entry("listRoots", this::listRoots),
+        Map.entry("/listRoots", this::listRoots),
         Map.entry("inspect", this::inspect),
+        Map.entry("/inspect", this::inspect),
         Map.entry("move", this::move),
+        Map.entry("/move", this::move),
         Map.entry("changeLane", this::changeLane),
+        Map.entry("/changeLane", this::changeLane),
         Map.entry("equip", this::equip),
-        Map.entry("buy", this::buy)
+        Map.entry("/equip", this::equip),
+        Map.entry("buy", this::buy),
+        Map.entry("/buy", this::buy)
     );
 
     public CommandInterpreter() {
