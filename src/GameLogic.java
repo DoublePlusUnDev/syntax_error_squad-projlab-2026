@@ -7,12 +7,14 @@ import java.util.List;
  * It also handles the turn-based system and the interactions between the different entities in the game.
  */
 public class GameLogic {
-    List<RoadNetwork> roads;
+    private List<Runnable> gameStateChangeListeners = new ArrayList<>();
+
+    private List<RoadNetwork> roads;
     List<Car> cars;
     List<Player> players;
     List<Updatable> updatables;
 
-    Player currentPlayer;
+    private Player currentPlayer = null;
     static GameLogic instance;
 
     public GameLogic() {
@@ -35,6 +37,7 @@ public class GameLogic {
 
     public void startTurn() {
         Logger.logLine("PLAYER " + currentPlayer.id + " TURN STARTED");
+        gameStateChangeListeners.forEach(Runnable::run);
     }
 
     public void endTurn() {
@@ -45,7 +48,16 @@ public class GameLogic {
             updateAll();
         }
         currentPlayer = players.get((currentIndex + 1) % players.size());
+        gameStateChangeListeners.forEach(Runnable::run);
         startTurn();
+    }
+
+    public void addGameStateChangeListener(Runnable listener) {
+        gameStateChangeListeners.add(listener);
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
     public void moveVehicle(Vehicle vehicle, RoadNetwork road, Node targetNode) {
@@ -96,6 +108,6 @@ public class GameLogic {
 
     public void removeCar(Car car) {
         cars.remove(car);
-        
+        car.location = null;
     }
 }

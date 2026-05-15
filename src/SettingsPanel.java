@@ -19,9 +19,7 @@ public class SettingsPanel extends JPanel{
     private static boolean integerSetter(String key, String newValue) {
         try {
             int value = Integer.parseInt(newValue);
-            System.out.println("Parsed integer: " + value);
             Game.setSetting(key, value);
-            System.out.println("Setting updated: " + key + " = " + value);
             return true;
         } catch (Exception e) {
             return false;

@@ -162,7 +162,7 @@ public class CommandInterpreter {
             return;
         }
 
-        GameLogic.getInstance().roads.add(new RoadNetwork(args.get("-id")));
+        GameLogic.getInstance().getRoads().add(new RoadNetwork(args.get("-id")));
     }
 
     public void start(Map<String, String> args) {
@@ -244,7 +244,7 @@ public class CommandInterpreter {
         RoadNetwork roadNetwork = new RoadNetwork(args.get("-id"));
         roadNetwork.setGenerationParameters(params);
         roadNetwork.generate();
-        GameLogic.getInstance().roads.add(roadNetwork);
+        GameLogic.getInstance().getRoads().add(roadNetwork);
     }
 
     public void addNode(Map<String, String> args) {

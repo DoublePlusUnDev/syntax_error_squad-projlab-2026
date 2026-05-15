@@ -24,11 +24,15 @@ public class RoadPanel extends JPanel {
         }
     }
 
-    List<DisplayNode> nodes = new ArrayList<>();
-    List<DisplayEdge> edges = new ArrayList<>();
+    private List<DisplayNode> nodes = new ArrayList<>();
+    private List<DisplayEdge> edges = new ArrayList<>();
 
-    public RoadPanel() {
+    private GameLogic gameLogic;
+
+    public RoadPanel(GameLogic gameLogic) {
         setBackground(UIStyles.backgroundColor);
+        this.gameLogic = gameLogic;
+        gameLogic.addGameStateChangeListener(this::update);
     }
 
     public void setRoads(RoadNetwork roads) {
@@ -50,6 +54,11 @@ public class RoadPanel extends JPanel {
                 edges.add(new DisplayEdge(from, to));
             }
         }
+    }
+
+    void update() {
+        repaint();
+        setRoads(gameLogic.getRoads().get(0));
     }
 
     @Override

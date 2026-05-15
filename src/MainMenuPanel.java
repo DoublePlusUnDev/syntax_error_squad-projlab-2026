@@ -32,7 +32,7 @@ public class MainMenuPanel extends JPanel {
 
         add(Box.createRigidArea(new Dimension(0, 40)));
 
-        newGameButton = UIFactory.createButton("Új játék", 18.0f, 240, 40, CENTER_ALIGNMENT, e -> gameUI.showGamePanel());
+        newGameButton = UIFactory.createButton("Új játék", 18.0f, 240, 40, CENTER_ALIGNMENT, e -> gameUI.startGame());
         add(newGameButton);
 
         add(Box.createRigidArea(new Dimension(0, 10)));

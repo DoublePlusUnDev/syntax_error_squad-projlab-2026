@@ -7,13 +7,17 @@ public class GameUI extends JFrame {
     private CardLayout cardLayout;
     private JPanel cards;
 
-    private static GameUI instance;
-    public final static String MAIN_MENU = "MainMenu";
-    public final static String SETTINGS_MENU = "SettingsMenu";
-    public final static String GAME_PANEL = "GamePanel";
+    public static final String MAIN_MENU = "MainMenu";
+    public static final String SETTINGS_MENU = "SettingsMenu";
+    public static final String GAME_PANEL = "GamePanel";
+
+    private CommandInterpreter commandInterpreter;
+    private GameLogic gameLogic;
     
-    
-    public GameUI(CommandInterpreter commandInterpreter) {
+    public GameUI(CommandInterpreter commandInterpreter, GameLogic gameLogic) {
+        this.commandInterpreter = commandInterpreter;
+        this.gameLogic = gameLogic;
+
         setTitle("Projlab Traffic Game ");
         setSize(1280, 720);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -28,7 +32,7 @@ public class GameUI extends JFrame {
         SettingsPanel settingsPanel = new SettingsPanel(this);
         cards.add(SETTINGS_MENU, settingsPanel);
 
-        GamePanel gamePanel = new GamePanel(commandInterpreter);
+        GamePanel gamePanel = new GamePanel(commandInterpreter, gameLogic);
         cards.add(GAME_PANEL, gamePanel);
 
         add(cards);
@@ -49,5 +53,12 @@ public class GameUI extends JFrame {
 
     public void showSettingsMenu() {
         cardLayout.show(cards, SETTINGS_MENU);
+    }
+
+    public void startGame() {
+        commandInterpreter.execute("/generate -id net");
+        commandInterpreter.execute("/addPlayer -id player1 -type snowplow -net net -lane Mainroad0.lane1");
+        commandInterpreter.execute("/start");
+        showGamePanel();
     }
 }
