@@ -46,10 +46,14 @@ public class TestRunner {
                     List<String> expectedLines = readNormalizedLines(expectedScanner);
                     List<String> actualLines = readNormalizedLines(Logger.logMessages);
                     if (expectedLines.equals(actualLines)) {
+                        Logger.setOutputEnabled(true);
                         Logger.logLine("Test " + testName + " passed.");
+                        Logger.setOutputEnabled(output);
                         testPassed = true;
                     } else {
+                        Logger.setOutputEnabled(true);
                         Logger.logLine("Test " + testName + " failed. Output does not match expected.");
+                        Logger.setOutputEnabled(output);
                     }
                 } catch (FileNotFoundException e) {
                     Logger.logError("Expected output file not found for test: " + testName);
