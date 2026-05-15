@@ -39,6 +39,21 @@ public class RoadSegment implements Inspectable {
     }
 
     /**
+     * Gets the list of lanes in this road segment.
+     * @return the list of lanes
+     */
+    public List<Lane> getLanes() {
+        return lanes;
+    }
+
+     /**
+     * Gets the lane at the specified index.
+     *
+     * @param index the lane index
+     * @return the lane at the specified index
+     */
+
+    /**
      * Gets the start node of this road segment.
      *
      * @return the start node

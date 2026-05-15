@@ -13,17 +13,21 @@ import javax.swing.JPanel;
 public class RoadPanel extends JPanel {
     class DisplayNode {
         float x, y;
-        public DisplayNode(float x, float y) {
+        Node node;
+        public DisplayNode(float x, float y, Node node) {
             this.x = x;
             this.y = y;
+            this.node = node;
         }
     }
 
     class DisplayEdge {
         DisplayNode from, to;
-        public DisplayEdge(DisplayNode from, DisplayNode to) {
+        RoadSegment segment;
+        public DisplayEdge(DisplayNode from, DisplayNode to, RoadSegment segment) {
             this.from = from;
             this.to = to;
+            this.segment = segment;
         }
     }
 
@@ -62,7 +66,7 @@ public class RoadPanel extends JPanel {
         int panelHeight = Math.max(getHeight(), 1);
 
         for (Node node : roads.getNodes()) {
-            DisplayNode displayNode = new DisplayNode(random.nextInt(panelWidth), random.nextInt(panelHeight));
+            DisplayNode displayNode = new DisplayNode(random.nextInt(panelWidth), random.nextInt(panelHeight), node);
             nodes.add(displayNode);
             nodeMap.put(node, displayNode);
         }
@@ -71,7 +75,7 @@ public class RoadPanel extends JPanel {
             DisplayNode from = nodeMap.get(segment.getStartPoint());
             DisplayNode to = nodeMap.get(segment.getEndPoint());
             if (from != null && to != null) {
-                edges.add(new DisplayEdge(from, to));
+                edges.add(new DisplayEdge(from, to, segment));
             }
         }
 
@@ -189,7 +193,37 @@ public class RoadPanel extends JPanel {
         super.paintComponent(g);
         g.setColor(Color.GREEN);
         for (DisplayEdge edge : edges) {
-            g.drawLine((int)edge.from.x, (int)edge.from.y, (int)edge.to.x, (int)edge.to.y);
+            DisplayNode from = edge.from;
+            DisplayNode to = edge.to;
+            List<Lane> lanes = edge.segment.getLanes();
+            
+            // Vector from start to end
+            float dx = to.x - from.x;
+            float dy = to.y - from.y;
+            float dist = (float) Math.sqrt(dx * dx + dy * dy);
+            
+            if (dist < 0.01f) continue; // Skip if nodes are too close
+            
+            // Perpendicular vector (rotated 90 degrees)
+            float perpX = -dy / dist;
+            float perpY = dx / dist;
+            
+            // Spacing between lanes
+            float laneSpacing = 3f; // Adjust as needed
+            float totalWidth = (lanes.size() - 1) * laneSpacing;
+            float startOffset = -totalWidth / 2f;
+            
+            // Draw each lane as a parallel line
+            for (int i = 0; i < lanes.size(); i++) {
+                float offset = startOffset + i * laneSpacing;
+                
+                int x1 = (int)(from.x + perpX * offset);
+                int y1 = (int)(from.y + perpY * offset);
+                int x2 = (int)(to.x + perpX * offset);
+                int y2 = (int)(to.y + perpY * offset);
+                
+                g.drawLine(x1, y1, x2, y2);
+            }
         }
         g.setColor(Color.ORANGE);
         for (DisplayNode node : nodes) {
