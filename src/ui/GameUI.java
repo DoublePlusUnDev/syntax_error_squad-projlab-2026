@@ -8,16 +8,16 @@ import utils.SettingsManager;
 
 public class GameUI extends JFrame {
 
-    private CardLayout cardLayout;
-    private JPanel cards;
+    private final CardLayout cardLayout;
+    private final JPanel cards;
 
     public static final String MAIN_MENU = "MainMenu";
     public static final String SETTINGS_MENU = "SettingsMenu";
     public static final String GAME_PANEL = "GamePanel";
 
-    private CommandInterpreter commandInterpreter;
-    private GameLogic gameLogic;
-    private SettingsManager settingsManager;
+    private final CommandInterpreter commandInterpreter;
+    private final GameLogic gameLogic;
+    private final SettingsManager settingsManager;
 
     public GameUI(CommandInterpreter commandInterpreter, GameLogic gameLogic, SettingsManager settingsManager) {
         this.commandInterpreter = commandInterpreter;

@@ -8,12 +8,15 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 public class RoadPanel extends JPanel {
@@ -37,15 +40,28 @@ public class RoadPanel extends JPanel {
         }
     }
 
-    private List<DisplayNode> nodes = new ArrayList<>();
-    private List<DisplayEdge> edges = new ArrayList<>();
+    private BufferedImage snowPlowImage;
+    private BufferedImage busImage;
+    private BufferedImage carImage;
 
-    private GameLogic gameLogic;
+    // Configurable lane rendering
+    private float laneWidth = 8f; // pixels
+    private float separatorWidth = 2f; // pixels between lanes
+    private Color laneColor = new Color(60, 60, 60);
+    private Color separatorColor = Color.WHITE;
+    private Color laneBorderColor = Color.BLACK;
+
+
+
+    private transient List<DisplayNode> nodes = new ArrayList<>();
+    private transient List<DisplayEdge> edges = new ArrayList<>();
+
+    private transient GameLogic gameLogic;
 
     public RoadPanel(GameLogic gameLogic) {
         setBackground(UIStyles.backgroundColor);
         this.gameLogic = gameLogic;
-        gameLogic.addGameStateChangeListener(this::update);
+        gameLogic.addGameStateChangeListener(this::updateDisplay);
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -56,6 +72,18 @@ public class RoadPanel extends JPanel {
                 repaint();
             }
         });
+
+        loadImages();
+    }
+
+    private void loadImages() {
+        try {
+            snowPlowImage = ImageIO.read(new File("resources/sprites/snowplow.png"));
+            carImage = ImageIO.read(new File("resources/sprites/car.png"));
+            busImage = ImageIO.read(new File("resources/sprites/bus.png"));
+        } catch (Exception e) {
+            System.err.println("Error loading images: " + e.getMessage());
+        }
     }
 
     public void setRoads(RoadNetwork roads) {
@@ -189,7 +217,7 @@ public class RoadPanel extends JPanel {
         }
     }
 
-    void update() {
+    private void updateDisplay() {
         setRoads(gameLogic.getRoads().get(0));
         repaint();
     }
@@ -197,43 +225,105 @@ public class RoadPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(Color.GREEN);
+        // draw roads (lanes as filled strips with separators)
+        java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;
+        g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
         for (DisplayEdge edge : edges) {
             DisplayNode from = edge.from;
             DisplayNode to = edge.to;
             List<Lane> lanes = edge.segment.getLanes();
-            
+
             // Vector from start to end
             float dx = to.x - from.x;
             float dy = to.y - from.y;
             float dist = (float) Math.sqrt(dx * dx + dy * dy);
-            
+
             if (dist < 0.01f) continue; // Skip if nodes are too close
-            
+
             // Perpendicular vector (rotated 90 degrees)
             float perpX = -dy / dist;
             float perpY = dx / dist;
-            
-            // Spacing between lanes
-            float laneSpacing = 3f; // Adjust as needed
-            float totalWidth = (lanes.size() - 1) * laneSpacing;
-            float startOffset = -totalWidth / 2f;
-            
-            // Draw each lane as a parallel line
+
+            // spacing between lane centers includes lane width + separator
+            float laneSpacing = laneWidth + separatorWidth;
+            float totalCenterSpan = (lanes.size() - 1) * laneSpacing;
+            float startOffset = -totalCenterSpan / 2f;
+
+            // Draw each lane as a filled polygon (strip)
             for (int i = 0; i < lanes.size(); i++) {
-                float offset = startOffset + i * laneSpacing;
-                
-                int x1 = (int)(from.x + perpX * offset);
-                int y1 = (int)(from.y + perpY * offset);
-                int x2 = (int)(to.x + perpX * offset);
-                int y2 = (int)(to.y + perpY * offset);
-                
-                g.drawLine(x1, y1, x2, y2);
+                float centerOffset = startOffset + i * laneSpacing;
+                float leftOffset = centerOffset - laneWidth / 2f;
+                float rightOffset = centerOffset + laneWidth / 2f;
+
+                int[] xs = new int[4];
+                int[] ys = new int[4];
+                xs[0] = (int) (from.x + perpX * leftOffset);
+                ys[0] = (int) (from.y + perpY * leftOffset);
+                xs[1] = (int) (to.x + perpX * leftOffset);
+                ys[1] = (int) (to.y + perpY * leftOffset);
+                xs[2] = (int) (to.x + perpX * rightOffset);
+                ys[2] = (int) (to.y + perpY * rightOffset);
+                xs[3] = (int) (from.x + perpX * rightOffset);
+                ys[3] = (int) (from.y + perpY * rightOffset);
+
+                g2.setColor(laneColor);
+                g2.fillPolygon(xs, ys, 4);
+                g2.setColor(laneBorderColor);
+                g2.drawPolygon(xs, ys, 4);
+            }
+
+            // Draw separators between lanes
+            g2.setColor(separatorColor);
+            for (int i = 0; i < Math.max(0, lanes.size() - 1); i++) {
+                float sepCenter = startOffset + (i + 0.5f) * laneSpacing;
+                float sepLeft = sepCenter - separatorWidth / 2f;
+                float sepRight = sepCenter + separatorWidth / 2f;
+
+                int[] xs = new int[4];
+                int[] ys = new int[4];
+                xs[0] = (int) (from.x + perpX * sepLeft);
+                ys[0] = (int) (from.y + perpY * sepLeft);
+                xs[1] = (int) (to.x + perpX * sepLeft);
+                ys[1] = (int) (to.y + perpY * sepLeft);
+                xs[2] = (int) (to.x + perpX * sepRight);
+                ys[2] = (int) (to.y + perpY * sepRight);
+                xs[3] = (int) (from.x + perpX * sepRight);
+                ys[3] = (int) (from.y + perpY * sepRight);
+
+                g2.fillPolygon(xs, ys, 4);
             }
         }
-        g.setColor(Color.ORANGE);
+                
+
+        g2.setColor(Color.ORANGE);
         for (DisplayNode node : nodes) {
-            g.fillOval((int)(node.x - 5), (int)(node.y - 5), 10, 10);
+            g2.fillOval((int)(node.x - 5), (int)(node.y - 5), 10, 10);
         }
+    }
+            
+    // Config setters
+    public void setLaneWidth(float laneWidth) {
+        this.laneWidth = Math.max(0f, laneWidth);
+        repaint();
+    }
+
+    public void setSeparatorWidth(float separatorWidth) {
+        this.separatorWidth = Math.max(0f, separatorWidth);
+        repaint();
+    }
+
+    public void setLaneColor(Color laneColor) {
+        if (laneColor != null) this.laneColor = laneColor;
+        repaint();
+    }
+
+    public void setSeparatorColor(Color separatorColor) {
+        if (separatorColor != null) this.separatorColor = separatorColor;
+        repaint();
+    }
+
+    public void setLaneBorderColor(Color laneBorderColor) {
+        if (laneBorderColor != null) this.laneBorderColor = laneBorderColor;
+        repaint();
     }
 }
