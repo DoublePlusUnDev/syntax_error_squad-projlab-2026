@@ -1,0 +1,33 @@
+package gamelogic;
+
+import utils.Logger;
+
+/**
+ * A buyable item that will add biokerosene it it's buyer's inventory.
+ */
+public class BioKerosene extends Buyable{
+    private final int amount;
+
+    public BioKerosene(String id, int amount, int price) {
+        super(id, price);
+        this.amount = amount;
+    }
+
+    @Override
+    public boolean buy(Inventory inventory, MoneyBank bank) {        
+        if (!super.buy(inventory, bank))
+            return false;
+        
+
+        inventory.addKerosene(amount);
+        return true;
+
+    }
+
+    @Override
+    public void inspect() {
+        Logger.logLine("Kerosene " + id + " details:");
+        Logger.logLine("Amount: " + amount);
+    }
+    
+}
