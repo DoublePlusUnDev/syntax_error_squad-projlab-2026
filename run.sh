@@ -1,2 +1,2 @@
-javac -d out src/*.java
+javac -d out $(find src/ -name "*.java")
 java -cp out Game
