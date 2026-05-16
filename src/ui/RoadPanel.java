@@ -43,6 +43,10 @@ public class RoadPanel extends JPanel {
     private BufferedImage snowPlowImage;
     private BufferedImage busImage;
     private BufferedImage carImage;
+    private BufferedImage apartmentImage;
+    private BufferedImage busStopImage;
+    private BufferedImage nodeImage;
+    private BufferedImage workPlaceImage;
 
     // Configurable lane rendering
     private float laneWidth = 8f; // pixels
@@ -81,6 +85,10 @@ public class RoadPanel extends JPanel {
             snowPlowImage = ImageIO.read(new File("resources/sprites/Snowplow.png"));
             carImage = ImageIO.read(new File("resources/sprites/Car.png"));
             busImage = ImageIO.read(new File("resources/sprites/Bus.png"));
+            apartmentImage = ImageIO.read(new File("resources/sprites/Apartment.png"));
+            busStopImage = ImageIO.read(new File("resources/sprites/BusStop.png"));
+            nodeImage = ImageIO.read(new File("resources/sprites/Node.png"));
+            workPlaceImage = ImageIO.read(new File("resources/sprites/WorkPlace.png"));
         } catch (Exception e) {
             System.err.println("Error loading images: " + e.getMessage());
         }
