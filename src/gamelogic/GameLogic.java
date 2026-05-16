@@ -29,7 +29,7 @@ public class GameLogic {
         
     }
 
-    public void start() {
+    public void startGame() {
         if (players.isEmpty()) {
             Logger.logError("NO PLAYERS! FAILING TO START GAME.");
             return;
@@ -64,16 +64,16 @@ public class GameLogic {
         return currentPlayer;
     }
 
-    public void moveVehicle(Vehicle vehicle, RoadNetwork road, Node targetNode) {
-        road.tryMoveTowardsNode(vehicle, targetNode);
+    public void moveVehicle(Vehicle vehicle, Node targetNode) {
+        roads.tryMoveTowardsNode(vehicle, targetNode);
     }
 
     public void makeRoads(String id) {
         roads = new RoadNetwork(id);
     }
 
-    public void changeLane(Vehicle vehicle, RoadNetwork road, int targetLane) {
-        road.changeLane(vehicle, targetLane);
+    public void changeLane(Vehicle vehicle, int targetLane) {
+        roads.changeLane(vehicle, targetLane);
     }
 
     public void registerUpdatable(Updatable updatable) {
@@ -104,10 +104,13 @@ public class GameLogic {
         return players;
     }
 
-    public void addCar(Car car, Lane lane, RoadNetwork road) {
+    public void addCar(Car car, Lane lane) {
         cars.add(car);
         car.setLocation(lane);
-        road.placeCar(car);
+
+        if (roads != null && lane != null) {
+            roads.placeCar(car);
+        }
     }
 
     public void addPlayer(Player player) {
@@ -117,5 +120,8 @@ public class GameLogic {
     public void removeCar(Car car) {
         cars.remove(car);
         car.setLocation(null);
+
+        if (roads != null) 
+            roads.removeCar(car);
     }
 }

@@ -10,7 +10,6 @@ import utils.Logger;
  * Can slip, on crash it'll be destroyed and will block the lane. 
  */
 public class Car extends Vehicle {
-    private boolean isDestroyed = false;
     private Apartment home;
     private Workplace workplace;
     private boolean headedHome = false;
@@ -25,9 +24,6 @@ public class Car extends Vehicle {
      * @param road
      */
     public void move(RoadNetwork road) {
-        if (isDestroyed) {
-            return; // Cannot move if destroyed
-        }
 
         Node target = headedHome ? home : workplace;
 
@@ -35,17 +31,6 @@ public class Car extends Vehicle {
             return; // No target to move towards
 
         road.tryMoveTowardsNode(this, target);
-    }
-
-    // Getters
-
-    /**
-     * Checks if this car has been destroyed.
-     *
-     * @return true if the car is destroyed
-     */
-    public boolean isDestroyed() {
-        return isDestroyed;
     }
 
     // Setters
@@ -81,7 +66,6 @@ public class Car extends Vehicle {
     public void crash(Lane lane) {
         super.crash(lane);
         lane.crashOccured();
-        isDestroyed = true;
         GameLogic.getInstance().removeCar(this);
     }
 
@@ -138,6 +122,5 @@ public class Car extends Vehicle {
     public void inspect() {
         Logger.logLine("Car " + id + " details:");
         Logger.logLine("Location: " + (location != null ? location.id : "none"));
-        Logger.logLine("Destroyed: " + (isDestroyed ? "yes" : "no"));
     }
 }

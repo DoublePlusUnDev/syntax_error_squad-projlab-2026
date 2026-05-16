@@ -200,7 +200,7 @@ public class CommandInterpreter {
     }
 
     public void start(Map<String, String> args) {
-        GameLogic.getInstance().start();
+        GameLogic.getInstance().startGame();
     }
 
     public void saveLog(Map<String, String> args) {
@@ -571,7 +571,7 @@ public class CommandInterpreter {
             case "car":
                 Car newCar = new Car(args.get("-id"));
                 ObjectRegistry.register(args.get("-id"), newCar);
-                GameLogic.getInstance().addCar(newCar, ObjectRegistry.get(args.get("-lane"), Lane.class), net); 
+                GameLogic.getInstance().addCar(newCar, ObjectRegistry.get(args.get("-lane"), Lane.class)); 
                 break;
             case "snowplow":
                 if (!args.containsKey("-player")) {
@@ -868,7 +868,7 @@ public class CommandInterpreter {
             return;
         }
         
-        GameLogic.getInstance().moveVehicle(vehicle, net, target);
+        GameLogic.getInstance().moveVehicle(vehicle, target);
     }
 
     public void changeLane(Map<String, String> args) {
@@ -897,7 +897,7 @@ public class CommandInterpreter {
             return;
         }
 
-        GameLogic.getInstance().changeLane(vehicle, net, laneNumber);
+        GameLogic.getInstance().changeLane(vehicle, laneNumber);
     }
 
     public void equip(Map<String, String> args) {

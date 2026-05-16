@@ -13,7 +13,7 @@ import utils.ObjectRegistry;
 public class Node implements Inspectable{
     String id;
 
-    private final List<Neighbour> neighbours;
+    protected final List<Neighbour> neighbours;
 
     public Node(String id) {
         this.id = id;

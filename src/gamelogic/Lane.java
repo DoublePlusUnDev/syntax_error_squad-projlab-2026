@@ -1,5 +1,8 @@
 package gamelogic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import utils.Logger;
 import utils.ObjectRegistry;
 import utils.RandomGenerator;
@@ -30,6 +33,9 @@ public class Lane implements Updatable, Inspectable {
     // Maintenance state
     private int saltedTimer = 0;
     private float gravelHeight = 0;
+
+    //Vehicles
+    private List<Vehicle> vehicles = new ArrayList<>();
 
     // Physical constants
     private static final float SNOW_COMPRESS_RATE = 0.02f;
@@ -89,6 +95,10 @@ public class Lane implements Updatable, Inspectable {
      */
     public boolean willSlip() {
         return iced && snowHeight > gravelHeight && RandomGenerator.decide(SLIP_CHANCE);
+    }
+
+    public boolean isOccupied() {
+        return !vehicles.isEmpty();
     }
 
     // ==================== State Modifiers ====================
@@ -271,6 +281,14 @@ public class Lane implements Updatable, Inspectable {
 
         Logger.logLine("LANE [" + id + "] CHANGED [gravelHeight] FROM [" + this.gravelHeight + "] TO [" + gravelHeight + "]");
         this.gravelHeight = gravelHeight;
+    }
+
+    public void addVehicle(Vehicle vehicle) {
+        vehicles.add(vehicle);
+    }
+
+    public void removeVehicle(Vehicle vehicle) {
+        vehicles.remove(vehicle);
     }
 
     // ==================== Lifecycle ====================

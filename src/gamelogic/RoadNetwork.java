@@ -270,6 +270,10 @@ public class RoadNetwork implements Inspectable {
         vehicles.add(snowPlow);
     }
 
+    public void removeCar(Car car){
+        vehicles.remove(car);
+    }
+
     public void generate() {
         nodes.clear();
         roadSegments.clear();

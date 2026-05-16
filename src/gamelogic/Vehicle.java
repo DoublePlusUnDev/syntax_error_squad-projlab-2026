@@ -20,7 +20,7 @@ public abstract class Vehicle implements Inspectable {
     }
 
     public void enter(Lane lane) {
-        location = lane;
+        setLocation(lane);
     }
 
     public void enterApartment(Apartment apartment) {
@@ -41,17 +41,19 @@ public abstract class Vehicle implements Inspectable {
 
     public boolean canEnter(Lane lane) {
 
-        if (lane.isBlocked()){
+        if (lane.isBlocked())
             return false;
-        }
+        
 
-        if (lane.isSnowy()){
-            return false;
-        }
+        if (lane.isBlocked())
+            return false;        
 
-        if (lane.isDebrisFilled()){
+        if (lane.isSnowy())
             return false;
-        }
+
+        if (lane.isDebrisFilled())
+            return false;
+        
 
         return true;
     }
@@ -61,7 +63,15 @@ public abstract class Vehicle implements Inspectable {
     }
 
     public void setLocation(Lane lane) {
+        if (location != null) {
+            location.removeVehicle(this);
+        }
+        
         this.location = lane;
+
+        if (lane != null) {
+            lane.addVehicle(this);
+        }
     }
 
     public abstract  boolean canSlip();

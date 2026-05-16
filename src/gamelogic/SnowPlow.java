@@ -20,7 +20,7 @@ public class SnowPlow extends Vehicle{
     @Override
     public boolean canEnter(Lane lane) {
 
-        if (lane.isBlocked()){
+        if (lane.isOccupied() || lane.isBlocked()){
             return false;
         }
 
@@ -29,7 +29,7 @@ public class SnowPlow extends Vehicle{
 
     @Override
     public void enter(Lane lane) {
-        location = lane;
+        setLocation(lane);
 
         if (plowHead != null) 
             plowHead.clean(lane);
