@@ -13,7 +13,7 @@ import utils.Logger;
 public class GameLogic {
     private List<Runnable> gameStateChangeListeners = new ArrayList<>();
 
-    private List<RoadNetwork> roads;
+    private RoadNetwork roads;
     List<Car> cars;
     List<Player> players;
     List<Updatable> updatables;
@@ -22,7 +22,7 @@ public class GameLogic {
     static GameLogic instance;
 
     public GameLogic() {
-        roads = new ArrayList<>();
+        roads = null;
         cars = new ArrayList<>();
         players = new ArrayList<>();
         updatables = new ArrayList<>();
@@ -68,6 +68,10 @@ public class GameLogic {
         road.tryMoveTowardsNode(vehicle, targetNode);
     }
 
+    public void makeRoads(String id) {
+        roads = new RoadNetwork(id);
+    }
+
     public void changeLane(Vehicle vehicle, RoadNetwork road, int targetLane) {
         road.changeLane(vehicle, targetLane);
     }
@@ -88,7 +92,7 @@ public class GameLogic {
         return instance;
     }
 
-    public List<RoadNetwork> getRoads() {
+    public RoadNetwork getRoads() {
         return roads;
     }
 

@@ -43,7 +43,7 @@ public class Apartment extends Node implements Updatable {
     }
 
     private void trySpawnCar(){
-
+        
     }
 
     @Override

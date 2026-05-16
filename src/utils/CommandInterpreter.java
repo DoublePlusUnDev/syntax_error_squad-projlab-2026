@@ -196,7 +196,7 @@ public class CommandInterpreter {
             return;
         }
 
-        GameLogic.getInstance().getRoads().add(new RoadNetwork(args.get("-id")));
+        GameLogic.getInstance().makeRoads(args.get("-id"));
     }
 
     public void start(Map<String, String> args) {
@@ -275,10 +275,9 @@ public class CommandInterpreter {
         if (args.containsKey("apartsmentsMax"))
             params.apartsmentsMax = Integer.parseInt(args.get("apartsmentsMax"));
 
-        RoadNetwork roadNetwork = new RoadNetwork(args.get("-id"));
-        roadNetwork.setGenerationParameters(params);
-        roadNetwork.generate();
-        GameLogic.getInstance().getRoads().add(roadNetwork);
+        GameLogic.getInstance().makeRoads(args.get("-id"));
+        GameLogic.getInstance().getRoads().setGenerationParameters(params);
+        GameLogic.getInstance().getRoads().generate();
     }
 
     public void addNode(Map<String, String> args) {
@@ -812,9 +811,12 @@ public class CommandInterpreter {
 
     public void listRoots(Map<String, String> args) {
         Logger.logLine("Root objects details:");
-        Logger.logLine("Road networks:");
-        for (RoadNetwork road : GameLogic.getInstance().getRoads()) {
-            Logger.logLine("- " + road.id);
+        Logger.logLine("Road network:");
+        if (GameLogic.getInstance().getRoads() != null) {
+            Logger.logLine("- " + GameLogic.getInstance().getRoads().id);
+        }
+        else {
+            Logger.logLine("- No road network found.");
         }
 
         Logger.logLine("Cars:");

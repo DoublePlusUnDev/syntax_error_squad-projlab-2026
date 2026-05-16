@@ -76,10 +76,10 @@ public class RoadPanel extends JPanel {
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                if (gameLogic.getRoads().isEmpty()) 
+                if (gameLogic.getRoads() == null) 
                     return;
                 
-                setRoads(gameLogic.getRoads().get(0));
+                setRoads(gameLogic.getRoads());
                 repaint();
             }
         });
@@ -233,7 +233,7 @@ public class RoadPanel extends JPanel {
     }
 
     private void updateDisplay() {
-        setRoads(gameLogic.getRoads().get(0));
+        setRoads(gameLogic.getRoads());
         repaint();
     }
 
