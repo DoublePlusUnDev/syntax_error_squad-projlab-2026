@@ -1,9 +1,13 @@
 package ui;
+import gamelogic.Apartment;
+import gamelogic.BusStop;
 import gamelogic.GameLogic;
 import gamelogic.Lane;
 import gamelogic.Node;
 import gamelogic.RoadNetwork;
 import gamelogic.RoadSegment;
+import gamelogic.Workplace;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ComponentAdapter;
@@ -47,6 +51,9 @@ public class RoadPanel extends JPanel {
     private BufferedImage busStopImage;
     private BufferedImage nodeImage;
     private BufferedImage workPlaceImage;
+
+    private int NODE_SIZE = 40;
+    private int NODE_OFFSET = NODE_SIZE / 2;
 
     // Configurable lane rendering
     private float laneWidth = 8f; // pixels
@@ -305,7 +312,15 @@ public class RoadPanel extends JPanel {
 
         g2.setColor(Color.ORANGE);
         for (DisplayNode node : nodes) {
-            g2.fillOval((int)(node.x - 5), (int)(node.y - 5), 10, 10);
+            if (node.node instanceof Apartment) {
+                g2.drawImage(apartmentImage, (int)(node.x - NODE_OFFSET), (int)(node.y - NODE_OFFSET), NODE_SIZE, NODE_SIZE, null);
+            } else if (node.node instanceof Workplace) {
+                g2.drawImage(workPlaceImage, (int)(node.x - NODE_OFFSET), (int)(node.y - NODE_OFFSET), NODE_SIZE, NODE_SIZE, null);
+            } else if (node.node instanceof BusStop) {
+                g2.drawImage(busStopImage, (int)(node.x - NODE_OFFSET), (int)(node.y - NODE_OFFSET), NODE_SIZE, NODE_SIZE, null);
+            } else {
+                g2.drawImage(nodeImage, (int)(node.x - NODE_OFFSET), (int)(node.y - NODE_OFFSET), NODE_SIZE, NODE_SIZE, null);
+            }
         }
     }
             
