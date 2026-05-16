@@ -21,7 +21,7 @@ public class RoadGenerationParameters {
 
     public static RoadGenerationParameters testParams = new RoadGenerationParameters() {{
         nodeMin = 10;
-        nodeMax = 20;
+        nodeMax = 15;
         mainLanes = 2;
         smallNodesMin = 2;
         smallNodesMax = 5;
@@ -32,10 +32,10 @@ public class RoadGenerationParameters {
         bigNodeLanes = 3;
         bigNodeExtraRoads = 2;
         busStopsMin = 2;
-        busStopsMax = 5;
+        busStopsMax = 3;
         workPlacesMin = 2;
-        workPlacesMax = 5;
+        workPlacesMax = 3;
         apartsmentsMin = 2;
-        apartsmentsMax = 5;
+        apartsmentsMax = 3;
      }};
 }

@@ -277,24 +277,23 @@ public class RoadNetwork implements Inspectable {
     public void generate() {
         nodes.clear();
         roadSegments.clear();
+        vehicles.clear();
 
         //prevemt duplicate connections
-        HashMap<Integer, Integer> nodeConnections = new HashMap<>();
+        Map<Node, Set<Node>> nodeConnections = new HashMap<>();
 
         //Phase 1
-        //generate a circle of interconnected nodes
-        //make sure to generate the special nodes as well, but in random order, so they are not always in the same place
-        //this is done by first creating a list of node types, then shuffling it, and then creating the nodes in the order of the shuffled list
+        //calculate the number of nodes for each type and create a shuffled list of their types
         List<String> nodeTypes = new ArrayList<String>();
         int numberOfAllNodes = RandomGenerator.getRandomInt(generationParameters.nodeMin, generationParameters.nodeMax);
-        
+        Logger.logLine("Generating " + numberOfAllNodes + " nodes in the road network.");
         int numberOfApartments = RandomGenerator.getRandomInt(generationParameters.apartsmentsMin, generationParameters.apartsmentsMax);
         int numberOfWorkplaces = RandomGenerator.getRandomInt(generationParameters.workPlacesMin, generationParameters.workPlacesMax);
         int numberOfBusStops = RandomGenerator.getRandomInt(generationParameters.busStopsMin, generationParameters.busStopsMax);
-        int numberOfNodes = numberOfAllNodes - numberOfApartments - numberOfWorkplaces - numberOfBusStops;
+        int numberOfNormalNodes = numberOfAllNodes - numberOfApartments - numberOfWorkplaces - numberOfBusStops;
 
-        if (numberOfNodes < 0){
-            System.out.println("Error: Too many special nodes for the total number of nodes. Please adjust the parameters.");
+        if (numberOfNormalNodes < 0){
+            Logger.logError("Error: Too many special nodes for the total number of nodes. Please adjust the parameters.");
             return;
         }
 
@@ -307,13 +306,15 @@ public class RoadNetwork implements Inspectable {
         for (int i = 0; i < numberOfBusStops; i++){
             nodeTypes.add("BusStop");
         }
-        for (int i = 0; i < numberOfNodes; i++){
+        for (int i = 0; i < numberOfNormalNodes; i++){
             nodeTypes.add("Node");
         }
 
         RandomGenerator.shuffleList(nodeTypes);
         
-        for (int i = 0; i < numberOfNodes; i++){
+        //Phase 2
+        //Instantiate the nodes in the order of the shuffled list and connect them in a circle with road segments with the specified number of lanes
+        for (int i = 0; i < numberOfAllNodes; i++){
             Node node;
 
             String nodeType = nodeTypes.get(i);
@@ -332,29 +333,73 @@ public class RoadNetwork implements Inspectable {
             RoadSegment segment = new RoadSegment("Mainroad" + i, generationParameters.mainLanes, prevNode, node);
             roadSegments.add(segment);
             if (prevNode != null){
-                nodeConnections.put(i, i-1);
-                nodeConnections.put(i-1, i);
+                nodeConnections.computeIfAbsent(node, k -> new HashSet<>()).add(prevNode);
+                nodeConnections.computeIfAbsent(prevNode, k -> new HashSet<>()).add(node);
             }
         }
         roadSegments.get(0).setStartPoint(nodes.get(nodes.size() - 1));
-        nodeConnections.put(0, numberOfNodes - 1);
-        nodeConnections.put(numberOfNodes - 1, 0);
+        nodeConnections.computeIfAbsent(nodes.get(0), k -> new HashSet<>()).add(nodes.get(nodes.size() - 1));
+        nodeConnections.computeIfAbsent(nodes.get(nodes.size() - 1), k -> new HashSet<>()).add(nodes.get(0));
 
-        //phase 2
-        /*List<Node> shuffleNodes = new ArrayList<>(nodes);
+        //phase 3
+        //Add extra connections to big nodes and small nodes
+        List<Node> shuffleNodes = new ArrayList<>(nodes);
         RandomGenerator.shuffleList(shuffleNodes);
         
         int numberOfBigNodes = RandomGenerator.getRandomInt(generationParameters.bigNodesMin, generationParameters.bigNodesMax);
-        List<Node> bigNodes = shuffleNodes.subList(0, numberOfBigNodes);
+        int numberOfSmallNodes = RandomGenerator.getRandomInt(generationParameters.smallNodesMin, generationParameters.smallNodesMax);
         
-        for (Node bigNode : bigNodes){
-            for (int i = 0; i < generationParameters.bigNodeExtraRoads; i++){
-            }
+        if (numberOfBigNodes + numberOfSmallNodes > nodes.size()){
+            Logger.logError("Error: Too many big and small nodes for the total number of nodes. Please adjust the parameters.");
+            return;
         }
 
-        int numberOfSmallNodes = RandomGenerator.getRandomInt(generationParameters.smallNodesMin, generationParameters.smallNodesMax);
+        List<Node> bigNodes = shuffleNodes.subList(0, numberOfBigNodes);
+        
+        for (Node currentBigNode : bigNodes){
+            List<Node> potentialConnections = new ArrayList<>(nodes);
+            RandomGenerator.shuffleList(potentialConnections);
+
+            int connectionsAdded = 0;
+            for (Node potential : potentialConnections){
+                if (potential == currentBigNode) continue;
+
+                if (nodeConnections.get(currentBigNode).contains(potential) || nodeConnections.get(potential).contains(currentBigNode)) continue; //already connected
+
+                RoadSegment segment = new RoadSegment("BigNodeExtraRoad" + currentBigNode.id + "_" + potential.id, generationParameters.bigNodeLanes, currentBigNode, potential);
+                roadSegments.add(segment);
+                nodeConnections.computeIfAbsent(currentBigNode, k -> new HashSet<>()).add(potential);
+                nodeConnections.computeIfAbsent(potential, k -> new HashSet<>()).add(currentBigNode);
+                connectionsAdded++;
+
+                if (connectionsAdded >= generationParameters.bigNodeExtraRoads) break;
+            }
+            
+        }
+
+        
         List<Node> smallNodes = shuffleNodes.subList(numberOfBigNodes, numberOfBigNodes + numberOfSmallNodes);
-        */
+        
+        for (Node currentSmallNode : smallNodes){
+            List<Node> potentialConnections = new ArrayList<>(nodes);
+            RandomGenerator.shuffleList(potentialConnections);
+
+            int connectionsAdded = 0;
+            for (Node potential : potentialConnections){
+                if (potential == currentSmallNode) continue;
+
+                if (nodeConnections.get(currentSmallNode).contains(potential) || nodeConnections.get(potential).contains(currentSmallNode)) continue; //already connected
+
+                RoadSegment segment = new RoadSegment("SmallNodeExtraRoad" + currentSmallNode.id + "_" + potential.id, generationParameters.smallNodeLanes, currentSmallNode, potential);
+                roadSegments.add(segment);
+                nodeConnections.computeIfAbsent(currentSmallNode, k -> new HashSet<>()).add(potential);
+                nodeConnections.computeIfAbsent(potential, k -> new HashSet<>()).add(currentSmallNode);
+                connectionsAdded++;
+
+                if (connectionsAdded >= generationParameters.smallNodeExtraRoads) break;
+            }
+            
+        }
         
     }
 
