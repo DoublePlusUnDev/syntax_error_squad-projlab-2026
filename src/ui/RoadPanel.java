@@ -78,9 +78,9 @@ public class RoadPanel extends JPanel {
 
     private void loadImages() {
         try {
-            snowPlowImage = ImageIO.read(new File("resources/sprites/snowplow.png"));
-            carImage = ImageIO.read(new File("resources/sprites/car.png"));
-            busImage = ImageIO.read(new File("resources/sprites/bus.png"));
+            snowPlowImage = ImageIO.read(new File("resources/sprites/Snowplow.png"));
+            carImage = ImageIO.read(new File("resources/sprites/Car.png"));
+            busImage = ImageIO.read(new File("resources/sprites/Bus.png"));
         } catch (Exception e) {
             System.err.println("Error loading images: " + e.getMessage());
         }
