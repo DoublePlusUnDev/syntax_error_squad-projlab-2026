@@ -7,7 +7,6 @@ import gamelogic.Node;
 import gamelogic.RoadNetwork;
 import gamelogic.RoadSegment;
 import gamelogic.Workplace;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ComponentAdapter;
@@ -22,6 +21,7 @@ import java.util.Map;
 import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import utils.Logger;
 
 public class RoadPanel extends JPanel {
     class DisplayNode {
@@ -44,13 +44,13 @@ public class RoadPanel extends JPanel {
         }
     }
 
-    private BufferedImage snowPlowImage;
-    private BufferedImage busImage;
-    private BufferedImage carImage;
-    private BufferedImage apartmentImage;
-    private BufferedImage busStopImage;
-    private BufferedImage nodeImage;
-    private BufferedImage workPlaceImage;
+    private transient BufferedImage snowPlowImage;
+    private transient BufferedImage busImage;
+    private transient BufferedImage carImage;
+    private transient BufferedImage apartmentImage;
+    private transient BufferedImage busStopImage;
+    private transient BufferedImage nodeImage;
+    private transient BufferedImage workPlaceImage;
 
     private int NODE_SIZE = 40;
     private int NODE_OFFSET = NODE_SIZE / 2;
@@ -73,18 +73,24 @@ public class RoadPanel extends JPanel {
         setBackground(UIStyles.backgroundColor);
         this.gameLogic = gameLogic;
         gameLogic.addGameStateChangeListener(this::updateDisplay);
+        gameLogic.addTopologyChangedListener(() -> {
+            recalculateRoads();
+            updateDisplay();
+        });
+
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                if (gameLogic.getRoads() == null) 
-                    return;
-                
-                setRoads(gameLogic.getRoads());
-                repaint();
+                recalculateRoads();
+                updateDisplay();
             }
         });
 
         loadImages();
+    }
+
+    private void updateDisplay() {
+        repaint();
     }
 
     private void loadImages() {
@@ -97,14 +103,15 @@ public class RoadPanel extends JPanel {
             nodeImage = ImageIO.read(new File("resources/sprites/Node.png"));
             workPlaceImage = ImageIO.read(new File("resources/sprites/WorkPlace.png"));
         } catch (Exception e) {
-            System.err.println("Error loading images: " + e.getMessage());
+            Logger.logError("Error loading images: " + e.getMessage());
         }
     }
 
-    public void setRoads(RoadNetwork roads) {
+    public void recalculateRoads() {
         nodes.clear();
         edges.clear();
 
+        RoadNetwork roads = gameLogic.getRoads();
         if (roads == null) {
             return;
         }
@@ -230,11 +237,6 @@ public class RoadPanel extends JPanel {
 
             temperature *= 0.95f;
         }
-    }
-
-    private void updateDisplay() {
-        setRoads(gameLogic.getRoads());
-        repaint();
     }
 
     @Override

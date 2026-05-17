@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
-
 import utils.Logger;
 import utils.ObjectRegistry;
 import utils.RandomGenerator;
@@ -19,6 +18,8 @@ import utils.RandomGenerator;
  * Snow can be added to in a radius of a node.
  */
 public class RoadNetwork implements Inspectable {
+    public List<Runnable> topologyChangedListeners = new ArrayList<>();
+
     public String id;
     private RoadGenerationParameters generationParameters;
 
@@ -253,10 +254,12 @@ public class RoadNetwork implements Inspectable {
 
     public void addNode(Node node){
         nodes.add(node);
+        topologyChangedListeners.forEach(Runnable::run);
     }
 
     public void addRoadSegment(RoadSegment roadSegment) {
         roadSegments.add(roadSegment);
+        topologyChangedListeners.forEach(Runnable::run);
     }
 
     public void placeCar(Car car){
@@ -401,11 +404,20 @@ public class RoadNetwork implements Inspectable {
             }
             
         }
+
+        topologyChangedListeners.forEach(Runnable::run);
         
     }
 
     public void setGenerationParameters(RoadGenerationParameters generationParameters){
         this.generationParameters = generationParameters;
+    }
+
+    public void addTopologyChangedListener(Runnable listener) {
+        if (topologyChangedListeners.contains(listener)) 
+            return;
+        
+        topologyChangedListeners.add(listener);
     }
 
     @Override

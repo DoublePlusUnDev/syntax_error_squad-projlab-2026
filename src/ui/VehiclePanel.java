@@ -34,6 +34,11 @@ public class VehiclePanel extends JPanel {
     private void update(){
         player = gameLogic.getCurrentPlayer();
 
+        if (player == null) {
+            topLabel.setText("Nincs játékos kiválasztva.");
+            return;
+        } 
+
         topLabel.setText("Járművek: ");
     
         vehicleLabels.forEach(label -> remove(label));

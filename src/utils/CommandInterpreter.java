@@ -53,7 +53,9 @@ public class CommandInterpreter {
         Map.entry("equip", new utils.commands.Equip()),
         Map.entry("/equip", new utils.commands.Equip()),
         Map.entry("buy", new utils.commands.Buy()),
-        Map.entry("/buy", new utils.commands.Buy())
+        Map.entry("/buy", new utils.commands.Buy()),
+        Map.entry("endTurn", new utils.commands.EndTurn()),
+        Map.entry("/endTurn", new utils.commands.EndTurn())
     );
 
     public CommandInterpreter() {

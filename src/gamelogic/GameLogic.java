@@ -2,7 +2,6 @@ package gamelogic;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import utils.Logger;
 
 /**
@@ -11,15 +10,16 @@ import utils.Logger;
  * It also handles the turn-based system and the interactions between the different entities in the game.
  */
 public class GameLogic {
-    private List<Runnable> gameStateChangeListeners = new ArrayList<>();
+    private final List<Runnable> gameStateChangeListeners = new ArrayList<>();
+    private final List<Runnable> topologyChangedListeners = new ArrayList<>();
 
     private RoadNetwork roads;
-    List<Car> cars;
-    List<Player> players;
-    List<Updatable> updatables;
+    private final List<Car> cars;
+    private final List<Player> players;
+    private final List<Updatable> updatables;
 
     private Player currentPlayer = null;
-    static GameLogic instance;
+    public static GameLogic instance;
 
     public GameLogic() {
         roads = null;
@@ -60,6 +60,10 @@ public class GameLogic {
         gameStateChangeListeners.add(listener);
     }
 
+    public void addTopologyChangedListener(Runnable listener) {
+        topologyChangedListeners.add(listener);
+    }
+
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
@@ -70,6 +74,7 @@ public class GameLogic {
 
     public void makeRoads(String id) {
         roads = new RoadNetwork(id);
+        roads.addTopologyChangedListener(() -> topologyChangedListeners.forEach(Runnable::run));
     }
 
     public void changeLane(Vehicle vehicle, int targetLane) {
