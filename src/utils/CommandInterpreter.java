@@ -1,14 +1,9 @@
 package utils;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
-
 import gamelogic.Apartment;
 import gamelogic.BioKerosene;
 import gamelogic.BlowerHead;
-import gamelogic.Bridge;
 import gamelogic.Bus;
 import gamelogic.BusPlayer;
 import gamelogic.BusStop;
@@ -26,15 +21,12 @@ import gamelogic.MoneyBank;
 import gamelogic.Node;
 import gamelogic.Player;
 import gamelogic.PlowHead;
-import gamelogic.RoadGenerationParameters;
 import gamelogic.RoadNetwork;
-import gamelogic.RoadSegment;
 import gamelogic.Salt;
 import gamelogic.SalterHead;
 import gamelogic.SnowPlow;
 import gamelogic.SnowPlowPlayer;
 import gamelogic.SweeperHead;
-import gamelogic.Tunnel;
 import gamelogic.Vehicle;
 import gamelogic.Workplace;
 
@@ -42,27 +34,27 @@ public class CommandInterpreter {
     private final TestRunner testRunner;
 
     public interface Command {
-        void execute(Map<String, String> args);
+        void execute(Map<String, String> args, CommandInterpreter interpreter);
         
     }
 
     Map<String, Command> commands = Map.ofEntries(
-        Map.entry("/test", this::test),
-        Map.entry("/testAll", this::testAll),
-        Map.entry("/removeTestOutputs", this::removeTestOutputs),
-        Map.entry("help", this::help),
-        Map.entry("/help", this::help),
-        Map.entry("/random", this::random),
-        Map.entry("/seed", this::seed),
-        Map.entry("/logging", this::logging),
-        Map.entry("/addNet", this::addNet),
-        Map.entry("/start", this::start),
-        Map.entry("/saveLog", this::saveLog),
-        Map.entry("/saveGame", this::saveGame),
-        Map.entry("/loadGame", this::loadGame),
-        Map.entry("/generate", this::generate),
-        Map.entry("/addNode", this::addNode),
-        Map.entry("/addRoad", this::addRoad),
+        Map.entry("/test", new utils.commands.Test()), 
+        Map.entry("/testAll", new utils.commands.TestAll()),
+        Map.entry("/removeTestOutputs", new utils.commands.RemoveTestOutput()),
+        Map.entry("help", new utils.commands.Help()),
+        Map.entry("/help", new utils.commands.Help()),
+        Map.entry("/random", new utils.commands.Random()),
+        Map.entry("/seed", new utils.commands.Seed()),
+        Map.entry("/logging", new utils.commands.Logging()),
+        Map.entry("/addNet", new utils.commands.AddNet()),
+        Map.entry("/start", new utils.commands.Start()),
+        Map.entry("/saveLog", new utils.commands.SaveLog()),
+        Map.entry("/saveGame", new utils.commands.SaveGame()),
+        Map.entry("/loadGame", new utils.commands.LoadGame()),
+        Map.entry("/generate", new utils.commands.Generate()),
+        Map.entry("/addNode", new utils.commands.AddNode()),
+        Map.entry("/addRoad", new utils.commands.AddRoad())/*,
         Map.entry("/modLane", this::modLane),
         Map.entry("/modPlow", this::modPlow),
         Map.entry("/modBus", this::modBus),
@@ -89,11 +81,15 @@ public class CommandInterpreter {
         Map.entry("equip", this::equip),
         Map.entry("/equip", this::equip),
         Map.entry("buy", this::buy),
-        Map.entry("/buy", this::buy)
+        Map.entry("/buy", this::buy)*/
     );
 
     public CommandInterpreter() {
         testRunner = new TestRunner();
+    }
+
+    public TestRunner getTestRunner() {
+        return testRunner;
     }
 
     public void execute(String command) {
@@ -109,283 +105,15 @@ public class CommandInterpreter {
 
             Command cmd = commands.get(commandName);
             if (cmd != null) {
-                cmd.execute(args);
+                cmd.execute(args, this);
                 Logger.logCommand(command);
             } else {
                 Logger.logError("Unknown command: " + commandName);
                 Logger.logError("Run help for list of available commands.");
             }
     }
+   
 
-    public void test(Map<String, String> args) {
-        if (!args.containsKey("-name")) {
-            Logger.logError("Error: Missing -name argument for test command.");
-            return;
-        }
-
-        boolean output = false;
-        if (args.containsKey("-output")) {
-            output = Boolean.parseBoolean(args.get("-output"));
-        }
-
-        testRunner.runTest(args.get("-name"), output);
-    }
-    
-    public void testAll(Map<String, String> args) {
-        boolean output = false;
-        if (args.containsKey("-output")) {
-            output = Boolean.parseBoolean(args.get("-output"));
-        }
-
-        testRunner.runAllTests(output);
-    }
-
-    public void removeTestOutputs(Map<String, String> args) {
-        testRunner.removeTestOutputs();
-    }
-
-    public void help(Map<String, String> args) {
-        Path helpPath = Paths.get("resources", "help.txt");
-
-        try (Scanner scanner = new Scanner(helpPath.toFile())) {
-            while (scanner.hasNextLine()) {
-                Logger.logLine(scanner.nextLine());
-            }
-        } catch (Exception e) {
-            Logger.logError("Error reading help file: " + e.getMessage());
-        }
-    }
-
-    public void random(Map<String, String> args) {
-        if (!args.containsKey("-mode")) {
-            Logger.logError("Error: Missing -mode argument for random command.");
-            return;
-        }
-        String mode = args.get("-mode");
-        switch (mode) {
-            case "always" -> RandomGenerator.setMode(RandomGeneratorMode.ALWAYS);
-            case "never" -> RandomGenerator.setMode(RandomGeneratorMode.NEVER);
-            case "random" -> RandomGenerator.setMode(RandomGeneratorMode.RANDOM);
-            default -> Logger.logError("Error: Invalid mode for random command. Use always, never, or random.");
-        }
-    }
-
-    public void seed(Map<String, String> args) {
-        if (!args.containsKey("-seed")) {
-            Logger.logError("Error: Missing -seed argument for seed command.");
-            return;
-        }
-
-        String seed = args.get("-seed");
-        RandomGenerator.setSeed(seed);
-    }
-
-    public void logging(Map<String, String> args) {
-        if (!args.containsKey("-enable")) {
-            Logger.logError("Error: Missing -enable argument for logging command.");
-            return;
-        }
-
-        boolean enable = Boolean.parseBoolean(args.get("-enable"));
-        Logger.setHistoryEnabled(enable);
-    }
-
-    public void addNet(Map<String, String> args) {
-        if (!args.containsKey("-id")) {
-            Logger.logError("Error: Missing -id argument for addnet command.");
-            return;
-        }
-
-        GameLogic.getInstance().makeRoads(args.get("-id"));
-    }
-
-    public void start(Map<String, String> args) {
-        GameLogic.getInstance().startGame();
-    }
-
-    public void saveLog(Map<String, String> args) {
-        if (!args.containsKey("-path")) {
-            System.out.println("Error: Missing -path argument for savelog command.");
-            return;
-        }
-        Logger.saveLog(Paths.get(args.get("-path")));
-    }
-
-    public void saveGame(Map<String, String> args) {
-        if (!args.containsKey("-path")) {
-            System.out.println("Error: Missing -path argument for savelog command.");
-            return;
-        }
-
-        Logger.saveGameState(Paths.get(args.get("-path")));
-    }
-
-    public void loadGame(Map<String, String> args) {
-        if (!args.containsKey("-path")) {
-            System.out.println("Error: Missing -path argument for loadgame command.");
-            return;
-        }
-        
-        try (Scanner fileScanner = new Scanner(Paths.get(args.get("-path")).toFile())) {
-            while (fileScanner.hasNextLine()) {
-                String line = fileScanner.nextLine().trim();
-                
-                if (line.isBlank() || line.startsWith("#")) {
-                    continue; // Skip empty lines and comments
-                }
-                //System.out.println(line);
-
-                execute(line);
-            }
-        } catch (Exception e) {
-            Logger.logError("Error loading game: " + e.getMessage());
-        }
-    }
-
-    public void generate(Map<String, String> args) {
-        RoadGenerationParameters params = RoadGenerationParameters.defaultParams;
-        // initialize defaults from the static testParams map if present
-        try {
-            // Command line args are stored with their leading dash (e.g. "-nodeMin"),
-            // SettingsManager builds flags with a leading dash, so read that form here.
-            if (args.containsKey("-" + RoadGenerationParameters.NODE_MIN_KEY))
-                params.setParameter(RoadGenerationParameters.NODE_MIN_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.NODE_MIN_KEY)));
-            if (args.containsKey("-" + RoadGenerationParameters.NODE_MAX_KEY))
-                params.setParameter(RoadGenerationParameters.NODE_MAX_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.NODE_MAX_KEY)));
-            if (args.containsKey("-" + RoadGenerationParameters.MAIN_LANES_KEY))
-                params.setParameter(RoadGenerationParameters.MAIN_LANES_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.MAIN_LANES_KEY)));
-            if (args.containsKey("-" + RoadGenerationParameters.SMALL_NODES_MIN_KEY))
-                params.setParameter(RoadGenerationParameters.SMALL_NODES_MIN_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.SMALL_NODES_MIN_KEY)));
-            if (args.containsKey("-" + RoadGenerationParameters.SMALL_NODES_MAX_KEY))
-                params.setParameter(RoadGenerationParameters.SMALL_NODES_MAX_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.SMALL_NODES_MAX_KEY)));
-            if (args.containsKey("-" + RoadGenerationParameters.SMALL_NODE_LANES_KEY))
-                params.setParameter(RoadGenerationParameters.SMALL_NODE_LANES_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.SMALL_NODE_LANES_KEY)));
-            if (args.containsKey("-" + RoadGenerationParameters.SMALL_NODE_EXTRA_ROADS_KEY))
-                params.setParameter(RoadGenerationParameters.SMALL_NODE_EXTRA_ROADS_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.SMALL_NODE_EXTRA_ROADS_KEY)));
-            if (args.containsKey("-" + RoadGenerationParameters.BIG_NODES_MIN_KEY))
-                params.setParameter(RoadGenerationParameters.BIG_NODES_MIN_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.BIG_NODES_MIN_KEY)));
-            if (args.containsKey("-" + RoadGenerationParameters.BIG_NODES_MAX_KEY))
-                params.setParameter(RoadGenerationParameters.BIG_NODES_MAX_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.BIG_NODES_MAX_KEY)));
-            if (args.containsKey("-" + RoadGenerationParameters.BIG_NODE_LANES_KEY))
-                params.setParameter(RoadGenerationParameters.BIG_NODE_LANES_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.BIG_NODE_LANES_KEY)));
-            if (args.containsKey("-" + RoadGenerationParameters.BIG_NODE_EXTRA_ROADS_KEY))
-                params.setParameter(RoadGenerationParameters.BIG_NODE_EXTRA_ROADS_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.BIG_NODE_EXTRA_ROADS_KEY)));
-            if (args.containsKey("-" + RoadGenerationParameters.BUS_STOPS_MIN_KEY))
-                params.setParameter(RoadGenerationParameters.BUS_STOPS_MIN_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.BUS_STOPS_MIN_KEY)));
-            if (args.containsKey("-" + RoadGenerationParameters.BUS_STOPS_MAX_KEY))
-                params.setParameter(RoadGenerationParameters.BUS_STOPS_MAX_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.BUS_STOPS_MAX_KEY)));
-            if (args.containsKey("-" + RoadGenerationParameters.WORK_PLACES_MIN_KEY))
-                params.setParameter(RoadGenerationParameters.WORK_PLACES_MIN_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.WORK_PLACES_MIN_KEY)));
-            if (args.containsKey("-" + RoadGenerationParameters.WORK_PLACES_MAX_KEY))
-                params.setParameter(RoadGenerationParameters.WORK_PLACES_MAX_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.WORK_PLACES_MAX_KEY)));
-            if (args.containsKey("-" + RoadGenerationParameters.APARTMENTS_MIN_KEY))
-                params.setParameter(RoadGenerationParameters.APARTMENTS_MIN_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.APARTMENTS_MIN_KEY)));
-            if (args.containsKey("-" + RoadGenerationParameters.APARTMENTS_MAX_KEY))
-                params.setParameter(RoadGenerationParameters.APARTMENTS_MAX_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.APARTMENTS_MAX_KEY)));
-        }
-        catch (NumberFormatException e) {
-            Logger.logError("Error: Invalid number format in generate command arguments. " + e.getMessage());
-            return;
-        }
-
-        GameLogic.getInstance().makeRoads(args.get("-id"));
-        GameLogic.getInstance().getRoads().setGenerationParameters(params);
-        GameLogic.getInstance().getRoads().generate();
-        
-    }
-
-    public void addNode(Map<String, String> args) {
-        if (!args.containsKey("-id") || !args.containsKey("-net")) {
-            Logger.logError("Error: Missing arguments for addnode command. Required: -id, -net.");
-            return;
-        }
-        
-        RoadNetwork net = ObjectRegistry.get(args.get("-net"), RoadNetwork.class);
-        if (net == null) {
-            Logger.logError("Error: Road network with id " + args.get("-net") + " does not exist.");
-            return;
-        }
-
-        if (args.containsKey("-type")) {
-            String type = args.get("-type");
-            if (type.equals("busstop")) {
-                net.addNode(new BusStop(args.get("-id")));
-            }
-            else if (type.equals("workplace")) {
-                net.addNode(new Workplace(args.get("-id")));
-            }
-            else if (type.equals("apartment")) {
-                net.addNode(new Apartment(args.get("-id")));
-            }
-            else {
-                Logger.logError("Error: Invalid node type. Use busstop, workplace, or apartment. Using default type of busstop.");
-                net.addNode(new BusStop(args.get("-id")));
-            }
-        }
-        else {
-            net.addNode(new Node(args.get("-id")));
-        }
-    }
-
-        
-
-    public void addRoad(Map<String, String> args) {
-        if (!args.containsKey("-id") || !args.containsKey("-net") || !args.containsKey("-start") || !args.containsKey("-end")) {
-            Logger.logError("Error: Missing arguments for addroad command. Required: -id, -net, -start, -end.");
-            return;
-        }
-        
-        RoadNetwork net = ObjectRegistry.get(args.get("-net"), RoadNetwork.class);
-        if (net == null) {
-            Logger.logError("Error: Road network with id " + args.get("-net") + " does not exist.");
-            return;
-        }
-
-        Node start = ObjectRegistry.get(args.get("-start"), Node.class);
-        if (start == null) {
-            Logger.logError("Error: Start node with id " + args.get("-start") + " does not exist.");
-            return;
-        }
-
-        Node end = ObjectRegistry.get(args.get("-end"), Node.class);
-        if (end == null) {
-            Logger.logError("Error: End node with id " + args.get("-end") + " does not exist.");
-            return;
-        }
-
-        int lanes = 1;
-        if (args.containsKey("-lanes")) {
-            try {
-                lanes = Integer.parseInt(args.get("-lanes"));
-            } catch (NumberFormatException e) {
-                Logger.logError("Error: Invalid number format for lanes. Using default value of 1.");
-            }
-        }
-
-        RoadSegment road;
-        if (args.containsKey("-type")) {
-            String type = args.get("-type");
-            if (type.equals("road")) {
-                road = new RoadSegment(args.get("-id"), lanes, start, end);
-            }
-            else if (type.equals("bridge")) {
-                road = new Bridge(args.get("-id"), lanes, start, end);
-            }
-            else if (type.equals("tunnel")) {
-                road = new Tunnel(args.get("-id"), lanes, start, end);
-            }
-            else {
-                Logger.logError("Error: Invalid road type. Use road, bridge, or tunnel. Using default type of road.");
-                road = new RoadSegment(args.get("-id"), lanes, start, end);
-            }
-        }
-        else {
-            road = new RoadSegment(args.get("-id"), lanes, start, end);
-        }
-
-        net.addRoadSegment(road);
-
-    }
 
     public void modLane(Map<String, String> args) {
         if (!args.containsKey("-id")) {
