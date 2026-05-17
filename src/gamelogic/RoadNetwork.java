@@ -79,15 +79,16 @@ public class RoadNetwork implements Inspectable {
 
     public void slip(Vehicle vehicle, Lane lane) {
         Logger.logLine("VEHICLE [" + vehicle.id + "] SLIPPED ONTO LANE [" + lane.id + "]");
-        boolean crashedIntoVehicle = false;
+        Vehicle crashedVehicle = null;
         for (Vehicle other : vehicles){
             if (other.location.getSegment() == lane.getSegment()){
-                other.crash(lane);
-                crashedIntoVehicle = true;
+                crashedVehicle = other;
+                break;
             }
         }
 
-        if (crashedIntoVehicle){
+        if (crashedVehicle != null){
+            crashedVehicle.crash(lane);
             vehicle.crash(lane);
         }
     }
