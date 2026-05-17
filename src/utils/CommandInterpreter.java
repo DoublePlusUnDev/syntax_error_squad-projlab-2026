@@ -243,41 +243,55 @@ public class CommandInterpreter {
     }
 
     public void generate(Map<String, String> args) {
-        RoadGenerationParameters params = RoadGenerationParameters.testParams;
-        if (args.containsKey("nodeMin"))
-            params.nodeMin = Integer.parseInt(args.get("nodeMin"));
-        if (args.containsKey("nodeMax"))
-            params.nodeMax = Integer.parseInt(args.get("nodeMax"));
-        if (args.containsKey("mainLanes"))
-            params.mainLanes = Integer.parseInt(args.get("mainLanes"));
-        if (args.containsKey("smallNodesMin"))
-            params.smallNodesMin = Integer.parseInt(args.get("smallNodesMin"));
-        if (args.containsKey("smallNodesMax"))
-            params.smallNodesMax = Integer.parseInt(args.get("smallNodesMax"));
-        if (args.containsKey("smallNodeLanes"))
-            params.smallNodeLanes = Integer.parseInt(args.get("smallNodeLanes"));
-        if (args.containsKey("bigNodesMin"))
-            params.bigNodesMin = Integer.parseInt(args.get("bigNodesMin"));
-        if (args.containsKey("bigNodesMax"))
-            params.bigNodesMax = Integer.parseInt(args.get("bigNodesMax"));
-        if (args.containsKey("bigNodeLanes"))
-            params.bigNodeLanes = Integer.parseInt(args.get("bigNodeLanes"));
-        if (args.containsKey("busStopsMin"))
-            params.busStopsMin = Integer.parseInt(args.get("busStopsMin"));
-        if (args.containsKey("busStopsMax"))
-            params.busStopsMax = Integer.parseInt(args.get("busStopsMax"));
-        if (args.containsKey("workPlacesMin"))
-            params.workPlacesMin = Integer.parseInt(args.get("workPlacesMin"));
-        if (args.containsKey("workPlacesMax"))
-            params.workPlacesMax = Integer.parseInt(args.get("workPlacesMax"));
-        if (args.containsKey("apartsmentsMin"))
-            params.apartsmentsMin = Integer.parseInt(args.get("apartsmentsMin"));
-        if (args.containsKey("apartsmentsMax"))
-            params.apartsmentsMax = Integer.parseInt(args.get("apartsmentsMax"));
+        RoadGenerationParameters params = RoadGenerationParameters.defaultParams;
+        // initialize defaults from the static testParams map if present
+        try {
+            // Command line args are stored with their leading dash (e.g. "-nodeMin"),
+            // SettingsManager builds flags with a leading dash, so read that form here.
+            if (args.containsKey("-" + RoadGenerationParameters.NODE_MIN_KEY))
+                params.setParameter(RoadGenerationParameters.NODE_MIN_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.NODE_MIN_KEY)));
+            if (args.containsKey("-" + RoadGenerationParameters.NODE_MAX_KEY))
+                params.setParameter(RoadGenerationParameters.NODE_MAX_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.NODE_MAX_KEY)));
+            if (args.containsKey("-" + RoadGenerationParameters.MAIN_LANES_KEY))
+                params.setParameter(RoadGenerationParameters.MAIN_LANES_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.MAIN_LANES_KEY)));
+            if (args.containsKey("-" + RoadGenerationParameters.SMALL_NODES_MIN_KEY))
+                params.setParameter(RoadGenerationParameters.SMALL_NODES_MIN_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.SMALL_NODES_MIN_KEY)));
+            if (args.containsKey("-" + RoadGenerationParameters.SMALL_NODES_MAX_KEY))
+                params.setParameter(RoadGenerationParameters.SMALL_NODES_MAX_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.SMALL_NODES_MAX_KEY)));
+            if (args.containsKey("-" + RoadGenerationParameters.SMALL_NODE_LANES_KEY))
+                params.setParameter(RoadGenerationParameters.SMALL_NODE_LANES_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.SMALL_NODE_LANES_KEY)));
+            if (args.containsKey("-" + RoadGenerationParameters.SMALL_NODE_EXTRA_ROADS_KEY))
+                params.setParameter(RoadGenerationParameters.SMALL_NODE_EXTRA_ROADS_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.SMALL_NODE_EXTRA_ROADS_KEY)));
+            if (args.containsKey("-" + RoadGenerationParameters.BIG_NODES_MIN_KEY))
+                params.setParameter(RoadGenerationParameters.BIG_NODES_MIN_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.BIG_NODES_MIN_KEY)));
+            if (args.containsKey("-" + RoadGenerationParameters.BIG_NODES_MAX_KEY))
+                params.setParameter(RoadGenerationParameters.BIG_NODES_MAX_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.BIG_NODES_MAX_KEY)));
+            if (args.containsKey("-" + RoadGenerationParameters.BIG_NODE_LANES_KEY))
+                params.setParameter(RoadGenerationParameters.BIG_NODE_LANES_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.BIG_NODE_LANES_KEY)));
+            if (args.containsKey("-" + RoadGenerationParameters.BIG_NODE_EXTRA_ROADS_KEY))
+                params.setParameter(RoadGenerationParameters.BIG_NODE_EXTRA_ROADS_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.BIG_NODE_EXTRA_ROADS_KEY)));
+            if (args.containsKey("-" + RoadGenerationParameters.BUS_STOPS_MIN_KEY))
+                params.setParameter(RoadGenerationParameters.BUS_STOPS_MIN_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.BUS_STOPS_MIN_KEY)));
+            if (args.containsKey("-" + RoadGenerationParameters.BUS_STOPS_MAX_KEY))
+                params.setParameter(RoadGenerationParameters.BUS_STOPS_MAX_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.BUS_STOPS_MAX_KEY)));
+            if (args.containsKey("-" + RoadGenerationParameters.WORK_PLACES_MIN_KEY))
+                params.setParameter(RoadGenerationParameters.WORK_PLACES_MIN_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.WORK_PLACES_MIN_KEY)));
+            if (args.containsKey("-" + RoadGenerationParameters.WORK_PLACES_MAX_KEY))
+                params.setParameter(RoadGenerationParameters.WORK_PLACES_MAX_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.WORK_PLACES_MAX_KEY)));
+            if (args.containsKey("-" + RoadGenerationParameters.APARTMENTS_MIN_KEY))
+                params.setParameter(RoadGenerationParameters.APARTMENTS_MIN_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.APARTMENTS_MIN_KEY)));
+            if (args.containsKey("-" + RoadGenerationParameters.APARTMENTS_MAX_KEY))
+                params.setParameter(RoadGenerationParameters.APARTMENTS_MAX_KEY, Integer.parseInt(args.get("-" + RoadGenerationParameters.APARTMENTS_MAX_KEY)));
+        }
+        catch (NumberFormatException e) {
+            Logger.logError("Error: Invalid number format in generate command arguments. " + e.getMessage());
+            return;
+        }
 
         GameLogic.getInstance().makeRoads(args.get("-id"));
         GameLogic.getInstance().getRoads().setGenerationParameters(params);
         GameLogic.getInstance().getRoads().generate();
+        
     }
 
     public void addNode(Map<String, String> args) {

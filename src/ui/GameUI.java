@@ -4,7 +4,6 @@ import java.awt.CardLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import utils.CommandInterpreter;
-import utils.SettingsManager;
 
 public class GameUI extends JFrame {
 
@@ -62,7 +61,7 @@ public class GameUI extends JFrame {
     }
 
     public void startGame() {
-        commandInterpreter.execute("/generate -id net");
+        commandInterpreter.execute(settingsManager.getRoadGenerator());
         commandInterpreter.execute("/addPlayer -id player1 -type snowplow -net net -lane Mainroad0.lane1");
         commandInterpreter.execute("/start");
         showGamePanel();

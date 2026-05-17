@@ -1,7 +1,7 @@
 import gamelogic.GameLogic;
 import ui.GameUI;
+import ui.SettingsManager;
 import utils.CommandInterpreter;
-import utils.SettingsManager;
 
 public class Game {
     
