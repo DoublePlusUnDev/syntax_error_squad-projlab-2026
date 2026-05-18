@@ -38,7 +38,7 @@ public class GameLogic {
             return;
         }
 
-        currentPlayer = players.get(0);
+        switchPlayer(players.get(0));
         startTurn();
     }
 
@@ -54,7 +54,7 @@ public class GameLogic {
             Logger.logLine("ROUND ENDED");
             updateAll();
         }
-        currentPlayer = players.get((currentIndex + 1) % players.size());
+        switchPlayer(players.get((currentIndex + 1) % players.size()));
         gameStateChangeListeners.forEach(Runnable::run);
         startTurn();
     }
@@ -67,14 +67,7 @@ public class GameLogic {
         topologyChangedListeners.add(listener);
     }
 
-    private void changePlayer(Player player) {
-        if (!players.contains(player)) {
-            Logger.logError("Error: Player with id " + player.id + " does not exist.");
-            return;
-        }
-
-        
-
+    private void switchPlayer(Player player) {
         currentPlayer = player;
         hasMoved = new java.util.HashMap<>();
         if (player instanceof SnowPlowPlayer snowPlowPlayer){
