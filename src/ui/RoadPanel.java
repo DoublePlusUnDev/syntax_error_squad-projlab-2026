@@ -33,6 +33,17 @@ public class RoadPanel extends JPanel {
             this.y = y;
             this.node = node;
         }
+        public void render(java.awt.Graphics2D g2) {
+            if (node instanceof Apartment) {
+                g2.drawImage(apartmentImage, (int)(x - NODE_OFFSET), (int)(y - NODE_OFFSET), NODE_SIZE, NODE_SIZE, null);
+            } else if (node instanceof Workplace) {
+                g2.drawImage(workPlaceImage, (int)(x - NODE_OFFSET), (int)(y - NODE_OFFSET), NODE_SIZE, NODE_SIZE, null);
+            } else if (node instanceof BusStop) {
+                g2.drawImage(busStopImage, (int)(x - NODE_OFFSET), (int)(y - NODE_OFFSET), NODE_SIZE, NODE_SIZE, null);
+            } else {
+                g2.drawImage(nodeImage, (int)(x - NODE_OFFSET), (int)(y - NODE_OFFSET), NODE_SIZE, NODE_SIZE, null);
+            }
+        }
     }
 
     class DisplayEdge {
@@ -42,6 +53,134 @@ public class RoadPanel extends JPanel {
             this.from = from;
             this.to = to;
             this.segment = segment;
+        }
+        public void render(java.awt.Graphics2D g2) {
+            List<Lane> lanes = segment.getLanes();
+
+            // Vector from start to end
+            float dx = to.x - from.x;
+            float dy = to.y - from.y;
+            float dist = (float) Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < 0.01f) return; // Skip if nodes are too close
+
+            // Perpendicular vector (rotated 90 degrees)
+            float perpX = -dy / dist;
+            float perpY = dx / dist;
+
+            // spacing between lane centers includes lane width + separator
+            float laneSpacing = laneWidth + separatorWidth;
+            float totalCenterSpan = (lanes.size() - 1) * laneSpacing;
+            float startOffset = -totalCenterSpan / 2f;
+
+            // Precompute center offsets for lanes so lane 0 is the lowest Y and higher indices have higher Y
+            float[] centerOffsets = new float[lanes.size()];
+            if (lanes.size() > 0) {
+                if (perpY >= 0f) {
+                    for (int i = 0; i < lanes.size(); i++) {
+                        centerOffsets[i] = startOffset + i * laneSpacing;
+                    }
+                } else {
+                    for (int i = 0; i < lanes.size(); i++) {
+                        centerOffsets[i] = startOffset + (lanes.size() - 1 - i) * laneSpacing;
+                    }
+                }
+            }
+
+            // Draw each lane as a filled polygon (strip)
+            for (int i = 0; i < lanes.size(); i++) {
+                float centerOffset = centerOffsets[i];
+                float leftOffset = centerOffset - laneWidth / 2f;
+                float rightOffset = centerOffset + laneWidth / 2f;
+
+                int[] xs = new int[4];
+                int[] ys = new int[4];
+                xs[0] = (int) (from.x + perpX * leftOffset);
+                ys[0] = (int) (from.y + perpY * leftOffset);
+                xs[1] = (int) (to.x + perpX * leftOffset);
+                ys[1] = (int) (to.y + perpY * leftOffset);
+                xs[2] = (int) (to.x + perpX * rightOffset);
+                ys[2] = (int) (to.y + perpY * rightOffset);
+                xs[3] = (int) (from.x + perpX * rightOffset);
+                ys[3] = (int) (from.y + perpY * rightOffset);
+
+                g2.setColor(laneColor);
+                g2.fillPolygon(xs, ys, 4);
+                g2.setColor(laneBorderColor);
+                g2.drawPolygon(xs, ys, 4);
+            }
+
+            // Draw separators between lanes
+            g2.setColor(separatorColor);
+            for (int i = 0; i < Math.max(0, lanes.size() - 1); i++) {
+                float sepCenter = (centerOffsets[i] + centerOffsets[i + 1]) * 0.5f;
+                float sepLeft = sepCenter - separatorWidth / 2f;
+                float sepRight = sepCenter + separatorWidth / 2f;
+
+                int[] xs = new int[4];
+                int[] ys = new int[4];
+                xs[0] = (int) (from.x + perpX * sepLeft);
+                ys[0] = (int) (from.y + perpY * sepLeft);
+                xs[1] = (int) (to.x + perpX * sepLeft);
+                ys[1] = (int) (to.y + perpY * sepLeft);
+                xs[2] = (int) (to.x + perpX * sepRight);
+                ys[2] = (int) (to.y + perpY * sepRight);
+                xs[3] = (int) (from.x + perpX * sepRight);
+                ys[3] = (int) (from.y + perpY * sepRight);
+
+                g2.fillPolygon(xs, ys, 4);
+            }
+
+            // Draw vehicles on top of lanes after all lanes and separators are rendered
+            for (int i = 0; i < lanes.size(); i++) {
+                Lane lane = lanes.get(i);
+                float centerOffset = centerOffsets[i];
+                renderVehiclesOnLane(g2, lane, centerOffset, perpX, perpY);
+            }
+        }
+
+        private void renderVehiclesOnLane(java.awt.Graphics2D g2, Lane lane, float centerOffset, float perpX, float perpY) {
+            List<gamelogic.Vehicle> vehicles = lane.getVehicles();
+            if (vehicles.isEmpty()) return;
+
+            // Vector from start to end
+            float dx = to.x - from.x;
+            float dy = to.y - from.y;
+            float segmentLength = (float) Math.sqrt(dx * dx + dy * dy);
+            float dirX = dx / segmentLength;
+            float dirY = dy / segmentLength;
+
+            // Calculate positions along the lane for each vehicle
+            for (int i = 0; i < vehicles.size(); i++) {
+                gamelogic.Vehicle vehicle = vehicles.get(i);
+
+                // Position along lane: center if single vehicle, evenly distributed if multiple
+                float positionAlongLane;
+                if (vehicles.size() == 1) {
+                    positionAlongLane = 0.5f; // Middle of lane
+                } else {
+                    positionAlongLane = (float) i / (vehicles.size() - 1); // Evenly distribute
+                }
+
+                // Calculate vehicle position on the lane
+                float vehicleX = from.x + dirX * segmentLength * positionAlongLane + perpX * centerOffset;
+                float vehicleY = from.y + dirY * segmentLength * positionAlongLane + perpY * centerOffset;
+
+                // Draw vehicle sprite based on type
+                if (vehicle instanceof gamelogic.SnowPlow) {
+                    if (snowPlowImage != null) {
+                        g2.drawImage(snowPlowImage, (int)(vehicleX - VEHICLE_OFFSET), (int)(vehicleY - VEHICLE_OFFSET), VEHICLE_SIZE, VEHICLE_SIZE, null);
+                    }
+                } else if (vehicle instanceof gamelogic.Bus) {
+                    if (busImage != null) {
+                        g2.drawImage(busImage, (int)(vehicleX - VEHICLE_OFFSET), (int)(vehicleY - VEHICLE_OFFSET), VEHICLE_SIZE, VEHICLE_SIZE, null);
+                    }
+                } else if (vehicle instanceof gamelogic.Car) {
+                    if (carImage != null) {
+                        g2.drawImage(carImage, (int)(vehicleX - VEHICLE_OFFSET), (int)(vehicleY - VEHICLE_OFFSET), VEHICLE_SIZE, VEHICLE_SIZE, null);
+                    }
+                }
+            }
         }
     }
 
@@ -251,154 +390,17 @@ public class RoadPanel extends JPanel {
         java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;
         g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
         for (DisplayEdge edge : edges) {
-            DisplayNode from = edge.from;
-            DisplayNode to = edge.to;
-            List<Lane> lanes = edge.segment.getLanes();
-
-            // Vector from start to end
-            float dx = to.x - from.x;
-            float dy = to.y - from.y;
-            float dist = (float) Math.sqrt(dx * dx + dy * dy);
-
-            if (dist < 0.01f) continue; // Skip if nodes are too close
-
-            // Perpendicular vector (rotated 90 degrees)
-            float perpX = -dy / dist;
-            float perpY = dx / dist;
-
-            // spacing between lane centers includes lane width + separator
-            float laneSpacing = laneWidth + separatorWidth;
-            float totalCenterSpan = (lanes.size() - 1) * laneSpacing;
-            float startOffset = -totalCenterSpan / 2f;
-
-            // Draw each lane as a filled polygon (strip)
-            for (int i = 0; i < lanes.size(); i++) {
-                float centerOffset = startOffset + i * laneSpacing;
-                float leftOffset = centerOffset - laneWidth / 2f;
-                float rightOffset = centerOffset + laneWidth / 2f;
-
-                int[] xs = new int[4];
-                int[] ys = new int[4];
-                xs[0] = (int) (from.x + perpX * leftOffset);
-                ys[0] = (int) (from.y + perpY * leftOffset);
-                xs[1] = (int) (to.x + perpX * leftOffset);
-                ys[1] = (int) (to.y + perpY * leftOffset);
-                xs[2] = (int) (to.x + perpX * rightOffset);
-                ys[2] = (int) (to.y + perpY * rightOffset);
-                xs[3] = (int) (from.x + perpX * rightOffset);
-                ys[3] = (int) (from.y + perpY * rightOffset);
-
-                g2.setColor(laneColor);
-                g2.fillPolygon(xs, ys, 4);
-                g2.setColor(laneBorderColor);
-                g2.drawPolygon(xs, ys, 4);
-
-                Lane lane = lanes.get(i);
-                renderVehiclesOnLane(g2, lane, from, to, centerOffset, perpX, perpY);
-                
-            }
-
-            // Draw separators between lanes
-            g2.setColor(separatorColor);
-            for (int i = 0; i < Math.max(0, lanes.size() - 1); i++) {
-                float sepCenter = startOffset + (i + 0.5f) * laneSpacing;
-                float sepLeft = sepCenter - separatorWidth / 2f;
-                float sepRight = sepCenter + separatorWidth / 2f;
-
-                int[] xs = new int[4];
-                int[] ys = new int[4];
-                xs[0] = (int) (from.x + perpX * sepLeft);
-                ys[0] = (int) (from.y + perpY * sepLeft);
-                xs[1] = (int) (to.x + perpX * sepLeft);
-                ys[1] = (int) (to.y + perpY * sepLeft);
-                xs[2] = (int) (to.x + perpX * sepRight);
-                ys[2] = (int) (to.y + perpY * sepRight);
-                xs[3] = (int) (from.x + perpX * sepRight);
-                ys[3] = (int) (from.y + perpY * sepRight);
-
-                g2.fillPolygon(xs, ys, 4);
-            }
+            edge.render(g2);
         }
                 
 
         g2.setColor(Color.ORANGE);
         for (DisplayNode node : nodes) {
-            if (node.node instanceof Apartment) {
-                g2.drawImage(apartmentImage, (int)(node.x - NODE_OFFSET), (int)(node.y - NODE_OFFSET), NODE_SIZE, NODE_SIZE, null);
-            } else if (node.node instanceof Workplace) {
-                g2.drawImage(workPlaceImage, (int)(node.x - NODE_OFFSET), (int)(node.y - NODE_OFFSET), NODE_SIZE, NODE_SIZE, null);
-            } else if (node.node instanceof BusStop) {
-                g2.drawImage(busStopImage, (int)(node.x - NODE_OFFSET), (int)(node.y - NODE_OFFSET), NODE_SIZE, NODE_SIZE, null);
-            } else {
-                g2.drawImage(nodeImage, (int)(node.x - NODE_OFFSET), (int)(node.y - NODE_OFFSET), NODE_SIZE, NODE_SIZE, null);
-            }
+            node.render(g2);
         }
     }
 
-    /**
-     * Renders vehicle sprites on a lane, distributing them evenly along the lane.
-     * - If there is only one vehicle, it is centered in the middle of the lane
-     * - If there are multiple vehicles, they are distributed equally along the lane
-     * Vehicles are rendered on top of the lanes.
-     * 
-     * @param g2 Graphics2D context for drawing
-     * @param lane The lane containing the vehicles
-     * @param from DisplayNode at the start of the lane segment
-     * @param to DisplayNode at the end of the lane segment
-     * @param centerOffset The perpendicular offset to the center of this lane
-     * @param perpX X component of the perpendicular vector (normalized)
-     * @param perpY Y component of the perpendicular vector (normalized)
-     */
-    private void renderVehiclesOnLane(java.awt.Graphics2D g2, Lane lane, DisplayNode from, DisplayNode to, 
-                                      float centerOffset, float perpX, float perpY) {
-        List<gamelogic.Vehicle> vehicles = lane.getVehicles();
-        
-        if (vehicles.isEmpty()) {
-            return;
-        }
-
-        // Vector from start to end
-        float dx = to.x - from.x;
-        float dy = to.y - from.y;
-        float segmentLength = (float) Math.sqrt(dx * dx + dy * dy);
-        float dirX = dx / segmentLength;
-        float dirY = dy / segmentLength;
-
-        // Calculate positions along the lane for each vehicle
-        for (int i = 0; i < vehicles.size(); i++) {
-            gamelogic.Vehicle vehicle = vehicles.get(i);
-            
-            // Position along lane: center if single vehicle, evenly distributed if multiple
-            float positionAlongLane;
-            if (vehicles.size() == 1) {
-                positionAlongLane = 0.5f; // Middle of lane
-            } else {
-                positionAlongLane = (float) i / (vehicles.size() - 1); // Evenly distribute
-            }
-
-            // Calculate vehicle position on the lane
-            float vehicleX = from.x + dirX * segmentLength * positionAlongLane + perpX * centerOffset;
-            float vehicleY = from.y + dirY * segmentLength * positionAlongLane + perpY * centerOffset;
-
-            // Draw vehicle sprite based on type
-            if (vehicle instanceof gamelogic.SnowPlow) {
-                if (snowPlowImage != null) {
-                    g2.drawImage(snowPlowImage, (int)(vehicleX - VEHICLE_OFFSET), (int)(vehicleY - VEHICLE_OFFSET), 
-                                VEHICLE_SIZE, VEHICLE_SIZE, null);
-                }
-            } else if (vehicle instanceof gamelogic.Bus) {
-                if (busImage != null) {
-                    g2.drawImage(busImage, (int)(vehicleX - VEHICLE_OFFSET), (int)(vehicleY - VEHICLE_OFFSET), 
-                                VEHICLE_SIZE, VEHICLE_SIZE, null);
-                }
-            } else if (vehicle instanceof gamelogic.Car) {
-                if (carImage != null) {
-                    g2.drawImage(carImage, (int)(vehicleX - VEHICLE_OFFSET), (int)(vehicleY - VEHICLE_OFFSET), 
-                                VEHICLE_SIZE, VEHICLE_SIZE, null);
-                }
-            }
-        }
-    }
+    
             
     // Config setters
     public void setLaneWidth(float laneWidth) {
