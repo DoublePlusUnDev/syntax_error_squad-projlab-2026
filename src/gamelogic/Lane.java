@@ -2,7 +2,6 @@ package gamelogic;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import utils.Logger;
 import utils.ObjectRegistry;
 import utils.RandomGenerator;
@@ -225,6 +224,10 @@ public class Lane implements Updatable, Inspectable {
         return laneCount;
     }
 
+    public List<Vehicle> getVehicles() {
+        return vehicles;
+    }
+
     // ==================== Mutators (for restoration/testing) ====================
 
     public void setSnowHeight(float height) {
@@ -322,5 +325,9 @@ public class Lane implements Updatable, Inspectable {
         Logger.logLine("Vehicle Block: " + (vehicleBlock ? "yes" : "no"));
         Logger.logLine("Ice Debris: " + (iceDebris ? "yes" : "no"));
         Logger.logLine("Salted Timer: " + saltedTimer);
+        Logger.logLine("Vehicles on lane: " + vehicles.size());
+        for (Vehicle vehicle : vehicles) {
+            Logger.logLine("- " + vehicle.id);
+        }
     }
 }

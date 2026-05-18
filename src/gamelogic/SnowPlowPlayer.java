@@ -1,7 +1,6 @@
 package gamelogic;
 import java.util.ArrayList;
 import java.util.List;
-
 import utils.Logger;
 
 /**
@@ -30,7 +29,7 @@ public class SnowPlowPlayer extends Player {
 
     public void addSnowPlow(SnowPlow snowPlow, Lane location) {
         snowPlows.add(snowPlow);
-        snowPlow.location = location;
+        snowPlow.setLocation(location);
         roads.placeSnowPlow(snowPlow);
     }
 

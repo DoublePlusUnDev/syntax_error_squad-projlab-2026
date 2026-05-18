@@ -13,6 +13,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -52,8 +53,11 @@ public class RoadPanel extends JPanel {
     private transient BufferedImage nodeImage;
     private transient BufferedImage workPlaceImage;
 
-    private int NODE_SIZE = 40;
-    private int NODE_OFFSET = NODE_SIZE / 2;
+    private static final int NODE_SIZE = 40;
+    private static final int NODE_OFFSET = NODE_SIZE / 2;
+
+    private static final int VEHICLE_SIZE = 30;
+    private static final int VEHICLE_OFFSET = VEHICLE_SIZE / 2;
 
     // Configurable lane rendering
     private float laneWidth = 8f; // pixels
@@ -67,7 +71,8 @@ public class RoadPanel extends JPanel {
     private transient List<DisplayNode> nodes = new ArrayList<>();
     private transient List<DisplayEdge> edges = new ArrayList<>();
 
-    private transient GameLogic gameLogic;
+    private final GameLogic gameLogic;
+    private final Random random = new Random();
 
     public RoadPanel(GameLogic gameLogic) {
         setBackground(UIStyles.backgroundColor);
@@ -102,7 +107,7 @@ public class RoadPanel extends JPanel {
             busStopImage = ImageIO.read(new File("resources/sprites/BusStop.png"));
             nodeImage = ImageIO.read(new File("resources/sprites/Node.png"));
             workPlaceImage = ImageIO.read(new File("resources/sprites/WorkPlace.png"));
-        } catch (Exception e) {
+        } catch (IOException e) {
             Logger.logError("Error loading images: " + e.getMessage());
         }
     }
@@ -117,7 +122,7 @@ public class RoadPanel extends JPanel {
         }
 
         Map<Node, DisplayNode> nodeMap = new HashMap<>();
-        Random random = new Random();
+ 
         int panelWidth = Math.max(getWidth(), 1);
         int panelHeight = Math.max(getHeight(), 1);
 
@@ -231,8 +236,8 @@ public class RoadPanel extends JPanel {
                     node.y += (dy / disp) * limited;
                 }
 
-                node.x = Math.max(minX, Math.min(maxX, node.x));
-                node.y = Math.max(minY, Math.min(maxY, node.y));
+                node.x = Math.clamp(node.x, minX, maxX);
+                node.y = Math.clamp(node.y, minY, maxY);
             }
 
             temperature *= 0.95f;
@@ -287,6 +292,10 @@ public class RoadPanel extends JPanel {
                 g2.fillPolygon(xs, ys, 4);
                 g2.setColor(laneBorderColor);
                 g2.drawPolygon(xs, ys, 4);
+
+                Lane lane = lanes.get(i);
+                renderVehiclesOnLane(g2, lane, from, to, centerOffset, perpX, perpY);
+                
             }
 
             // Draw separators between lanes
@@ -322,6 +331,71 @@ public class RoadPanel extends JPanel {
                 g2.drawImage(busStopImage, (int)(node.x - NODE_OFFSET), (int)(node.y - NODE_OFFSET), NODE_SIZE, NODE_SIZE, null);
             } else {
                 g2.drawImage(nodeImage, (int)(node.x - NODE_OFFSET), (int)(node.y - NODE_OFFSET), NODE_SIZE, NODE_SIZE, null);
+            }
+        }
+    }
+
+    /**
+     * Renders vehicle sprites on a lane, distributing them evenly along the lane.
+     * - If there is only one vehicle, it is centered in the middle of the lane
+     * - If there are multiple vehicles, they are distributed equally along the lane
+     * Vehicles are rendered on top of the lanes.
+     * 
+     * @param g2 Graphics2D context for drawing
+     * @param lane The lane containing the vehicles
+     * @param from DisplayNode at the start of the lane segment
+     * @param to DisplayNode at the end of the lane segment
+     * @param centerOffset The perpendicular offset to the center of this lane
+     * @param perpX X component of the perpendicular vector (normalized)
+     * @param perpY Y component of the perpendicular vector (normalized)
+     */
+    private void renderVehiclesOnLane(java.awt.Graphics2D g2, Lane lane, DisplayNode from, DisplayNode to, 
+                                      float centerOffset, float perpX, float perpY) {
+        List<gamelogic.Vehicle> vehicles = lane.getVehicles();
+        
+        if (vehicles.isEmpty()) {
+            return;
+        }
+
+        // Vector from start to end
+        float dx = to.x - from.x;
+        float dy = to.y - from.y;
+        float segmentLength = (float) Math.sqrt(dx * dx + dy * dy);
+        float dirX = dx / segmentLength;
+        float dirY = dy / segmentLength;
+
+        // Calculate positions along the lane for each vehicle
+        for (int i = 0; i < vehicles.size(); i++) {
+            gamelogic.Vehicle vehicle = vehicles.get(i);
+            
+            // Position along lane: center if single vehicle, evenly distributed if multiple
+            float positionAlongLane;
+            if (vehicles.size() == 1) {
+                positionAlongLane = 0.5f; // Middle of lane
+            } else {
+                positionAlongLane = (float) i / (vehicles.size() - 1); // Evenly distribute
+            }
+
+            // Calculate vehicle position on the lane
+            float vehicleX = from.x + dirX * segmentLength * positionAlongLane + perpX * centerOffset;
+            float vehicleY = from.y + dirY * segmentLength * positionAlongLane + perpY * centerOffset;
+
+            // Draw vehicle sprite based on type
+            if (vehicle instanceof gamelogic.SnowPlow) {
+                if (snowPlowImage != null) {
+                    g2.drawImage(snowPlowImage, (int)(vehicleX - VEHICLE_OFFSET), (int)(vehicleY - VEHICLE_OFFSET), 
+                                VEHICLE_SIZE, VEHICLE_SIZE, null);
+                }
+            } else if (vehicle instanceof gamelogic.Bus) {
+                if (busImage != null) {
+                    g2.drawImage(busImage, (int)(vehicleX - VEHICLE_OFFSET), (int)(vehicleY - VEHICLE_OFFSET), 
+                                VEHICLE_SIZE, VEHICLE_SIZE, null);
+                }
+            } else if (vehicle instanceof gamelogic.Car) {
+                if (carImage != null) {
+                    g2.drawImage(carImage, (int)(vehicleX - VEHICLE_OFFSET), (int)(vehicleY - VEHICLE_OFFSET), 
+                                VEHICLE_SIZE, VEHICLE_SIZE, null);
+                }
             }
         }
     }
