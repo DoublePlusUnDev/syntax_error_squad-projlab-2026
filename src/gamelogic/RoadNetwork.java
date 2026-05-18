@@ -258,8 +258,33 @@ public class RoadNetwork implements Inspectable {
     }
 
     public void addRoadSegment(RoadSegment roadSegment) {
+        if (roadSegment == null) {
+            Logger.logError("Error: Cannot add a null road segment.");
+            return;
+        }
+
+        if (!canAddRoadBetween(roadSegment.getStartPoint(), roadSegment.getEndPoint())) {
+            Logger.logError("Error: Road segment [" + roadSegment.id + "] duplicates an existing connection or has invalid endpoints.");
+            return;
+        }
+
         roadSegments.add(roadSegment);
         topologyChangedListeners.forEach(Runnable::run);
+    }
+
+    public boolean canAddRoadBetween(Node startPoint, Node endPoint) {
+        if (startPoint == null || endPoint == null || startPoint == endPoint) {
+            return false;
+        }
+
+        for (RoadSegment roadSegment : roadSegments) {
+            if ((roadSegment.getStartPoint() == startPoint && roadSegment.getEndPoint() == endPoint)
+                    || (roadSegment.getStartPoint() == endPoint && roadSegment.getEndPoint() == startPoint)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public void placeCar(Car car){
@@ -279,6 +304,43 @@ public class RoadNetwork implements Inspectable {
     }
 
     public void generate() {
+        int numberOfAllNodes;
+        int numberOfApartments;
+        int numberOfWorkplaces;
+        int numberOfBusStops;
+        int numberOfNormalNodes;
+        int numberOfBigNodes;
+        int numberOfSmallNodes;
+
+        try {
+            numberOfAllNodes = RandomGenerator.getRandomInt((Integer) generationParameters.getParameter(RoadGenerationParameters.NODE_MIN_KEY), (Integer) generationParameters.getParameter(RoadGenerationParameters.NODE_MAX_KEY));
+            numberOfApartments = RandomGenerator.getRandomInt((Integer) generationParameters.getParameter(RoadGenerationParameters.APARTMENTS_MIN_KEY), (Integer) generationParameters.getParameter(RoadGenerationParameters.APARTMENTS_MAX_KEY));
+            numberOfWorkplaces = RandomGenerator.getRandomInt((Integer) generationParameters.getParameter(RoadGenerationParameters.WORK_PLACES_MIN_KEY), (Integer) generationParameters.getParameter(RoadGenerationParameters.WORK_PLACES_MAX_KEY));
+            numberOfBusStops = RandomGenerator.getRandomInt((Integer) generationParameters.getParameter(RoadGenerationParameters.BUS_STOPS_MIN_KEY), (Integer) generationParameters.getParameter(RoadGenerationParameters.BUS_STOPS_MAX_KEY));
+            numberOfBigNodes = RandomGenerator.getRandomInt((Integer) generationParameters.getParameter(RoadGenerationParameters.BIG_NODES_MIN_KEY), (Integer) generationParameters.getParameter(RoadGenerationParameters.BIG_NODES_MAX_KEY));
+            numberOfSmallNodes = RandomGenerator.getRandomInt((Integer) generationParameters.getParameter(RoadGenerationParameters.SMALL_NODES_MIN_KEY), (Integer) generationParameters.getParameter(RoadGenerationParameters.SMALL_NODES_MAX_KEY));
+        } catch (RuntimeException exception) {
+            Logger.logError("Error: Road generation failed because one of the generation parameters is invalid: " + exception.getMessage());
+            return;
+        }
+
+        if (numberOfAllNodes < 2) {
+            Logger.logError("Error: Road generation requires at least 2 nodes.");
+            return;
+        }
+
+        numberOfNormalNodes = numberOfAllNodes - numberOfApartments - numberOfWorkplaces - numberOfBusStops;
+
+        if (numberOfNormalNodes < 0){
+            Logger.logError("Error: Too many special nodes for the total number of nodes. Please adjust the parameters.");
+            return;
+        }
+
+        if (numberOfBigNodes + numberOfSmallNodes > numberOfAllNodes){
+            Logger.logError("Error: Too many big and small nodes for the total number of nodes. Please adjust the parameters.");
+            return;
+        }
+
         nodes.clear();
         roadSegments.clear();
         vehicles.clear();
@@ -289,17 +351,7 @@ public class RoadNetwork implements Inspectable {
         //Phase 1
         //calculate the number of nodes for each type and create a shuffled list of their types
         List<String> nodeTypes = new ArrayList<String>();
-        int numberOfAllNodes = RandomGenerator.getRandomInt((Integer) generationParameters.getParameter(RoadGenerationParameters.NODE_MIN_KEY), (Integer) generationParameters.getParameter(RoadGenerationParameters.NODE_MAX_KEY));
         Logger.logLine("Generating " + numberOfAllNodes + " nodes in the road network.");
-        int numberOfApartments = RandomGenerator.getRandomInt((Integer) generationParameters.getParameter(RoadGenerationParameters.APARTMENTS_MIN_KEY), (Integer) generationParameters.getParameter(RoadGenerationParameters.APARTMENTS_MAX_KEY));
-        int numberOfWorkplaces = RandomGenerator.getRandomInt((Integer) generationParameters.getParameter(RoadGenerationParameters.WORK_PLACES_MIN_KEY), (Integer) generationParameters.getParameter(RoadGenerationParameters.WORK_PLACES_MAX_KEY));
-        int numberOfBusStops = RandomGenerator.getRandomInt((Integer) generationParameters.getParameter(RoadGenerationParameters.BUS_STOPS_MIN_KEY), (Integer) generationParameters.getParameter(RoadGenerationParameters.BUS_STOPS_MAX_KEY));
-        int numberOfNormalNodes = numberOfAllNodes - numberOfApartments - numberOfWorkplaces - numberOfBusStops;
-
-        if (numberOfNormalNodes < 0){
-            Logger.logError("Error: Too many special nodes for the total number of nodes. Please adjust the parameters.");
-            return;
-        }
 
         for (int i = 0; i < numberOfApartments; i++){
             nodeTypes.add("Apartment");
@@ -349,14 +401,6 @@ public class RoadNetwork implements Inspectable {
         //Add extra connections to big nodes and small nodes
         List<Node> shuffleNodes = new ArrayList<>(nodes);
         RandomGenerator.shuffleList(shuffleNodes);
-        
-        int numberOfBigNodes = RandomGenerator.getRandomInt((Integer) generationParameters.getParameter(RoadGenerationParameters.BIG_NODES_MIN_KEY), (Integer) generationParameters.getParameter(RoadGenerationParameters.BIG_NODES_MAX_KEY));
-        int numberOfSmallNodes = RandomGenerator.getRandomInt((Integer) generationParameters.getParameter(RoadGenerationParameters.SMALL_NODES_MIN_KEY), (Integer) generationParameters.getParameter(RoadGenerationParameters.SMALL_NODES_MAX_KEY));
-
-        if (numberOfBigNodes + numberOfSmallNodes > nodes.size()){
-            Logger.logError("Error: Too many big and small nodes for the total number of nodes. Please adjust the parameters.");
-            return;
-        }
 
         List<Node> bigNodes = shuffleNodes.subList(0, numberOfBigNodes);
         
@@ -368,7 +412,7 @@ public class RoadNetwork implements Inspectable {
             for (Node potential : potentialConnections){
                 if (potential == currentBigNode) continue;
 
-                if (nodeConnections.get(currentBigNode).contains(potential) || nodeConnections.get(potential).contains(currentBigNode)) continue; //already connected
+                if (!canAddRoadBetween(currentBigNode, potential)) continue;
 
                 RoadSegment segment = new RoadSegment("BigNodeExtraRoad" + currentBigNode.id + "_" + potential.id, (Integer) generationParameters.getParameter(RoadGenerationParameters.BIG_NODE_LANES_KEY), currentBigNode, potential);
                 roadSegments.add(segment);
@@ -392,7 +436,7 @@ public class RoadNetwork implements Inspectable {
             for (Node potential : potentialConnections){
                 if (potential == currentSmallNode) continue;
 
-                if (nodeConnections.get(currentSmallNode).contains(potential) || nodeConnections.get(potential).contains(currentSmallNode)) continue; //already connected
+                if (!canAddRoadBetween(currentSmallNode, potential)) continue;
 
                 RoadSegment segment = new RoadSegment("SmallNodeExtraRoad" + currentSmallNode.id + "_" + potential.id, (Integer) generationParameters.getParameter(RoadGenerationParameters.SMALL_NODE_LANES_KEY), currentSmallNode, potential);
                 roadSegments.add(segment);

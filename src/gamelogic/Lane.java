@@ -294,6 +294,10 @@ public class Lane implements Updatable, Inspectable {
         vehicles.remove(vehicle);
     }
 
+    public String getId() {
+        return id;
+    }
+
     // ==================== Lifecycle ====================
 
     /**

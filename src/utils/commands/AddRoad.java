@@ -1,12 +1,11 @@
 package utils.commands;
 
-import java.util.Map;
-
 import gamelogic.Bridge;
 import gamelogic.Node;
 import gamelogic.RoadNetwork;
 import gamelogic.RoadSegment;
 import gamelogic.Tunnel;
+import java.util.Map;
 import utils.CommandInterpreter;
 import utils.CommandInterpreter.Command;
 import utils.Logger;
@@ -46,6 +45,11 @@ public class AddRoad implements Command{
             } catch (NumberFormatException e) {
                 Logger.logError("Error: Invalid number format for lanes. Using default value of 1.");
             }
+        }
+
+        if (!net.canAddRoadBetween(start, end)) {
+            Logger.logError("Error: A road already exists between " + start.getId() + " and " + end.getId() + ".");
+            return;
         }
 
         RoadSegment road;

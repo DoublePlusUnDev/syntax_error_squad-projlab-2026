@@ -2,7 +2,6 @@ package gamelogic;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import utils.Logger;
 import utils.ObjectRegistry;
 
@@ -19,6 +18,10 @@ public class Node implements Inspectable{
         this.id = id;
         ObjectRegistry.register(id, this);
         this.neighbours = new ArrayList<>();
+    }
+
+    public String getId() {
+        return id;
     }
 
     public void accept(Vehicle vehicle) {

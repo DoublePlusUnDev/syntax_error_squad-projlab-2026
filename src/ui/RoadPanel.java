@@ -9,8 +9,11 @@ import gamelogic.RoadSegment;
 import gamelogic.Workplace;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Polygon;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -139,6 +142,59 @@ public class RoadPanel extends JPanel {
             }
         }
 
+        public Lane hitTestLane(int mx, int my) {
+            List<Lane> lanes = segment.getLanes();
+
+            float dx = to.x - from.x;
+            float dy = to.y - from.y;
+            float dist = (float) Math.sqrt(dx * dx + dy * dy);
+            if (dist < 0.01f) return null;
+
+            float perpX = -dy / dist;
+            float perpY = dx / dist;
+
+            float laneSpacing = laneWidth + separatorWidth;
+            float totalCenterSpan = (lanes.size() - 1) * laneSpacing;
+            float startOffset = -totalCenterSpan / 2f;
+
+            float[] centerOffsets = new float[lanes.size()];
+            if (lanes.size() > 0) {
+                if (perpY >= 0f) {
+                    for (int i = 0; i < lanes.size(); i++) {
+                        centerOffsets[i] = startOffset + i * laneSpacing;
+                    }
+                } else {
+                    for (int i = 0; i < lanes.size(); i++) {
+                        centerOffsets[i] = startOffset + (lanes.size() - 1 - i) * laneSpacing;
+                    }
+                }
+            }
+
+            for (int i = 0; i < lanes.size(); i++) {
+                float centerOffset = centerOffsets[i];
+                float leftOffset = centerOffset - laneWidth / 2f;
+                float rightOffset = centerOffset + laneWidth / 2f;
+
+                int[] xs = new int[4];
+                int[] ys = new int[4];
+                xs[0] = (int) (from.x + perpX * leftOffset);
+                ys[0] = (int) (from.y + perpY * leftOffset);
+                xs[1] = (int) (to.x + perpX * leftOffset);
+                ys[1] = (int) (to.y + perpY * leftOffset);
+                xs[2] = (int) (to.x + perpX * rightOffset);
+                ys[2] = (int) (to.y + perpY * rightOffset);
+                xs[3] = (int) (from.x + perpX * rightOffset);
+                ys[3] = (int) (from.y + perpY * rightOffset);
+
+                Polygon poly = new Polygon(xs, ys, 4);
+                if (poly.contains(mx, my)) {
+                    return lanes.get(i);
+                }
+            }
+
+            return null;
+        }
+
         private void renderVehiclesOnLane(java.awt.Graphics2D g2, Lane lane, float centerOffset, float perpX, float perpY) {
             List<gamelogic.Vehicle> vehicles = lane.getVehicles();
             if (vehicles.isEmpty()) return;
@@ -230,11 +286,48 @@ public class RoadPanel extends JPanel {
             }
         });
 
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                handleClick(e.getX(), e.getY());
+            }
+        });
+
         loadImages();
     }
 
     private void updateDisplay() {
         repaint();
+    }
+
+    private void handleClick(int mx, int my) {
+        // Check nodes first (clicking a node takes precedence)
+        for (DisplayNode dn : nodes) {
+            float dx = mx - dn.x;
+            float dy = my - dn.y;
+            if (dx * dx + dy * dy <= NODE_OFFSET * NODE_OFFSET) {
+                // Log node id
+                try {
+                    Logger.logLine("NODE [" + dn.node.getId() + "] CLICKED");
+                } catch (Exception ex) {
+                    Logger.logLine("NODE clicked");
+                }
+                return;
+            }
+        }
+
+        // Then check lanes
+        for (DisplayEdge de : edges) {
+            Lane lane = de.hitTestLane(mx, my);
+            if (lane != null) {
+                try {
+                    Logger.logLine("LANE [" + lane.getId() + "] CLICKED");
+                } catch (Exception ex) {
+                    Logger.logLine("LANE clicked");
+                }
+                return;
+            }
+        }
     }
 
     private void loadImages() {
