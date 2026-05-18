@@ -10,7 +10,7 @@ import utils.ObjectRegistry;
  * the vehicle will enter the two neighbouring nodes. 
  */
 public class Node implements Inspectable{
-    String id;
+    public String id;
 
     protected final List<Neighbour> neighbours;
 

@@ -16,7 +16,7 @@ import utils.RandomGenerator;
  */
 public class Lane implements Updatable, Inspectable {
     // Lane identification
-    String id;
+    public String id;
     private RoadSegment roadSegment;
     private int laneCount;
 

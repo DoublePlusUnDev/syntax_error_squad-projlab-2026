@@ -29,7 +29,8 @@ import utils.Logger;
 
 public class RoadPanel extends JPanel {
     class DisplayNode {
-        float x, y;
+        float x;
+        float y;
         Node node;
         public DisplayNode(float x, float y, Node node) {
             this.x = x;
@@ -50,19 +51,20 @@ public class RoadPanel extends JPanel {
     }
 
     class DisplayEdge {
-        DisplayNode from, to;
+        DisplayNode start;
+        DisplayNode end;
         RoadSegment segment;
         public DisplayEdge(DisplayNode from, DisplayNode to, RoadSegment segment) {
-            this.from = from;
-            this.to = to;
+            this.start = from;
+            this.end = to;
             this.segment = segment;
         }
         public void render(java.awt.Graphics2D g2) {
             List<Lane> lanes = segment.getLanes();
 
             // Vector from start to end
-            float dx = to.x - from.x;
-            float dy = to.y - from.y;
+            float dx = end.x - start.x;
+            float dy = end.y - start.y;
             float dist = (float) Math.sqrt(dx * dx + dy * dy);
 
             if (dist < 0.01f) return; // Skip if nodes are too close
@@ -78,7 +80,7 @@ public class RoadPanel extends JPanel {
 
             // Precompute center offsets for lanes so lane 0 is the lowest Y and higher indices have higher Y
             float[] centerOffsets = new float[lanes.size()];
-            if (lanes.size() > 0) {
+            if (!lanes.isEmpty()) {
                 if (perpY >= 0f) {
                     for (int i = 0; i < lanes.size(); i++) {
                         centerOffsets[i] = startOffset + i * laneSpacing;
@@ -98,14 +100,14 @@ public class RoadPanel extends JPanel {
 
                 int[] xs = new int[4];
                 int[] ys = new int[4];
-                xs[0] = (int) (from.x + perpX * leftOffset);
-                ys[0] = (int) (from.y + perpY * leftOffset);
-                xs[1] = (int) (to.x + perpX * leftOffset);
-                ys[1] = (int) (to.y + perpY * leftOffset);
-                xs[2] = (int) (to.x + perpX * rightOffset);
-                ys[2] = (int) (to.y + perpY * rightOffset);
-                xs[3] = (int) (from.x + perpX * rightOffset);
-                ys[3] = (int) (from.y + perpY * rightOffset);
+                xs[0] = (int) (start.x + perpX * leftOffset);
+                ys[0] = (int) (start.y + perpY * leftOffset);
+                xs[1] = (int) (end.x + perpX * leftOffset);
+                ys[1] = (int) (end.y + perpY * leftOffset);
+                xs[2] = (int) (end.x + perpX * rightOffset);
+                ys[2] = (int) (end.y + perpY * rightOffset);
+                xs[3] = (int) (start.x + perpX * rightOffset);
+                ys[3] = (int) (start.y + perpY * rightOffset);
 
                 g2.setColor(laneColor);
                 g2.fillPolygon(xs, ys, 4);
@@ -122,14 +124,14 @@ public class RoadPanel extends JPanel {
 
                 int[] xs = new int[4];
                 int[] ys = new int[4];
-                xs[0] = (int) (from.x + perpX * sepLeft);
-                ys[0] = (int) (from.y + perpY * sepLeft);
-                xs[1] = (int) (to.x + perpX * sepLeft);
-                ys[1] = (int) (to.y + perpY * sepLeft);
-                xs[2] = (int) (to.x + perpX * sepRight);
-                ys[2] = (int) (to.y + perpY * sepRight);
-                xs[3] = (int) (from.x + perpX * sepRight);
-                ys[3] = (int) (from.y + perpY * sepRight);
+                xs[0] = (int) (start.x + perpX * sepLeft);
+                ys[0] = (int) (start.y + perpY * sepLeft);
+                xs[1] = (int) (end.x + perpX * sepLeft);
+                ys[1] = (int) (end.y + perpY * sepLeft);
+                xs[2] = (int) (end.x + perpX * sepRight);
+                ys[2] = (int) (end.y + perpY * sepRight);
+                xs[3] = (int) (start.x + perpX * sepRight);
+                ys[3] = (int) (start.y + perpY * sepRight);
 
                 g2.fillPolygon(xs, ys, 4);
             }
@@ -145,8 +147,8 @@ public class RoadPanel extends JPanel {
         public Lane hitTestLane(int mx, int my) {
             List<Lane> lanes = segment.getLanes();
 
-            float dx = to.x - from.x;
-            float dy = to.y - from.y;
+            float dx = end.x - start.x;
+            float dy = end.y - start.y;
             float dist = (float) Math.sqrt(dx * dx + dy * dy);
             if (dist < 0.01f) return null;
 
@@ -158,7 +160,7 @@ public class RoadPanel extends JPanel {
             float startOffset = -totalCenterSpan / 2f;
 
             float[] centerOffsets = new float[lanes.size()];
-            if (lanes.size() > 0) {
+            if (!lanes.isEmpty()) {
                 if (perpY >= 0f) {
                     for (int i = 0; i < lanes.size(); i++) {
                         centerOffsets[i] = startOffset + i * laneSpacing;
@@ -177,14 +179,14 @@ public class RoadPanel extends JPanel {
 
                 int[] xs = new int[4];
                 int[] ys = new int[4];
-                xs[0] = (int) (from.x + perpX * leftOffset);
-                ys[0] = (int) (from.y + perpY * leftOffset);
-                xs[1] = (int) (to.x + perpX * leftOffset);
-                ys[1] = (int) (to.y + perpY * leftOffset);
-                xs[2] = (int) (to.x + perpX * rightOffset);
-                ys[2] = (int) (to.y + perpY * rightOffset);
-                xs[3] = (int) (from.x + perpX * rightOffset);
-                ys[3] = (int) (from.y + perpY * rightOffset);
+                xs[0] = (int) (start.x + perpX * leftOffset);
+                ys[0] = (int) (start.y + perpY * leftOffset);
+                xs[1] = (int) (end.x + perpX * leftOffset);
+                ys[1] = (int) (end.y + perpY * leftOffset);
+                xs[2] = (int) (end.x + perpX * rightOffset);
+                ys[2] = (int) (end.y + perpY * rightOffset);
+                xs[3] = (int) (start.x + perpX * rightOffset);
+                ys[3] = (int) (start.y + perpY * rightOffset);
 
                 Polygon poly = new Polygon(xs, ys, 4);
                 if (poly.contains(mx, my)) {
@@ -200,8 +202,8 @@ public class RoadPanel extends JPanel {
             if (vehicles.isEmpty()) return;
 
             // Vector from start to end
-            float dx = to.x - from.x;
-            float dy = to.y - from.y;
+            float dx = end.x - start.x;
+            float dy = end.y - start.y;
             float segmentLength = (float) Math.sqrt(dx * dx + dy * dy);
             float dirX = dx / segmentLength;
             float dirY = dy / segmentLength;
@@ -219,8 +221,8 @@ public class RoadPanel extends JPanel {
                 }
 
                 // Calculate vehicle position on the lane
-                float vehicleX = from.x + dirX * segmentLength * positionAlongLane + perpX * centerOffset;
-                float vehicleY = from.y + dirY * segmentLength * positionAlongLane + perpY * centerOffset;
+                float vehicleX = start.x + dirX * segmentLength * positionAlongLane + perpX * centerOffset;
+                float vehicleY = start.y + dirY * segmentLength * positionAlongLane + perpY * centerOffset;
 
                 // Draw vehicle sprite based on type
                 if (vehicle instanceof gamelogic.SnowPlow) {
@@ -267,11 +269,13 @@ public class RoadPanel extends JPanel {
     private transient List<DisplayEdge> edges = new ArrayList<>();
 
     private final GameLogic gameLogic;
+    private final GamePanel gamePanel;
     private final Random random = new Random();
 
-    public RoadPanel(GameLogic gameLogic) {
+    public RoadPanel(GameLogic gameLogic, GamePanel gamePanel) {
         setBackground(UIStyles.backgroundColor);
         this.gameLogic = gameLogic;
+        this.gamePanel = gamePanel;
         gameLogic.addGameStateChangeListener(this::updateDisplay);
         gameLogic.addTopologyChangedListener(() -> {
             recalculateRoads();
@@ -309,6 +313,7 @@ public class RoadPanel extends JPanel {
                 // Log node id
                 try {
                     Logger.logLine("NODE [" + dn.node.getId() + "] CLICKED");
+                    gamePanel.nodeClicked(dn.node);
                 } catch (Exception ex) {
                     Logger.logLine("NODE clicked");
                 }
@@ -322,6 +327,8 @@ public class RoadPanel extends JPanel {
             if (lane != null) {
                 try {
                     Logger.logLine("LANE [" + lane.getId() + "] CLICKED");
+                    gamePanel.laneClicked(lane);
+                    
                 } catch (Exception ex) {
                     Logger.logLine("LANE clicked");
                 }
@@ -432,8 +439,8 @@ public class RoadPanel extends JPanel {
 
             // Attractive forces along edges.
             for (DisplayEdge edge : edges) {
-                Integer fromIndex = nodeIndex.get(edge.from);
-                Integer toIndex = nodeIndex.get(edge.to);
+                Integer fromIndex = nodeIndex.get(edge.start);
+                Integer toIndex = nodeIndex.get(edge.end);
                 if (fromIndex == null || toIndex == null || fromIndex.equals(toIndex)) {
                     continue;
                 }

@@ -5,6 +5,7 @@ import gamelogic.GameLogic;
 import gamelogic.Player;
 import gamelogic.SnowPlow;
 import gamelogic.SnowPlowPlayer;
+import gamelogic.Vehicle;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,8 @@ public class VehiclePanel extends JPanel {
     private JLabel topLabel;
     private List<JLabel> vehicleLabels = new ArrayList<>();
     private GameLogic gameLogic;
+
+    private Vehicle selectedVehicle = null;
 
     public VehiclePanel(GameLogic gameLogic) {
         this.gameLogic = gameLogic;
@@ -41,7 +44,7 @@ public class VehiclePanel extends JPanel {
 
         topLabel.setText("Járművek: ");
     
-        vehicleLabels.forEach(label -> remove(label));
+        vehicleLabels.forEach(this::remove);
         vehicleLabels.clear();
 
         switch (player) {
@@ -50,6 +53,13 @@ public class VehiclePanel extends JPanel {
                     JLabel label = UIFactory.createLabel("- Hókotró " + snowPlow.id, 16.0f);
                     vehicleLabels.add(label);
                     add(label, BorderLayout.CENTER);
+                    label.addMouseListener(new java.awt.event.MouseAdapter() {
+                        @Override
+                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                            selectedVehicle = snowPlow;
+                            topLabel.setText("Kiválasztott jármű: Hókotró " + snowPlow.id);
+                        }
+                    });
                 }
             }
             case BusPlayer busPlayer -> {
@@ -57,6 +67,13 @@ public class VehiclePanel extends JPanel {
                 JLabel label = UIFactory.createLabel("- Busz " + bus.id, 16.0f);
                 vehicleLabels.add(label);
                 add(label, BorderLayout.CENTER);
+                label.addMouseListener(new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                        selectedVehicle = bus;
+                        topLabel.setText("Kiválasztott jármű: Busz " + bus.id);
+                    }
+                });
             }
             default -> {
                 JLabel label = UIFactory.createLabel("- Nincs játékos kiválasztva.", 16.0f);
@@ -64,5 +81,9 @@ public class VehiclePanel extends JPanel {
                 add(label, BorderLayout.CENTER);
             }
         }
+    }
+
+    public Vehicle getSelectedVehicle() {
+        return selectedVehicle;
     }
 }
