@@ -2,6 +2,7 @@ package gamelogic;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import utils.Logger;
 
 /**
@@ -20,6 +21,8 @@ public class GameLogic {
 
     private Player currentPlayer = null;
     public static GameLogic instance;
+
+    private Map<Vehicle, Boolean> hasMoved;
 
     public GameLogic() {
         roads = null;
@@ -64,11 +67,37 @@ public class GameLogic {
         topologyChangedListeners.add(listener);
     }
 
+    private void changePlayer(Player player) {
+        if (!players.contains(player)) {
+            Logger.logError("Error: Player with id " + player.id + " does not exist.");
+            return;
+        }
+
+        
+
+        currentPlayer = player;
+        hasMoved = new java.util.HashMap<>();
+        if (player instanceof SnowPlowPlayer snowPlowPlayer){
+            snowPlowPlayer.getSnowPlows().forEach(snowPlow -> hasMoved.put(snowPlow, false));
+        }
+        else if (player instanceof BusPlayer busPlayer){
+            hasMoved = new java.util.HashMap<>();
+            hasMoved.put(busPlayer.getBus(), false);
+        }
+
+        gameStateChangeListeners.forEach(Runnable::run);
+    }
+
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
     public void moveVehicle(Vehicle vehicle, Node targetNode) {
+        if (hasMoved.getOrDefault(vehicle, false)) {
+            Logger.logError("Error: Vehicle with id " + vehicle.id + " has already moved this turn.");
+            return;
+        }
+        hasMoved.put(vehicle, true);
         roads.tryMoveTowardsNode(vehicle, targetNode);
     }
 

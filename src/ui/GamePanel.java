@@ -67,7 +67,7 @@ public class GamePanel extends JPanel {
 
     public void nodeClicked(Node node) {
         Vehicle selectedVehicle = vehiclePanel.getSelectedVehicle();
-        
+
         if (selectedVehicle == null)
             return;
 
