@@ -27,7 +27,7 @@ public class GamePanel extends JPanel {
         this.gameLogic = gameLogic;
         
         JTabbedPane infoPages = new JTabbedPane();
-        vehiclePanel = new VehiclePanel(gameLogic);
+        vehiclePanel = new VehiclePanel(gameLogic, commandInterpreter);
         infoPages.addTab("Járművek", vehiclePanel);
 
         inventoryPanel = new InventoryPanel();
