@@ -227,11 +227,11 @@ public class RoadPanel extends JPanel {
                 // Draw vehicle sprite based on type
                 if (vehicle instanceof gamelogic.SnowPlow) {
                     if (snowPlowImage != null) {
-                        g2.drawImage(snowPlowImage, (int)(vehicleX - VEHICLE_OFFSET), (int)(vehicleY - VEHICLE_OFFSET), VEHICLE_SIZE, VEHICLE_SIZE, null);
+                        g2.drawImage(vehiclePanel.getSelectedVehicle() == vehicle ? snowPlowSelectedImage : snowPlowImage, (int)(vehicleX - VEHICLE_OFFSET), (int)(vehicleY - VEHICLE_OFFSET), VEHICLE_SIZE, VEHICLE_SIZE, null);
                     }
                 } else if (vehicle instanceof gamelogic.Bus) {
                     if (busImage != null) {
-                        g2.drawImage(busImage, (int)(vehicleX - VEHICLE_OFFSET), (int)(vehicleY - VEHICLE_OFFSET), VEHICLE_SIZE, VEHICLE_SIZE, null);
+                        g2.drawImage(vehiclePanel.getSelectedVehicle() == vehicle ? busSelectedImage : busImage, (int)(vehicleX - VEHICLE_OFFSET), (int)(vehicleY - VEHICLE_OFFSET), VEHICLE_SIZE, VEHICLE_SIZE, null);
                     }
                 } else if (vehicle instanceof gamelogic.Car) {
                     if (carImage != null) {
@@ -243,7 +243,9 @@ public class RoadPanel extends JPanel {
     }
 
     private transient BufferedImage snowPlowImage;
+    private transient BufferedImage snowPlowSelectedImage;
     private transient BufferedImage busImage;
+    private transient BufferedImage busSelectedImage;
     private transient BufferedImage carImage;
     private transient BufferedImage apartmentImage;
     private transient BufferedImage busStopImage;
@@ -271,16 +273,20 @@ public class RoadPanel extends JPanel {
     private final GameLogic gameLogic;
     private final GamePanel gamePanel;
     private final Random random = new Random();
+    private final VehiclePanel vehiclePanel;
 
-    public RoadPanel(GameLogic gameLogic, GamePanel gamePanel) {
+    public RoadPanel(GameLogic gameLogic, GamePanel gamePanel, VehiclePanel vehiclePanel) {
         setBackground(UIStyles.backgroundColor);
         this.gameLogic = gameLogic;
         this.gamePanel = gamePanel;
+        this.vehiclePanel = vehiclePanel;
         gameLogic.addGameStateChangeListener(this::updateDisplay);
         gameLogic.addTopologyChangedListener(() -> {
             recalculateRoads();
             updateDisplay();
         });
+
+        vehiclePanel.addSelectionChangeListener(this::updateDisplay);
 
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -340,8 +346,10 @@ public class RoadPanel extends JPanel {
     private void loadImages() {
         try {
             snowPlowImage = ImageIO.read(new File("resources/sprites/Snowplow.png"));
+            snowPlowSelectedImage = ImageIO.read(new File("resources/sprites/Snowplow_Selected.png"));
             carImage = ImageIO.read(new File("resources/sprites/Car.png"));
             busImage = ImageIO.read(new File("resources/sprites/Bus.png"));
+            busSelectedImage = ImageIO.read(new File("resources/sprites/Bus_Selected.png"));
             apartmentImage = ImageIO.read(new File("resources/sprites/Apartment.png"));
             busStopImage = ImageIO.read(new File("resources/sprites/BusStop.png"));
             nodeImage = ImageIO.read(new File("resources/sprites/Node.png"));

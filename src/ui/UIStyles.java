@@ -8,4 +8,5 @@ public class UIStyles {
     static Color borderColor = new Color(159, 204, 243);
     static Color buttonBackgroundColor = new Color(81, 105, 125);
     static Color invalidColor = new Color(255, 100, 100);
+    static Color selectedColor = new Color(235, 185, 70);
 }

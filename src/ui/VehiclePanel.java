@@ -14,6 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class VehiclePanel extends JPanel {
+    private List<Runnable> selectionChangeListeners = new ArrayList<>();
+
     private Player player;
     private JLabel topLabel;
     private List<JLabel> vehicleLabels = new ArrayList<>();
@@ -58,6 +60,7 @@ public class VehiclePanel extends JPanel {
                         public void mouseClicked(java.awt.event.MouseEvent evt) {
                             selectedVehicle = snowPlow;
                             topLabel.setText("Kiválasztott jármű: Hókotró " + snowPlow.id);
+                            selectionChangeListeners.forEach(Runnable::run);
                         }
                     });
                 }
@@ -72,6 +75,7 @@ public class VehiclePanel extends JPanel {
                     public void mouseClicked(java.awt.event.MouseEvent evt) {
                         selectedVehicle = bus;
                         topLabel.setText("Kiválasztott jármű: Busz " + bus.id);
+                        selectionChangeListeners.forEach(Runnable::run);
                     }
                 });
             }
@@ -85,5 +89,9 @@ public class VehiclePanel extends JPanel {
 
     public Vehicle getSelectedVehicle() {
         return selectedVehicle;
+    }
+
+    public void addSelectionChangeListener(Runnable listener) {
+        selectionChangeListeners.add(listener);
     }
 }

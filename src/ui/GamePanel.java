@@ -25,13 +25,8 @@ public class GamePanel extends JPanel {
         setBackground(UIStyles.backgroundColor);
         this.commandInterpreter = commandInterpreter;
         this.gameLogic = gameLogic;
-
-        RoadPanel roadPanel = new RoadPanel(gameLogic, this);
-        add(roadPanel, BorderLayout.CENTER);
-
-        JTabbedPane infoPages = new JTabbedPane();
         
-
+        JTabbedPane infoPages = new JTabbedPane();
         vehiclePanel = new VehiclePanel(gameLogic);
         infoPages.addTab("Járművek", vehiclePanel);
 
@@ -49,6 +44,11 @@ public class GamePanel extends JPanel {
         infoPages.setPreferredSize(new Dimension(infoPages.getPreferredSize().width, 300));
 
         add(infoPages, BorderLayout.SOUTH);
+
+        RoadPanel roadPanel = new RoadPanel(gameLogic, this, vehiclePanel);
+        add(roadPanel, BorderLayout.CENTER);
+
+        
 
         //gameLogic.addGameStateChangeListener(this::gameStateChanged);
     }
