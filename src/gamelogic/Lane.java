@@ -15,10 +15,13 @@ import utils.RandomGenerator;
  * via the parent RoadSegment when multiple lanes are involved.
  */
 public class Lane implements Updatable, Inspectable {
+    private List<Runnable> onChangeCallback = new ArrayList<>();
+
     // Lane identification
     public String id;
     private RoadSegment roadSegment;
-    private int laneCount;
+    // 0-based index of this lane within its parent RoadSegment
+    private int laneIndex;
 
     // Snow and ice state
     private float snowHeight = 0;
@@ -46,11 +49,11 @@ public class Lane implements Updatable, Inspectable {
 
     // ==================== Initialization ====================
 
-    public Lane(String id, RoadSegment roadSegment, int laneCount) {
+    public Lane(String id, RoadSegment roadSegment, int laneIndex) {
         this.id = id;
         ObjectRegistry.register(id, this);
         this.roadSegment = roadSegment;
-        this.laneCount = laneCount;
+        this.laneIndex = laneIndex;
         GameLogic.getInstance().registerUpdatable(this);
     }
 
@@ -220,8 +223,11 @@ public class Lane implements Updatable, Inspectable {
         return roadSegment;
     }
 
+    /**
+     * Returns the 0-based index of this lane inside its RoadSegment.
+     */
     public int getCount() {
-        return laneCount;
+        return laneIndex;
     }
 
     public List<Vehicle> getVehicles() {
@@ -236,6 +242,7 @@ public class Lane implements Updatable, Inspectable {
 
         Logger.logLine("LANE [" + id + "] CHANGED [snowHeight] FROM [" + this.snowHeight + "] TO [" + height + "]");
         this.snowHeight = height;
+        onChangeCallback.forEach(Runnable::run);
     }
 
     public void setIcingProgress(int progress) {
@@ -244,6 +251,7 @@ public class Lane implements Updatable, Inspectable {
         
         Logger.logLine("LANE [" + id + "] CHANGED [icingProgress] FROM [" + this.icingProgress + "] TO [" + progress + "]");
         this.icingProgress = progress;
+        onChangeCallback.forEach(Runnable::run);
     }
 
     public void setIced(boolean iced) {
@@ -252,6 +260,7 @@ public class Lane implements Updatable, Inspectable {
         
         Logger.logLine("LANE [" + id + "] CHANGED [iced] FROM [" + this.iced + "] TO [" + iced + "]");
         this.iced = iced;
+        onChangeCallback.forEach(Runnable::run);
     }
 
     public void setVehicleBlock(boolean vehicleBlock) {
@@ -260,6 +269,7 @@ public class Lane implements Updatable, Inspectable {
         
         Logger.logLine("LANE [" + id + "] CHANGED [vehicleBlock] FROM [" + this.vehicleBlock + "] TO [" + vehicleBlock + "]");
         this.vehicleBlock = vehicleBlock;
+        onChangeCallback.forEach(Runnable::run);
     }
 
     public void setIceDebris(boolean iceDebris) {
@@ -268,6 +278,7 @@ public class Lane implements Updatable, Inspectable {
         
         Logger.logLine("LANE [" + id + "] CHANGED [iceDebris] FROM [" + this.iceDebris + "] TO [" + iceDebris + "]");
         this.iceDebris = iceDebris;
+        onChangeCallback.forEach(Runnable::run);
     }
 
     public void setSaltedTimer(int saltedTimer) {
@@ -276,6 +287,7 @@ public class Lane implements Updatable, Inspectable {
         
         Logger.logLine("LANE [" + id + "] CHANGED [saltedTimer] FROM [" + this.saltedTimer + "] TO [" + saltedTimer + "]");
         this.saltedTimer = saltedTimer;
+        onChangeCallback.forEach(Runnable::run);
     }
 
     public void setGravelHeight(float gravelHeight) {
@@ -284,18 +296,25 @@ public class Lane implements Updatable, Inspectable {
 
         Logger.logLine("LANE [" + id + "] CHANGED [gravelHeight] FROM [" + this.gravelHeight + "] TO [" + gravelHeight + "]");
         this.gravelHeight = gravelHeight;
+        onChangeCallback.forEach(Runnable::run);
     }
 
     public void addVehicle(Vehicle vehicle) {
         vehicles.add(vehicle);
+        onChangeCallback.forEach(Runnable::run);
     }
 
     public void removeVehicle(Vehicle vehicle) {
         vehicles.remove(vehicle);
+        onChangeCallback.forEach(Runnable::run);
     }
 
     public String getId() {
         return id;
+    }
+
+    public void addOnChangeListener(Runnable callback) {
+        onChangeCallback.add(callback);
     }
 
     // ==================== Lifecycle ====================

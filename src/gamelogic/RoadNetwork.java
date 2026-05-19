@@ -18,7 +18,8 @@ import utils.RandomGenerator;
  * Snow can be added to in a radius of a node.
  */
 public class RoadNetwork implements Inspectable {
-    public List<Runnable> topologyChangedListeners = new ArrayList<>();
+    private List<Runnable> topologyChangedCallback = new ArrayList<>();
+    private List<Runnable> stateChangeCallback = new ArrayList<>();
 
     public String id;
     private RoadGenerationParameters generationParameters;
@@ -35,6 +36,8 @@ public class RoadNetwork implements Inspectable {
         roadSegments = new ArrayList<>();
         vehicles = new ArrayList<>();
     }
+
+    
 
     public boolean tryMoveTowardsNode(Vehicle vehicle, Node node) {
         Lane nextLane = findNextLaneInPath(vehicle, node); //figure out later
@@ -254,7 +257,7 @@ public class RoadNetwork implements Inspectable {
 
     public void addNode(Node node){
         nodes.add(node);
-        topologyChangedListeners.forEach(Runnable::run);
+        topologyChangedCallback.forEach(Runnable::run);
     }
 
     public void addRoadSegment(RoadSegment roadSegment) {
@@ -269,7 +272,8 @@ public class RoadNetwork implements Inspectable {
         }
 
         roadSegments.add(roadSegment);
-        topologyChangedListeners.forEach(Runnable::run);
+        topologyChangedCallback.forEach(Runnable::run);
+        roadSegment.addOnChangeListener(() -> stateChangeCallback.forEach(Runnable::run));
     }
 
     public boolean canAddRoadBetween(Node startPoint, Node endPoint) {
@@ -368,8 +372,8 @@ public class RoadNetwork implements Inspectable {
 
         RandomGenerator.shuffleList(nodeTypes);
         
-        //Phase 2
-        //Instantiate the nodes in the order of the shuffled list and connect them in a circle with road segments with the specified number of lanes
+        // Phase 2
+        // Instantiate all nodes first (so addNode/addRoadSegment can be used safely), then connect them in a circle
         for (int i = 0; i < numberOfAllNodes; i++){
             Node node;
 
@@ -383,19 +387,32 @@ public class RoadNetwork implements Inspectable {
             else
                 node = new Node(id + "." + "node" + i);
 
-            nodes.add(node); 
-            Node prevNode = i > 0 ? nodes.get(i-1) : null;
+            addNode(node);
+        }
 
-            RoadSegment segment = new RoadSegment("Mainroad" + i, (Integer) generationParameters.getParameter(RoadGenerationParameters.MAIN_LANES_KEY), prevNode, node);
-            roadSegments.add(segment);
-            if (prevNode != null){
-                nodeConnections.computeIfAbsent(node, k -> new HashSet<>()).add(prevNode);
-                nodeConnections.computeIfAbsent(prevNode, k -> new HashSet<>()).add(node);
+        // connect consecutive nodes
+        for (int i = 1; i < nodes.size(); i++) {
+            Node a = nodes.get(i - 1);
+            Node b = nodes.get(i);
+            if (canAddRoadBetween(a, b)){
+                RoadSegment segment = new RoadSegment("Mainroad" + i, (Integer) generationParameters.getParameter(RoadGenerationParameters.MAIN_LANES_KEY), a, b);
+                addRoadSegment(segment);
+                nodeConnections.computeIfAbsent(a, k -> new HashSet<>()).add(b);
+                nodeConnections.computeIfAbsent(b, k -> new HashSet<>()).add(a);
             }
         }
-        roadSegments.get(0).setStartPoint(nodes.get(nodes.size() - 1));
-        nodeConnections.computeIfAbsent(nodes.get(0), k -> new HashSet<>()).add(nodes.get(nodes.size() - 1));
-        nodeConnections.computeIfAbsent(nodes.get(nodes.size() - 1), k -> new HashSet<>()).add(nodes.get(0));
+
+        // connect last -> first to close the ring
+        if (nodes.size() >= 2) {
+            Node last = nodes.get(nodes.size() - 1);
+            Node first = nodes.get(0);
+            if (canAddRoadBetween(last, first)){
+                RoadSegment segment0 = new RoadSegment("Mainroad0", (Integer) generationParameters.getParameter(RoadGenerationParameters.MAIN_LANES_KEY), last, first);
+                addRoadSegment(segment0);
+                nodeConnections.computeIfAbsent(last, k -> new HashSet<>()).add(first);
+                nodeConnections.computeIfAbsent(first, k -> new HashSet<>()).add(last);
+            }
+        }
 
         //phase 3
         //Add extra connections to big nodes and small nodes
@@ -415,7 +432,7 @@ public class RoadNetwork implements Inspectable {
                 if (!canAddRoadBetween(currentBigNode, potential)) continue;
 
                 RoadSegment segment = new RoadSegment("BigNodeExtraRoad" + currentBigNode.id + "_" + potential.id, (Integer) generationParameters.getParameter(RoadGenerationParameters.BIG_NODE_LANES_KEY), currentBigNode, potential);
-                roadSegments.add(segment);
+                addRoadSegment(segment);
                 nodeConnections.computeIfAbsent(currentBigNode, k -> new HashSet<>()).add(potential);
                 nodeConnections.computeIfAbsent(potential, k -> new HashSet<>()).add(currentBigNode);
                 connectionsAdded++;
@@ -439,7 +456,7 @@ public class RoadNetwork implements Inspectable {
                 if (!canAddRoadBetween(currentSmallNode, potential)) continue;
 
                 RoadSegment segment = new RoadSegment("SmallNodeExtraRoad" + currentSmallNode.id + "_" + potential.id, (Integer) generationParameters.getParameter(RoadGenerationParameters.SMALL_NODE_LANES_KEY), currentSmallNode, potential);
-                roadSegments.add(segment);
+                addRoadSegment(segment);
                 nodeConnections.computeIfAbsent(currentSmallNode, k -> new HashSet<>()).add(potential);
                 nodeConnections.computeIfAbsent(potential, k -> new HashSet<>()).add(currentSmallNode);
                 connectionsAdded++;
@@ -449,7 +466,7 @@ public class RoadNetwork implements Inspectable {
             
         }
 
-        topologyChangedListeners.forEach(Runnable::run);
+        topologyChangedCallback.forEach(Runnable::run);
         
     }
 
@@ -458,10 +475,17 @@ public class RoadNetwork implements Inspectable {
     }
 
     public void addTopologyChangedListener(Runnable listener) {
-        if (topologyChangedListeners.contains(listener)) 
+        if (topologyChangedCallback.contains(listener)) 
             return;
         
-        topologyChangedListeners.add(listener);
+        topologyChangedCallback.add(listener);
+    }
+
+    public void addStateChangeListener(Runnable listener) {
+        if (stateChangeCallback.contains(listener)) 
+            return;
+        
+        stateChangeCallback.add(listener);
     }
 
     @Override

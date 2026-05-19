@@ -1,7 +1,6 @@
 package gamelogic;
 import java.util.ArrayList;
 import java.util.List;
-
 import utils.Logger;
 import utils.ObjectRegistry;
 
@@ -12,6 +11,8 @@ import utils.ObjectRegistry;
  * Can be swept and blown.
  */
 public class RoadSegment implements Inspectable {
+    private List<Runnable> onChangeCallback = new ArrayList<>();
+    
     String id;
     protected List<Lane> lanes;    
     protected Node startPoint;
@@ -24,6 +25,7 @@ public class RoadSegment implements Inspectable {
         lanes = new ArrayList<>();
         for (int i = 0; i < laneCount; i++) {
             lanes.add(new Lane( id + ".lane" + (i + 1), this, i));
+            lanes.get(i).addOnChangeListener(() -> onChangeCallback.forEach(Runnable::run));
         }
 
         this.startPoint = startPoint;
@@ -48,6 +50,14 @@ public class RoadSegment implements Inspectable {
      */
     public List<Lane> getLanes() {
         return lanes;
+    }
+
+    /**
+     * Returns the lane at the given 0-based index, or null if the index is invalid.
+     */
+    public Lane getLane(int index) {
+        if (index < 0 || index >= lanes.size()) return null;
+        return lanes.get(index);
     }
 
      /**
@@ -117,6 +127,11 @@ public class RoadSegment implements Inspectable {
      * @param lane the lane index to enter
      */
     public void enter(Vehicle vehicle, int lane) {
+        if (lane < 0 || lane >= lanes.size()) {
+            Logger.logLine("RoadSegment [" + id + "] invalid lane index: " + lane);
+            return;
+        }
+
         Lane selectedLane = lanes.get(lane);
         selectedLane.driveOver();
         vehicle.enter(selectedLane);
@@ -128,13 +143,19 @@ public class RoadSegment implements Inspectable {
      * @param lane the lane to sweep
      */
     public void sweep(Lane lane){
+        int idx = lanes.indexOf(lane);
+        if (idx == -1) {
+            Logger.logLine("RoadSegment [" + id + "] sweep: lane not found");
+            return;
+        }
+
         float snowLevel = lane.getSnow();
         lane.destroySnow();
         float gravelLevel = lane.getGravel();
         lane.destroyGravel();
 
-        if (!isRightLane(lane)) {
-            Lane laneToTheRight = lanes.get(lanes.indexOf(lane) + 1);
+        if (idx < lanes.size() - 1) {
+            Lane laneToTheRight = lanes.get(idx + 1);
             laneToTheRight.addSnow(snowLevel);
             laneToTheRight.addGravel(gravelLevel);
         }
@@ -174,6 +195,10 @@ public class RoadSegment implements Inspectable {
             startPoint.removeNeighbour(endPoint, this);
             endPoint.removeNeighbour(startPoint, this);
         }
+    }
+
+    public void addOnChangeListener(Runnable callback) {
+        onChangeCallback.add(callback);
     }
 
     protected boolean isRightLane(Lane lane){

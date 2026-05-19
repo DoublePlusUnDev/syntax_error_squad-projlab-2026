@@ -97,6 +97,7 @@ public class GameLogic {
     public void makeRoads(String id) {
         roads = new RoadNetwork(id);
         roads.addTopologyChangedListener(() -> topologyChangedListeners.forEach(Runnable::run));
+        roads.addStateChangeListener(() -> gameStateChangeListeners.forEach(Runnable::run));
     }
 
     public void changeLane(Vehicle vehicle, int targetLane) {
