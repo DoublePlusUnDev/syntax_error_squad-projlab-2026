@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.ToolTipManager;
 import utils.Logger;
 
 public class RoadPanel extends JPanel {
@@ -303,7 +304,66 @@ public class RoadPanel extends JPanel {
             }
         });
 
+        // Show lane inspect text as tooltip when hovering
+        addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                Lane hoverLane = null;
+                for (DisplayEdge de : edges) {
+                    Lane l = de.hitTestLane(e.getX(), e.getY());
+                    if (l != null) { hoverLane = l; break; }
+                }
+
+                if (hoverLane != null) {
+                    try {
+                        StringBuilder sb = new StringBuilder();
+                        sb.append("Lane ").append(hoverLane.getId()).append(": ");
+                        sb.append("Snow=").append(hoverLane.getSnow()).append(", ");
+                        sb.append("Gravel=").append(hoverLane.getGravel()).append(", ");
+                        sb.append("Icing=").append(hoverLane.getIcingProgress()).append(", ");
+                        sb.append("Iced=").append(hoverLane.isIced() ? "yes" : "no").append(", ");
+                        sb.append("Blocked=").append(hoverLane.isBlocked() ? "yes" : "no").append(", ");
+                        sb.append("Vehicles=").append(hoverLane.getVehicles().size());
+                        setToolTipText(sb.toString());
+                    } catch (Exception ex) {
+                        setToolTipText(null);
+                    }
+                } else {
+                    setToolTipText(null);
+                }
+                // Notify ToolTipManager to update immediately
+                ToolTipManager.sharedInstance().mouseMoved(e);
+            }
+        });
+
         loadImages();
+        // Register for tooltips and show immediately
+        ToolTipManager.sharedInstance().registerComponent(this);
+        ToolTipManager.sharedInstance().setInitialDelay(0);
+    }
+
+    @Override
+    public String getToolTipText(MouseEvent event) {
+        if (event == null) return null;
+        for (DisplayEdge de : edges) {
+            Lane l = de.hitTestLane(event.getX(), event.getY());
+            if (l != null) {
+                try {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("Lane ").append(l.getId()).append(": ");
+                    sb.append("Snow=").append(l.getSnow()).append(", ");
+                    sb.append("Gravel=").append(l.getGravel()).append(", ");
+                    sb.append("Icing=").append(l.getIcingProgress()).append(", ");
+                    sb.append("Iced=").append(l.isIced() ? "yes" : "no").append(", ");
+                    sb.append("Blocked=").append(l.isBlocked() ? "yes" : "no").append(", ");
+                    sb.append("Vehicles=").append(l.getVehicles().size());
+                    return sb.toString();
+                } catch (Exception ex) {
+                    return null;
+                }
+            }
+        }
+        return null;
     }
 
     private void updateDisplay() {
