@@ -1,17 +1,24 @@
 package ui;
 
 import gamelogic.BioKerosene;
+import gamelogic.BlowerHead;
 import gamelogic.Buyable;
+import gamelogic.DragonHead;
 import gamelogic.GameLogic;
 import gamelogic.Gravel;
+import gamelogic.GravelThrowerHead;
+import gamelogic.IceBreakerHead;
 import gamelogic.Player;
 import gamelogic.Salt;
+import gamelogic.SalterHead;
 import gamelogic.SnowPlow;
+import gamelogic.SweeperHead;
 import gamelogic.Vehicle;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputAdapter;
+import utils.Logger;
 
 public class StorePanel extends JPanel {
     VehiclePanel vehiclePanel;
@@ -22,6 +29,12 @@ public class StorePanel extends JPanel {
     private JLabel keroseneBuyable ;
     private JLabel saltBuyable;
     private JLabel gravelBuyable;
+    private JLabel sweeperHeadBuyable;
+    private JLabel blowerHeadBuyable;
+    private JLabel iceBreakerHeadBuyable;
+    private JLabel salterHeadBuyable;
+    private JLabel gravelThrowerHeadBuyable;
+    private JLabel dragonHeadBuyable;
 
     public StorePanel(GameLogic gameLogic, VehiclePanel vehiclePanel) {
         this.vehiclePanel = vehiclePanel;
@@ -37,34 +50,53 @@ public class StorePanel extends JPanel {
 
 
 
-        keroseneBuyable = UIFactory.createLabel("Kerosene: ", 16);
-        keroseneBuyable.addMouseListener(new MouseInputAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-                tryBuy(new BioKerosene("Kerosene", 1, 50));
-            }
-        });
+        keroseneBuyable = createBuyableLabel("Kerosene - ${price} - #{amount}", 30, 10, BioKerosene.class);
         add(keroseneBuyable);
 
-        saltBuyable = UIFactory.createLabel("Salt: ", 16);
-        saltBuyable.addMouseListener(new MouseInputAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {                
-                tryBuy(new Salt("Salt", 1, 30));
-            }
-        });
+        saltBuyable = createBuyableLabel("Salt: ${price} - #{amount}", 30, 10, Salt.class);
         add(saltBuyable);
-
-        gravelBuyable = UIFactory.createLabel("Gravel: ", 16);
-        gravelBuyable.addMouseListener(new MouseInputAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {                
-                tryBuy(new Gravel("Gravel", 1, 20));
-            }
-        });
+        
+        gravelBuyable = createBuyableLabel("Gravel: ${price} - #{amount}", 20, 10, Gravel.class);
         add(gravelBuyable);
 
+        sweeperHeadBuyable = createBuyableLabel("Sweeper Head: ${price} - #{amount}", 100, 1, SweeperHead.class);
+        add(sweeperHeadBuyable);
+
+        blowerHeadBuyable = createBuyableLabel("Blower Head: ${price} - #{amount}", 100, 1, BlowerHead.class);
+        add(blowerHeadBuyable);
+
+        iceBreakerHeadBuyable = createBuyableLabel("Ice Breaker Head: ${price} - #{amount}", 100, 1, IceBreakerHead.class);
+        add(iceBreakerHeadBuyable);
+
+        salterHeadBuyable = createBuyableLabel("Salter Head: ${price} - #{amount}", 100, 1, SalterHead.class);
+        add(salterHeadBuyable);
+
+        gravelThrowerHeadBuyable = createBuyableLabel("Gravel Thrower Head: ${price} - #{amount}", 100, 1, GravelThrowerHead.class);
+        add(gravelThrowerHeadBuyable);
+
+        dragonHeadBuyable = createBuyableLabel("Dragon Head: ${price} - #{amount}", 100, 1, DragonHead.class);
+        add(dragonHeadBuyable);
+
         gameLogic.addGameStateChangeListener(this::update);
+
+        
+    }
+
+    public final JLabel createBuyableLabel(String title, int price, int amount, Class <? extends Buyable> buyableClass) {
+        String modfiedTitle = title.replace("{price}", String.valueOf(price)).replace("{amount}", String.valueOf(amount));
+        JLabel label = UIFactory.createLabel(modfiedTitle, 16);
+        label.addMouseListener(new MouseInputAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {                
+                try {
+                    Buyable buyable = buyableClass.getConstructor(String.class, int.class, int.class).newInstance(title, amount, price);
+                    tryBuy(buyable);
+                } catch (Exception ex) {
+                    Logger.logError("Error creating buyable: " + ex.getMessage());
+                }
+            }
+        });
+        return label;
     }
 
     public void update() {
