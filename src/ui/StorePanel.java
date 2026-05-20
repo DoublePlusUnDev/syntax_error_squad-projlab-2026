@@ -1,19 +1,19 @@
 package ui;
 
-import gamelogic.BioKerosene;
-import gamelogic.BlowerHead;
-import gamelogic.Buyable;
-import gamelogic.DragonHead;
 import gamelogic.GameLogic;
-import gamelogic.Gravel;
-import gamelogic.GravelThrowerHead;
-import gamelogic.IceBreakerHead;
 import gamelogic.Player;
-import gamelogic.Salt;
-import gamelogic.SalterHead;
 import gamelogic.SnowPlow;
-import gamelogic.SweeperHead;
 import gamelogic.Vehicle;
+import gamelogic.buyables.BioKerosene;
+import gamelogic.buyables.BlowerHead;
+import gamelogic.buyables.Buyable;
+import gamelogic.buyables.DragonHead;
+import gamelogic.buyables.Gravel;
+import gamelogic.buyables.GravelThrowerHead;
+import gamelogic.buyables.IceBreakerHead;
+import gamelogic.buyables.Salt;
+import gamelogic.buyables.SalterHead;
+import gamelogic.buyables.SweeperHead;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -21,20 +21,20 @@ import javax.swing.event.MouseInputAdapter;
 import utils.Logger;
 
 public class StorePanel extends JPanel {
-    VehiclePanel vehiclePanel;
-    GameLogic gameLogic;
+    private final VehiclePanel vehiclePanel;
+    private final GameLogic gameLogic;
 
-    private JLabel storeLabel;
-    private JLabel moneyLabel;
-    private JLabel keroseneBuyable ;
-    private JLabel saltBuyable;
-    private JLabel gravelBuyable;
-    private JLabel sweeperHeadBuyable;
-    private JLabel blowerHeadBuyable;
-    private JLabel iceBreakerHeadBuyable;
-    private JLabel salterHeadBuyable;
-    private JLabel gravelThrowerHeadBuyable;
-    private JLabel dragonHeadBuyable;
+    private final JLabel storeLabel;
+    private final JLabel moneyLabel;
+    private final JLabel keroseneBuyable ;
+    private final JLabel saltBuyable;
+    private final JLabel gravelBuyable;
+    private final JLabel sweeperHeadBuyable;
+    private final JLabel blowerHeadBuyable;
+    private final JLabel iceBreakerHeadBuyable;
+    private final JLabel salterHeadBuyable;
+    private final JLabel gravelThrowerHeadBuyable;
+    private final JLabel dragonHeadBuyable;
 
     public StorePanel(GameLogic gameLogic, VehiclePanel vehiclePanel) {
         this.vehiclePanel = vehiclePanel;

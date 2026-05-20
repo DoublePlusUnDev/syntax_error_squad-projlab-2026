@@ -1,4 +1,10 @@
-package gamelogic;
+package gamelogic.buyables;
+
+import gamelogic.Inventory;
+import gamelogic.Lane;
+import gamelogic.Player;
+import gamelogic.SnowPlowPlayer;
+
 /**
  * An abstract base for a plowhead.
  * Can be checked if it's equipped, can be equipped and unequipped.
@@ -7,6 +13,7 @@ package gamelogic;
 public abstract class PlowHead extends Buyable{
     protected Inventory inventory; 
     protected boolean equipped = false;
+    protected SnowPlowPlayer player;
 
     public PlowHead(String id, int price) {
         super(id, price);
@@ -31,8 +38,9 @@ public abstract class PlowHead extends Buyable{
     /**
      * Equip the plowhead on a player, it'll mark it as equipped.
      */
-    public void equip() {
+    public void equip(SnowPlowPlayer player) {
         equipped = true;
+        this.player = player;
     }
 
     public void unequip() {

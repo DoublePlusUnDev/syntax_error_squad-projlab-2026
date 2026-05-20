@@ -24,15 +24,24 @@ public class Bridge extends RoadSegment {
      * Otherwise, the snow will be moved to the next lane on the right.
      */
     @Override
-    public void sweep(Lane lane) {
+    public float sweep(Lane lane) {
         if (isRightLane(lane))
-            return;
-        
+            return 0;
 
         Lane nextLane = lanes.get(lane.getCount() + 1);
+        float payout = 0;
         float snowLevel = lane.getSnow();
-        lane.destroySnow();
+        payout += lane.destroySnow();
+        float gravelLevel = lane.getGravel();
+        payout += lane.destroyGravel();
+        boolean iceDebris = lane.isDebrisFilled();
+        payout += lane.destroyIceDebris();
+        
         nextLane.addSnow(snowLevel);
+        nextLane.addGravel(gravelLevel);
+        nextLane.setIceDebris(iceDebris);
+
+        return payout;
     }
 
     /**
@@ -44,15 +53,27 @@ public class Bridge extends RoadSegment {
      * Otherwise, the snow will be moved to the rightmost lane.
      */
     @Override
-    public void blow(Lane lane) {
+    public float blow(Lane lane) {
         if (isRightLane(lane))
-            return;
-        
+            return 0;
 
         Lane rightMostLane = lanes.get(lanes.size() - 1);
+        float payout = 0;
+
         float snowLevel = lane.getSnow();
-        lane.destroySnow();
+        payout += lane.destroySnow();
+
+        float gravelLevel = lane.getGravel();
+        payout += lane.destroyGravel();
+
+        boolean iceDebris = lane.isDebrisFilled();
+        payout += lane.destroyIceDebris();
+
         rightMostLane.addSnow(snowLevel);
+        rightMostLane.addGravel(gravelLevel);
+        rightMostLane.setIceDebris(iceDebris);
+
+        return payout;
     }
 
     @Override

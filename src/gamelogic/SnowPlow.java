@@ -1,5 +1,6 @@
 package gamelogic;
 
+import gamelogic.buyables.PlowHead;
 import utils.Logger;
 
 /**
@@ -11,9 +12,11 @@ import utils.Logger;
 public class SnowPlow extends Vehicle{
     private PlowHead plowHead;
     private Inventory inventory;
+    private SnowPlowPlayer player;
 
-    public SnowPlow(String id){
+    public SnowPlow(String id, Player player){
         super(id);
+        this.player = (SnowPlowPlayer) player;
         this.inventory = new Inventory(id + ".inventory");
     }
 
@@ -41,7 +44,7 @@ public class SnowPlow extends Vehicle{
             plowHead.unequip();
         this.plowHead = head;
         Logger.logLine("SNOWPLOW [" + id + "] EQUIPPED [" + head.id + "]");
-        plowHead.equip();
+        plowHead.equip(player);
     }
 
     public Inventory getInventory() {

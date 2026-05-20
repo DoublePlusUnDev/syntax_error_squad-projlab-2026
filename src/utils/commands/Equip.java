@@ -1,9 +1,8 @@
 package utils.commands;
 
-import java.util.Map;
-
-import gamelogic.PlowHead;
 import gamelogic.SnowPlow;
+import gamelogic.buyables.PlowHead;
+import java.util.Map;
 import utils.CommandInterpreter;
 import utils.CommandInterpreter.Command;
 import utils.Logger;

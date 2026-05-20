@@ -1,5 +1,7 @@
-package gamelogic;
+package gamelogic.buyables;
 
+import gamelogic.Inventory;
+import gamelogic.Player;
 import utils.Logger;
 
 /**

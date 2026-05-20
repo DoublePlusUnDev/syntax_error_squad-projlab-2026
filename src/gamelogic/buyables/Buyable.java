@@ -1,5 +1,8 @@
-package gamelogic;
+package gamelogic.buyables;
 
+import gamelogic.Inspectable;
+import gamelogic.Inventory;
+import gamelogic.Player;
 import utils.Logger;
 import utils.ObjectRegistry;
 
@@ -7,7 +10,7 @@ import utils.ObjectRegistry;
  * An item that can be bought if the buyer's inventory has enough money to purchase it.
  */
 public abstract class Buyable implements Inspectable {
-    String id;
+    public String id;
     protected int price;
 
     public Buyable(String id, int price) {

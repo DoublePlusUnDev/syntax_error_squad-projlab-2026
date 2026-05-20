@@ -142,23 +142,28 @@ public class RoadSegment implements Inspectable {
      *
      * @param lane the lane to sweep
      */
-    public void sweep(Lane lane){
+    public float sweep(Lane lane){
         int idx = lanes.indexOf(lane);
         if (idx == -1) {
             Logger.logLine("RoadSegment [" + id + "] sweep: lane not found");
-            return;
+            return 0;
         }
 
+        float payout = 0;
         float snowLevel = lane.getSnow();
-        lane.destroySnow();
+        payout += lane.destroySnow();
         float gravelLevel = lane.getGravel();
-        lane.destroyGravel();
+        payout += lane.destroyGravel();
+        boolean iceDebris = lane.isDebrisFilled();
+        payout += lane.destroyIceDebris();
 
         if (idx < lanes.size() - 1) {
             Lane laneToTheRight = lanes.get(idx + 1);
             laneToTheRight.addSnow(snowLevel);
             laneToTheRight.addGravel(gravelLevel);
+            laneToTheRight.setIceDebris(iceDebris);
         }
+        return payout;
     }
 
     /**
@@ -166,8 +171,13 @@ public class RoadSegment implements Inspectable {
      *
      * @param lane the lane to blow
      */
-    public void blow(Lane lane) {
-        lane.destroySnow();
+    public float blow(Lane lane) {
+        float payout = lane.destroySnow();
+        payout += lane.destroySnow();
+        payout += lane.destroyGravel();
+        payout += lane.destroyIceDebris();
+        return payout;
+
     }
 
     @Override

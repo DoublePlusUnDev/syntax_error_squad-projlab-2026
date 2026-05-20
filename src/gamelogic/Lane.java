@@ -47,6 +47,10 @@ public class Lane implements Updatable, Inspectable {
     private static final float SLIP_CHANCE = 0.5f;
     private static final float GRAVEL_OVER_SNOW_BUFFER = 0.1f;
 
+    //money constant
+    private static final float SNOW_CLEAR_PAYOUT = 10f;
+    private static final float ICE_CLEAR_PAYOUT = 20f;
+
     // ==================== Initialization ====================
 
     public Lane(String id, RoadSegment roadSegment, int laneIndex) {
@@ -117,8 +121,9 @@ public class Lane implements Updatable, Inspectable {
         setGravelHeight(gravelHeight + gravelLevel);
     }
 
-    public void throwGravel() {
+    public float throwGravel() {
         setGravelHeight(snowHeight + GRAVEL_OVER_SNOW_BUFFER);
+        return 0;
     }
 
     /**
@@ -151,54 +156,68 @@ public class Lane implements Updatable, Inspectable {
     /**
      * Applies salt to the lane. Reduces snow over time and eventually destroys ice.
      */
-    public void salt() {
+    public float salt() {
         setSaltedTimer(5);
+        return 0;
     }
 
     /**
      * Breaks the ice on the lane, converting it to debris.
      */
-    public void breakIce() {
+    public float breakIce() {
         if (iced) {
             setIced(false);
             setIceDebris(true);
             Logger.logLine("LANE [" + id + "] ICE BROKEN");
         }
+        return 0;
     }
 
     /**
      * Completely removes all snow from the lane.
      */
-    public void destroySnow() {
+    public float destroySnow() {
+        float prevSnow = snowHeight;
         setSnowHeight(0);
         Logger.logLine("LANE [" + id + "] SNOW DESTROYED");
+        return prevSnow * SNOW_CLEAR_PAYOUT;
     }
 
-    public void destroyGravel() {
+    public float destroyIceDebris() {
+        boolean hadDebris = iceDebris;
+        setIceDebris(false);
+        Logger.logLine("LANE [" + id + "] ICE DEBRIS DESTROYED");
+        return hadDebris ? ICE_CLEAR_PAYOUT : 0;
+    }
+
+    public float destroyGravel() {
         setGravelHeight(0);
         Logger.logLine("LANE [" + id + "] GRAVEL DESTROYED");
+        return 0;
     }
 
     /**
      * Removes the ice from the lane without creating debris.
      */
-    public void destroyIce() {
+    public float destroyIce() {
+        boolean wasIced = iced;
         setIced(false);
         Logger.logLine("LANE [" + id + "] ICE DESTROYED");
+        return wasIced ? ICE_CLEAR_PAYOUT : 0;
     }
 
     /**
      * Delegates sweeping to the parent road segment.
      */
-    public void sweep() {
-        roadSegment.sweep(this);
+    public float sweep() {
+        return roadSegment.sweep(this);
     }
 
     /**
      * Delegates blowing to the parent road segment.
      */
-    public void blow() {
-        roadSegment.blow(this);
+    public float blow() {
+        return roadSegment.blow(this);
     }
 
     // ==================== Accessors ====================

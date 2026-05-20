@@ -7,14 +7,14 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import gamelogic.BlowerHead;
-import gamelogic.DragonHead;
-import gamelogic.GravelThrowerHead;
-import gamelogic.IceBreakerHead;
 import gamelogic.Inventory;
-import gamelogic.PlowHead;
-import gamelogic.SalterHead;
-import gamelogic.SweeperHead;
+import gamelogic.buyables.BlowerHead;
+import gamelogic.buyables.DragonHead;
+import gamelogic.buyables.GravelThrowerHead;
+import gamelogic.buyables.IceBreakerHead;
+import gamelogic.buyables.PlowHead;
+import gamelogic.buyables.SalterHead;
+import gamelogic.buyables.SweeperHead;
 
 public class InventoryPanel extends JPanel {
     private Inventory inventory;

@@ -1,13 +1,12 @@
 package utils.commands;
 
-import java.util.Map;
-
 import gamelogic.Car;
 import gamelogic.GameLogic;
 import gamelogic.Lane;
 import gamelogic.RoadNetwork;
 import gamelogic.SnowPlow;
 import gamelogic.SnowPlowPlayer;
+import java.util.Map;
 import utils.CommandInterpreter;
 import utils.CommandInterpreter.Command;
 import utils.Logger;
@@ -53,9 +52,11 @@ public class AddVehicle implements Command {
                     Logger.logError("Error: Missing -player argument for adding snowplow. A snowplow must be assigned to a player.");
                     return;
                 }
-                SnowPlow newPlow = new SnowPlow(args.get("-id"));
-                ObjectRegistry.register(args.get("-id"), newPlow);
+                
+                
                 SnowPlowPlayer player = ObjectRegistry.get(args.get("-player"), SnowPlowPlayer.class);
+                SnowPlow newPlow = new SnowPlow(args.get("-id"), player);
+                ObjectRegistry.register(args.get("-id"), newPlow);
                 player.addSnowPlow(newPlow, ObjectRegistry.get(args.get("-lane"), Lane.class));
 
                 break;

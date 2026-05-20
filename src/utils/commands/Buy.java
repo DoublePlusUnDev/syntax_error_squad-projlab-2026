@@ -1,8 +1,8 @@
 package utils.commands;
 
-import gamelogic.Buyable;
 import gamelogic.Inventory;
 import gamelogic.Player;
+import gamelogic.buyables.Buyable;
 import java.util.Map;
 import utils.CommandInterpreter;
 import utils.CommandInterpreter.Command;

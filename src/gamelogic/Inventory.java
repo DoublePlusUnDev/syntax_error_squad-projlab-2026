@@ -1,7 +1,7 @@
 package gamelogic;
+import gamelogic.buyables.PlowHead;
 import java.util.ArrayList;
 import java.util.List;
-
 import utils.Logger;
 import utils.ObjectRegistry;
 
@@ -11,7 +11,7 @@ import utils.ObjectRegistry;
  * Said resources may be attempted to be consumed.
  */
 public class Inventory implements Inspectable{
-    String id;
+    public String id;
     private int salt = 0;
     private int gravel = 0;
     private int bioKerosene = 0;

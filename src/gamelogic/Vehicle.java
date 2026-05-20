@@ -13,6 +13,7 @@ import utils.ObjectRegistry;
 public abstract class Vehicle implements Inspectable {
     public String id;
     protected Lane location;
+    protected Player player;
 
     public Vehicle(String id){
         this.id = id;

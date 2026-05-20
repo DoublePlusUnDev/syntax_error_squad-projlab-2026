@@ -1,5 +1,6 @@
-package gamelogic;
+package gamelogic.buyables;
 
+import gamelogic.Lane;
 import utils.Logger;
 
 public class GravelThrowerHead extends PlowHead {

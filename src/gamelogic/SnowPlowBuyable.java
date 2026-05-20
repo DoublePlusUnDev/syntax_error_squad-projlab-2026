@@ -1,5 +1,7 @@
 package gamelogic;
 
+import gamelogic.buyables.Buyable;
+
 public class SnowPlowBuyable extends Buyable {
 
     public SnowPlowBuyable(String id, int cost) {
