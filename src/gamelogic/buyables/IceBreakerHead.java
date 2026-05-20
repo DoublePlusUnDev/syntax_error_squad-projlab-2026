@@ -15,7 +15,8 @@ public class IceBreakerHead extends PlowHead {
 
     @Override
     public void clean(Lane lane) {
-        lane.breakIce();
+        float money = lane.breakIce();
+        player.getBank().addMoney((int)Math.floor(money));
     }
 
     @Override

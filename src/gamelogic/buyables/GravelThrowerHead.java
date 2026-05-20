@@ -15,8 +15,12 @@ public class GravelThrowerHead extends PlowHead {
      */
     @Override
     public void clean(Lane lane) {
-        if (inventory.tryConsumeGravel())
-            lane.throwGravel();      
+        if (!inventory.tryConsumeGravel())
+            return;
+
+        float money = 0;
+        money += lane.throwGravel();
+        player.getBank().addMoney((int)Math.floor(money));
     }
     
     @Override

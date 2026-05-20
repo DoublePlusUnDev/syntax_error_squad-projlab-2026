@@ -15,7 +15,8 @@ public class BlowerHead extends PlowHead {
 
     @Override
     public void clean(Lane lane) {
-        lane.blow();
+        float money = lane.blow();
+        player.getBank().addMoney((int)Math.floor(money));
     }
 
     @Override

@@ -23,8 +23,10 @@ public class DragonHead extends PlowHead {
         if (!inventory.tryConsumeKerosene())
             return;
 
-        lane.destroyIce();
-        lane.destroySnow();
+        float money = 0;
+        money += lane.destroyIce();
+        money += lane.destroySnow();
+        player.getBank().addMoney((int)Math.floor(money));
     }
 
     @Override

@@ -11,7 +11,8 @@ public class SweeperHead extends PlowHead {
 
     @Override
     public void clean(Lane lane) {
-        lane.sweep();
+        float money = lane.sweep();
+        player.getBank().addMoney((int)Math.floor(money));
     }
     
     public SweeperHead(String id, int price) {

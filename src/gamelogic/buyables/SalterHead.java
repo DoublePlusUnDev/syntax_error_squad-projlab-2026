@@ -19,7 +19,8 @@ public class SalterHead extends PlowHead {
         if (!inventory.tryConsumeSalt())
             return;
 
-        lane.salt();
+        float money = lane.salt();
+        player.getBank().addMoney((int)Math.floor(money));
     }
 
     @Override
