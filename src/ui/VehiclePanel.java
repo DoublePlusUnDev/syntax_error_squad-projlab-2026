@@ -48,6 +48,7 @@ public class VehiclePanel extends JPanel {
         add(nextTurnButton, BorderLayout.SOUTH);
 
         gameLogic.addGameStateChangeListener(this::update);
+        addSelectionChangeListener(this::update);
     }
 
 
@@ -114,7 +115,7 @@ public class VehiclePanel extends JPanel {
         return selectedVehicle;
     }
 
-    public void addSelectionChangeListener(Runnable listener) {
+    public final void addSelectionChangeListener(Runnable listener) {
         selectionChangeListeners.add(listener);
     }
 }

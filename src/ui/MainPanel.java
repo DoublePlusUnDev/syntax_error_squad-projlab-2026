@@ -15,6 +15,7 @@ public class MainPanel extends JPanel {
     private transient CommandInterpreter commandInterpreter;
     private transient GameLogic gameLogic;
     private transient VehiclePanel vehiclePanel;
+    private transient StorePanel storePanel;
     private transient InventoryPanel inventoryPanel;
     private transient ConsolePanel consolePanel;
 
@@ -28,20 +29,24 @@ public class MainPanel extends JPanel {
         
         JTabbedPane infoPages = new JTabbedPane();
         vehiclePanel = new VehiclePanel(gameLogic, commandInterpreter);
-        infoPages.addTab("Járművek", vehiclePanel);
+        
+        storePanel = new StorePanel(gameLogic, vehiclePanel, commandInterpreter);
 
-        inventoryPanel = new InventoryPanel();
-        infoPages.addTab("Készlet", inventoryPanel);
-
-        infoPages.addTab("Bolt", new StorePanel(gameLogic, vehiclePanel, commandInterpreter));
+        inventoryPanel = new InventoryPanel(gameLogic, vehiclePanel, storePanel);
         
         consolePanel = new ConsolePanel(commandInterpreter);
-        infoPages.addTab("Parancsok", consolePanel);
 
         infoPages.setBackground(UIStyles.backgroundColor);
         infoPages.setForeground(UIStyles.textColor);
 
+
         infoPages.setPreferredSize(new Dimension(infoPages.getPreferredSize().width, 300));
+
+        infoPages.addTab("Járművek", vehiclePanel);
+        infoPages.addTab("Készlet", inventoryPanel);
+        infoPages.addTab("Bolt", storePanel);
+        infoPages.addTab("Parancsok", consolePanel);
+
 
         add(infoPages, BorderLayout.SOUTH);
 

@@ -14,6 +14,8 @@ import gamelogic.buyables.IceBreakerHead;
 import gamelogic.buyables.Salt;
 import gamelogic.buyables.SalterHead;
 import gamelogic.buyables.SweeperHead;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -21,6 +23,8 @@ import javax.swing.event.MouseInputAdapter;
 import utils.CommandInterpreter;
 
 public class StorePanel extends JPanel {
+    private final List<Runnable> itemBoughtListeners = new ArrayList<>();
+
     private final VehiclePanel vehiclePanel;
     private final GameLogic gameLogic;
     private final CommandInterpreter commandInterpreter;
@@ -80,7 +84,7 @@ public class StorePanel extends JPanel {
         add(dragonHeadBuyable);
 
         gameLogic.addGameStateChangeListener(this::update);
-
+        vehiclePanel.addSelectionChangeListener(this::update);
         
     }
 
@@ -117,6 +121,7 @@ public class StorePanel extends JPanel {
                     if (selectedVehicle instanceof SnowPlow snowPlow){
                         commandInterpreter.execute("/createBuyable -id " + buyableName + " -amount " + amount + " -price " + price + " -type " + buyableName);
                         commandInterpreter.execute("buy -buyable " + buyableName + " -inventory " + snowPlow.getInventory().id + " -player " + gameLogic.getCurrentPlayer().id);
+                        itemBoughtListeners.forEach(Runnable::run);
                     }
             }
         });
@@ -128,5 +133,9 @@ public class StorePanel extends JPanel {
         if (currentPlayer != null) {
             moneyLabel.setText("Rendelkezésre álló pénz: " + currentPlayer.getBank().getMoney());
         }
+    }
+
+    public void addItemBoughtListener(Runnable listener) {
+        itemBoughtListeners.add(listener);
     }
 }

@@ -1,4 +1,14 @@
 package ui;
+import gamelogic.GameLogic;
+import gamelogic.Inventory;
+import gamelogic.SnowPlow;
+import gamelogic.buyables.BlowerHead;
+import gamelogic.buyables.DragonHead;
+import gamelogic.buyables.GravelThrowerHead;
+import gamelogic.buyables.IceBreakerHead;
+import gamelogic.buyables.PlowHead;
+import gamelogic.buyables.SalterHead;
+import gamelogic.buyables.SweeperHead;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -7,16 +17,10 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import gamelogic.Inventory;
-import gamelogic.buyables.BlowerHead;
-import gamelogic.buyables.DragonHead;
-import gamelogic.buyables.GravelThrowerHead;
-import gamelogic.buyables.IceBreakerHead;
-import gamelogic.buyables.PlowHead;
-import gamelogic.buyables.SalterHead;
-import gamelogic.buyables.SweeperHead;
-
 public class InventoryPanel extends JPanel {
+    private final GameLogic gameLogic;
+    private final VehiclePanel vehiclePanel;
+    private final StorePanel storePanel;
     private Inventory inventory;
     private JLabel topLabel;
     private JLabel saltLabel;
@@ -25,7 +29,10 @@ public class InventoryPanel extends JPanel {
     private JLabel headLabel;
     private List<JLabel> plowHeads;
 
-    public InventoryPanel() {
+    public InventoryPanel(GameLogic gameLogic, VehiclePanel vehiclePanel, StorePanel storePanel) {
+        this.gameLogic = gameLogic;
+        this.vehiclePanel = vehiclePanel;
+        this.storePanel = storePanel;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(UIStyles.backgroundColor);
         setPreferredSize(new Dimension(getPreferredSize().width, 360));
@@ -52,17 +59,18 @@ public class InventoryPanel extends JPanel {
 
         plowHeads = new ArrayList<JLabel>();
 
-        update();
+        vehiclePanel.addSelectionChangeListener(this::update);
+        storePanel.addItemBoughtListener(this::update);
     }    
 
-    public void setInventory(Inventory inventory) {
-        this.inventory = inventory;
-        update();
-    }
-
     private void update() {
-        if (inventory == null)
+        SnowPlow selectedPlow = vehiclePanel.getSelectedVehicle() instanceof SnowPlow snowPlow ? snowPlow : null;
+
+        if (selectedPlow == null) {
             return;
+        } 
+
+        inventory = selectedPlow.getInventory();
 
         for (JLabel head : plowHeads) {
             remove(head);
