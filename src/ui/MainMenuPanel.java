@@ -38,7 +38,7 @@ public class MainMenuPanel extends JPanel {
 
         add(Box.createRigidArea(new Dimension(0, 10)));
 
-        loadGameButton = UIFactory.createButton("Játék Betöltése", 18.0f, 240, 40, CENTER_ALIGNMENT, null);
+        loadGameButton = UIFactory.createButton("Játék Betöltése", 18.0f, 240, 40, CENTER_ALIGNMENT, e -> gameWindow.showLoadGamePanel());
         add(loadGameButton);
 
         add(Box.createRigidArea(new Dimension(0, 10)));

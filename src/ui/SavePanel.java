@@ -11,6 +11,7 @@ public class SavePanel extends JPanel {
     JTextField saveNameField;
 
     public SavePanel() {
+        
         setBackground(UIStyles.backgroundColor);   
         saveButton = UIFactory.createButton("Játék mentése", e -> {
             File saveFile = new File(saveNameField.getText());
