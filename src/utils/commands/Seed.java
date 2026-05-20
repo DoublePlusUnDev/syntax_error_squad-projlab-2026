@@ -1,7 +1,6 @@
 package utils.commands;
 
 import java.util.Map;
-
 import utils.CommandInterpreter;
 import utils.CommandInterpreter.Command;
 import utils.Logger;
@@ -18,6 +17,7 @@ public class Seed implements Command {
 
         String seed = args.get("-seed");
         RandomGenerator.setSeed(seed);
+        Logger.logLine("Random seed set to: " + seed);
     }
 
     

@@ -1,6 +1,7 @@
 package ui;
 import gamelogic.GameLogic;
 import java.awt.CardLayout;
+import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
@@ -62,6 +63,9 @@ public class GameWindow extends JFrame {
     }
 
     public void startGame() {
+        Random random = new Random();
+        Long seed = random.nextLong();
+        commandInterpreter.execute("/seed -seed " + seed.toString());
         commandInterpreter.execute(settingsManager.getGeneratorCommand());
 
         String startLaneId = gameLogic.getRoads().getRoadSegments().get(0).getLane(0).id;
