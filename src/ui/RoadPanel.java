@@ -1,11 +1,13 @@
 package ui;
 import gamelogic.Apartment;
+import gamelogic.Bridge;
 import gamelogic.BusStop;
 import gamelogic.GameLogic;
 import gamelogic.Lane;
 import gamelogic.Node;
 import gamelogic.RoadNetwork;
 import gamelogic.RoadSegment;
+import gamelogic.Tunnel;
 import gamelogic.Workplace;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -110,14 +112,14 @@ public class RoadPanel extends JPanel {
                 xs[3] = (int) (start.x + perpX * rightOffset);
                 ys[3] = (int) (start.y + perpY * rightOffset);
 
-                g2.setColor(getLaneFillColor(lanes.get(i)));
+                g2.setColor(getLaneFillColor(segment, lanes.get(i)));
                 g2.fillPolygon(xs, ys, 4);
-                g2.setColor(laneBorderColor);
+                g2.setColor(getLaneBorderColor(segment));
                 g2.drawPolygon(xs, ys, 4);
             }
 
             // Draw separators between lanes
-            g2.setColor(separatorColor);
+            g2.setColor(getSeparatorColor(segment));
             for (int i = 0; i < Math.max(0, lanes.size() - 1); i++) {
                 float sepCenter = (centerOffsets[i] + centerOffsets[i + 1]) * 0.5f;
                 float sepLeft = sepCenter - separatorWidth / 2f;
@@ -243,7 +245,11 @@ public class RoadPanel extends JPanel {
         }
     }
 
-    private Color getLaneFillColor(Lane lane) {
+    private Color getLaneFillColor(RoadSegment segment, Lane lane) {
+        if (segment instanceof Tunnel) {
+            return tunnelColor;
+        }
+
         if (lane.isIced()) {
             return icingColor;
         }
@@ -260,6 +266,26 @@ public class RoadPanel extends JPanel {
         }
 
         return laneColor;
+    }
+
+    private Color getSeparatorColor(RoadSegment segment) {
+        if (segment instanceof Tunnel) {
+            return tunnelColor;
+        }
+
+        if (segment instanceof Bridge) {
+            return bridgeSeparator;
+        }
+
+        return separatorColor;
+    }
+
+    private Color getLaneBorderColor(RoadSegment segment) {
+        if (segment instanceof Bridge) {
+            return bridgeBorderColor;
+        }
+
+        return laneBorderColor;
     }
 
     private transient BufferedImage snowPlowImage;
@@ -287,7 +313,9 @@ public class RoadPanel extends JPanel {
     private Color snowColor = new Color(245, 255, 255);
     private Color gravelColor = new Color(172, 172, 172);
     private Color icingColor = new Color(160, 255, 245);
-
+    private Color tunnelColor = new Color(25, 25, 25);
+    private Color bridgeSeparator = new Color(255, 255, 0);
+    private Color bridgeBorderColor = new Color(200, 200, 0);
 
     private transient List<DisplayNode> nodes = new ArrayList<>();
     private transient List<DisplayEdge> edges = new ArrayList<>();

@@ -328,170 +328,21 @@ public class RoadNetwork implements Inspectable {
     }
 
     public void generate() {
-        int numberOfAllNodes;
-        int numberOfApartments;
-        int numberOfWorkplaces;
-        int numberOfBusStops;
-        int numberOfNormalNodes;
-        int numberOfBigNodes;
-        int numberOfSmallNodes;
-
-        try {
-            numberOfAllNodes = RandomGenerator.getRandomInt((Integer) generationParameters.getParameter(RoadGenerationParameters.NODE_MIN_KEY), (Integer) generationParameters.getParameter(RoadGenerationParameters.NODE_MAX_KEY));
-            numberOfApartments = RandomGenerator.getRandomInt((Integer) generationParameters.getParameter(RoadGenerationParameters.APARTMENTS_MIN_KEY), (Integer) generationParameters.getParameter(RoadGenerationParameters.APARTMENTS_MAX_KEY));
-            numberOfWorkplaces = RandomGenerator.getRandomInt((Integer) generationParameters.getParameter(RoadGenerationParameters.WORK_PLACES_MIN_KEY), (Integer) generationParameters.getParameter(RoadGenerationParameters.WORK_PLACES_MAX_KEY));
-            numberOfBusStops = RandomGenerator.getRandomInt((Integer) generationParameters.getParameter(RoadGenerationParameters.BUS_STOPS_MIN_KEY), (Integer) generationParameters.getParameter(RoadGenerationParameters.BUS_STOPS_MAX_KEY));
-            numberOfBigNodes = RandomGenerator.getRandomInt((Integer) generationParameters.getParameter(RoadGenerationParameters.BIG_NODES_MIN_KEY), (Integer) generationParameters.getParameter(RoadGenerationParameters.BIG_NODES_MAX_KEY));
-            numberOfSmallNodes = RandomGenerator.getRandomInt((Integer) generationParameters.getParameter(RoadGenerationParameters.SMALL_NODES_MIN_KEY), (Integer) generationParameters.getParameter(RoadGenerationParameters.SMALL_NODES_MAX_KEY));
-        } catch (RuntimeException exception) {
-            Logger.logError("Error: Road generation failed because one of the generation parameters is invalid: " + exception.getMessage());
-            return;
-        }
-
-        if (numberOfAllNodes < 2) {
-            Logger.logError("Error: Road generation requires at least 2 nodes.");
-            return;
-        }
-
-        numberOfNormalNodes = numberOfAllNodes - numberOfApartments - numberOfWorkplaces - numberOfBusStops;
-
-        if (numberOfNormalNodes < 0){
-            Logger.logError("Error: Too many special nodes for the total number of nodes. Please adjust the parameters.");
-            return;
-        }
-
-        if (numberOfBigNodes + numberOfSmallNodes > numberOfAllNodes){
-            Logger.logError("Error: Too many big and small nodes for the total number of nodes. Please adjust the parameters.");
-            return;
-        }
-
-        nodes.clear();
-        roadSegments.clear();
-        vehicles.clear();
-
-        //prevemt duplicate connections
-        Map<Node, Set<Node>> nodeConnections = new HashMap<>();
-
-        //Phase 1
-        //calculate the number of nodes for each type and create a shuffled list of their types
-        List<String> nodeTypes = new ArrayList<String>();
-        Logger.logLine("Generating " + numberOfAllNodes + " nodes in the road network.");
-
-        for (int i = 0; i < numberOfApartments; i++){
-            nodeTypes.add("Apartment");
-        }
-        for (int i = 0; i < numberOfWorkplaces; i++){
-            nodeTypes.add("Workplace");
-        }
-        for (int i = 0; i < numberOfBusStops; i++){
-            nodeTypes.add("BusStop");
-        }
-        for (int i = 0; i < numberOfNormalNodes; i++){
-            nodeTypes.add("Node");
-        }
-
-        RandomGenerator.shuffleList(nodeTypes);
-        
-        // Phase 2
-        // Instantiate all nodes first (so addNode/addRoadSegment can be used safely), then connect them in a circle
-        for (int i = 0; i < numberOfAllNodes; i++){
-            Node node;
-
-            String nodeType = nodeTypes.get(i);
-            if (nodeType.equals("Apartment"))
-                node = new Apartment(id + "." + "apartment" + i);
-            else if (nodeType.equals("Workplace"))
-                node = new Workplace(id + "." + "workPlace" + i);
-            else if (nodeType.equals("BusStop"))
-                node = new BusStop(id + "." + "busStop" + i);
-            else
-                node = new Node(id + "." + "node" + i);
-
-            addNode(node);
-        }
-
-        // connect consecutive nodes
-        for (int i = 1; i < nodes.size(); i++) {
-            Node a = nodes.get(i - 1);
-            Node b = nodes.get(i);
-            if (canAddRoadBetween(a, b)){
-                RoadSegment segment = new RoadSegment("Mainroad" + i, (Integer) generationParameters.getParameter(RoadGenerationParameters.MAIN_LANES_KEY), a, b);
-                addRoadSegment(segment);
-                nodeConnections.computeIfAbsent(a, k -> new HashSet<>()).add(b);
-                nodeConnections.computeIfAbsent(b, k -> new HashSet<>()).add(a);
-            }
-        }
-
-        // connect last -> first to close the ring
-        if (nodes.size() >= 2) {
-            Node last = nodes.get(nodes.size() - 1);
-            Node first = nodes.get(0);
-            if (canAddRoadBetween(last, first)){
-                RoadSegment segment0 = new RoadSegment("Mainroad0", (Integer) generationParameters.getParameter(RoadGenerationParameters.MAIN_LANES_KEY), last, first);
-                addRoadSegment(segment0);
-                nodeConnections.computeIfAbsent(last, k -> new HashSet<>()).add(first);
-                nodeConnections.computeIfAbsent(first, k -> new HashSet<>()).add(last);
-            }
-        }
-
-        //phase 3
-        //Add extra connections to big nodes and small nodes
-        List<Node> shuffleNodes = new ArrayList<>(nodes);
-        RandomGenerator.shuffleList(shuffleNodes);
-
-        List<Node> bigNodes = shuffleNodes.subList(0, numberOfBigNodes);
-        
-        for (Node currentBigNode : bigNodes){
-            List<Node> potentialConnections = new ArrayList<>(nodes);
-            RandomGenerator.shuffleList(potentialConnections);
-
-            int connectionsAdded = 0;
-            for (Node potential : potentialConnections){
-                if (potential == currentBigNode) continue;
-
-                if (!canAddRoadBetween(currentBigNode, potential)) continue;
-
-                RoadSegment segment = new RoadSegment("BigNodeExtraRoad" + currentBigNode.id + "_" + potential.id, (Integer) generationParameters.getParameter(RoadGenerationParameters.BIG_NODE_LANES_KEY), currentBigNode, potential);
-                addRoadSegment(segment);
-                nodeConnections.computeIfAbsent(currentBigNode, k -> new HashSet<>()).add(potential);
-                nodeConnections.computeIfAbsent(potential, k -> new HashSet<>()).add(currentBigNode);
-                connectionsAdded++;
-
-                if (connectionsAdded >= (Integer) generationParameters.getParameter(RoadGenerationParameters.BIG_NODE_EXTRA_ROADS_KEY)) break;
-            }
-            
-        }
-
-        
-        List<Node> smallNodes = shuffleNodes.subList(numberOfBigNodes, numberOfBigNodes + numberOfSmallNodes);
-        
-        for (Node currentSmallNode : smallNodes){
-            List<Node> potentialConnections = new ArrayList<>(nodes);
-            RandomGenerator.shuffleList(potentialConnections);
-
-            int connectionsAdded = 0;
-            for (Node potential : potentialConnections){
-                if (potential == currentSmallNode) continue;
-
-                if (!canAddRoadBetween(currentSmallNode, potential)) continue;
-
-                RoadSegment segment = new RoadSegment("SmallNodeExtraRoad" + currentSmallNode.id + "_" + potential.id, (Integer) generationParameters.getParameter(RoadGenerationParameters.SMALL_NODE_LANES_KEY), currentSmallNode, potential);
-                addRoadSegment(segment);
-                nodeConnections.computeIfAbsent(currentSmallNode, k -> new HashSet<>()).add(potential);
-                nodeConnections.computeIfAbsent(potential, k -> new HashSet<>()).add(currentSmallNode);
-                connectionsAdded++;
-
-                if (connectionsAdded >= (Integer) generationParameters.getParameter(RoadGenerationParameters.SMALL_NODE_EXTRA_ROADS_KEY)) break;
-            }
-            
-        }
-
-        topologyChangedCallback.forEach(Runnable::run);
-        
+        RoadGenerator.generate(this, generationParameters);
     }
 
     public void setGenerationParameters(RoadGenerationParameters generationParameters){
         this.generationParameters = generationParameters;
+    }
+
+    void clearGeneratedData() {
+        nodes.clear();
+        roadSegments.clear();
+        vehicles.clear();
+    }
+
+    void fireTopologyChanged() {
+        topologyChangedCallback.forEach(Runnable::run);
     }
 
     public void addTopologyChangedListener(Runnable listener) {

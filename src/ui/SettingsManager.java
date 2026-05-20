@@ -40,7 +40,22 @@ public class SettingsManager  {
             sb.append(" -" + RoadGenerationParameters.BUS_STOPS_MIN_KEY + " ").append(settings.get(RoadGenerationParameters.BUS_STOPS_MIN_KEY));
         if (settings.containsKey(RoadGenerationParameters.BUS_STOPS_MAX_KEY))
             sb.append(" -" + RoadGenerationParameters.BUS_STOPS_MAX_KEY + " ").append(settings.get(RoadGenerationParameters.BUS_STOPS_MAX_KEY));
-
+        if (settings.containsKey(RoadGenerationParameters.APARTMENTS_MIN_KEY))
+            sb.append(" -" + RoadGenerationParameters.APARTMENTS_MIN_KEY + " ").append(settings.get(RoadGenerationParameters.APARTMENTS_MIN_KEY));
+        if (settings.containsKey(RoadGenerationParameters.APARTMENTS_MAX_KEY))
+            sb.append(" -" + RoadGenerationParameters.APARTMENTS_MAX_KEY + " ").append(settings.get(RoadGenerationParameters.APARTMENTS_MAX_KEY));
+        if (settings.containsKey(RoadGenerationParameters.WORK_PLACES_MIN_KEY))
+            sb.append(" -" + RoadGenerationParameters.WORK_PLACES_MIN_KEY + " ").append(settings.get(RoadGenerationParameters.WORK_PLACES_MIN_KEY));
+        if (settings.containsKey(RoadGenerationParameters.WORK_PLACES_MAX_KEY))
+            sb.append(" -" + RoadGenerationParameters.WORK_PLACES_MAX_KEY + " ").append(settings.get(RoadGenerationParameters.WORK_PLACES_MAX_KEY));
+        if (settings.containsKey(RoadGenerationParameters.BRIDGES_MIN_KEY))
+            sb.append(" -" + RoadGenerationParameters.BRIDGES_MIN_KEY + " ").append(settings.get(RoadGenerationParameters.BRIDGES_MIN_KEY));
+        if (settings.containsKey(RoadGenerationParameters.BRIDGES_MAX_KEY))
+            sb.append(" -" + RoadGenerationParameters.BRIDGES_MAX_KEY + " ").append(settings.get(RoadGenerationParameters.BRIDGES_MAX_KEY));
+        if (settings.containsKey(RoadGenerationParameters.TUNNELS_MIN_KEY))
+            sb.append(" -" + RoadGenerationParameters.TUNNELS_MIN_KEY + " ").append(settings.get(RoadGenerationParameters.TUNNELS_MIN_KEY));
+        if (settings.containsKey(RoadGenerationParameters.TUNNELS_MAX_KEY))
+            sb.append(" -" + RoadGenerationParameters.TUNNELS_MAX_KEY + " ").append(settings.get(RoadGenerationParameters.TUNNELS_MAX_KEY));
 
         return sb.toString();
     }

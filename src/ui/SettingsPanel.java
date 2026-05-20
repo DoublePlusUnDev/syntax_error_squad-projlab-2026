@@ -86,6 +86,14 @@ public class SettingsPanel extends JPanel{
             value -> integerSetter(RoadGenerationParameters.APARTMENTS_MIN_KEY, value)));
         contentPanel.add(new SettingsCardValueField("Apartments max: ", (Integer) RoadGenerationParameters.defaultParams.getParameter(RoadGenerationParameters.APARTMENTS_MAX_KEY), 
             value -> integerSetter(RoadGenerationParameters.APARTMENTS_MAX_KEY, value)));
+        contentPanel.add(new SettingsCardValueField("Bridges min: ", (Integer) RoadGenerationParameters.defaultParams.getParameter(RoadGenerationParameters.BRIDGES_MIN_KEY), 
+            value -> integerSetter(RoadGenerationParameters.BRIDGES_MIN_KEY, value)));
+        contentPanel.add(new SettingsCardValueField("Bridges max: ", (Integer) RoadGenerationParameters.defaultParams.getParameter(RoadGenerationParameters.BRIDGES_MAX_KEY), 
+            value -> integerSetter(RoadGenerationParameters.BRIDGES_MAX_KEY, value)));
+        contentPanel.add(new SettingsCardValueField("Tunnels min: ", (Integer) RoadGenerationParameters.defaultParams.getParameter(RoadGenerationParameters.TUNNELS_MIN_KEY), 
+            value -> integerSetter(RoadGenerationParameters.TUNNELS_MIN_KEY, value)));
+        contentPanel.add(new SettingsCardValueField("Tunnels max: ", (Integer) RoadGenerationParameters.defaultParams.getParameter(RoadGenerationParameters.TUNNELS_MAX_KEY), 
+            value -> integerSetter(RoadGenerationParameters.TUNNELS_MAX_KEY, value)));
 
         add(contentPanel, BorderLayout.CENTER);
 

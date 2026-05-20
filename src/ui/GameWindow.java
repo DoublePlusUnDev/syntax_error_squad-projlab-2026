@@ -3,6 +3,7 @@ import gamelogic.GameLogic;
 import java.awt.CardLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 import utils.CommandInterpreter;
 
 public class GameWindow extends JFrame {
@@ -25,7 +26,7 @@ public class GameWindow extends JFrame {
 
         setTitle("Projlab Traffic Game ");
         setSize(1280, 720);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
         cardLayout = new CardLayout();
@@ -62,8 +63,9 @@ public class GameWindow extends JFrame {
 
     public void startGame() {
         commandInterpreter.execute(settingsManager.getGeneratorCommand());
-        
-        commandInterpreter.execute("/addPlayer -id player1 -type snowplow -net net -lane Mainroad0.lane1");
+
+        String startLaneId = gameLogic.getRoads().getRoadSegments().get(0).getLane(0).id;
+        commandInterpreter.execute("/addPlayer -id player1 -type snowplow -net net -lane " + startLaneId);
         commandInterpreter.execute(settingsManager.getStartCommand());
         showGamePanel();
     }

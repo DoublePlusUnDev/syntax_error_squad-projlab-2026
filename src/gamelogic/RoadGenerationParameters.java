@@ -22,6 +22,10 @@ public class RoadGenerationParameters {
     public static final String WORK_PLACES_MAX_KEY = "workPlacesMax";
     public static final String APARTMENTS_MIN_KEY = "apartmentsMin";
     public static final String APARTMENTS_MAX_KEY = "apartmentsMax";
+    public static final String BRIDGES_MIN_KEY = "bridgesMin";
+    public static final String BRIDGES_MAX_KEY = "bridgesMax";
+    public static final String TUNNELS_MIN_KEY = "tunnelsMin";
+    public static final String TUNNELS_MAX_KEY = "tunnelsMax";
 
     public void setParameter(String key, Object value) {
         settings.put(key, value);
@@ -49,5 +53,9 @@ public class RoadGenerationParameters {
         setParameter(WORK_PLACES_MAX_KEY, 3);
         setParameter(APARTMENTS_MIN_KEY, 2);
         setParameter(APARTMENTS_MAX_KEY, 3);
+        setParameter(BRIDGES_MIN_KEY, 2);
+        setParameter(BRIDGES_MAX_KEY, 3);
+        setParameter(TUNNELS_MIN_KEY, 2);
+        setParameter(TUNNELS_MAX_KEY, 3);
      }};
 }
