@@ -51,6 +51,10 @@ public class SnowPlow extends Vehicle{
         return inventory;
     }
 
+    public PlowHead getEquippedPlowHead() {
+        return plowHead;
+    }
+
     @Override
     public boolean canSlip() {
         return false;

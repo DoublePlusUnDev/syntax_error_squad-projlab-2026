@@ -90,10 +90,14 @@ public class InventoryPanel extends JPanel {
         headLabel.setText("Kotrófejek: (" + inventory.getPlowHeads().size() + ")");
 
         for (PlowHead head : inventory.getPlowHeads()) {
-            JLabel headLabel = UIFactory.createLabel("- " + plowHeadName(head), 16f);
-            headLabel.setHorizontalAlignment(JLabel.LEFT);
-            add(headLabel, BorderLayout.CENTER);
-            headLabel.addMouseListener(new MouseAdapter() {
+            JLabel currentHeadLabel = UIFactory.createLabel("- " + plowHeadName(head), 16f);
+            
+            currentHeadLabel.setHorizontalAlignment(JLabel.LEFT);
+            if (head == selectedPlow.getEquippedPlowHead())
+                currentHeadLabel.setForeground(UIStyles.selectedColor);
+            
+
+            currentHeadLabel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent e) {
                     commandInterpreter.execute("equip -vehicle " + selectedPlow.id + " -head " + head.id);
@@ -102,7 +106,8 @@ public class InventoryPanel extends JPanel {
                 }
             });
 
-            plowHeads.add(headLabel);
+            add(currentHeadLabel, BorderLayout.CENTER);
+            plowHeads.add(currentHeadLabel);
         }
     }
     
