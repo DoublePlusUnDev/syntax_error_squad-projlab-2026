@@ -44,7 +44,9 @@ public class SnowPlow extends Vehicle{
         plowHead.equip();
     }
 
-    
+    public Inventory getInventory() {
+        return inventory;
+    }
 
     @Override
     public boolean canSlip() {

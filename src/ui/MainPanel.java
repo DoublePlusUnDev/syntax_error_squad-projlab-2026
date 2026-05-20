@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import utils.CommandInterpreter;
 
-public class GamePanel extends JPanel {
+public class MainPanel extends JPanel {
 
     private transient CommandInterpreter commandInterpreter;
     private transient GameLogic gameLogic;
@@ -20,7 +20,7 @@ public class GamePanel extends JPanel {
 
     
 
-    public GamePanel(CommandInterpreter commandInterpreter, GameLogic gameLogic) {
+    public MainPanel(CommandInterpreter commandInterpreter, GameLogic gameLogic) {
         setLayout(new BorderLayout());
         setBackground(UIStyles.backgroundColor);
         this.commandInterpreter = commandInterpreter;
@@ -33,7 +33,7 @@ public class GamePanel extends JPanel {
         inventoryPanel = new InventoryPanel();
         infoPages.addTab("Készlet", inventoryPanel);
 
-        //infoPages.addTab("Bolt", new StorePanel());
+        infoPages.addTab("Bolt", new StorePanel(gameLogic, vehiclePanel));
         
         consolePanel = new ConsolePanel(commandInterpreter);
         infoPages.addTab("Parancsok", consolePanel);

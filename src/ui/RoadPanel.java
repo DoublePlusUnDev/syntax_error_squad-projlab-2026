@@ -272,11 +272,11 @@ public class RoadPanel extends JPanel {
     private transient List<DisplayEdge> edges = new ArrayList<>();
 
     private final GameLogic gameLogic;
-    private final GamePanel gamePanel;
+    private final MainPanel gamePanel;
     private final Random random = new Random();
     private final VehiclePanel vehiclePanel;
 
-    public RoadPanel(GameLogic gameLogic, GamePanel gamePanel, VehiclePanel vehiclePanel) {
+    public RoadPanel(GameLogic gameLogic, MainPanel gamePanel, VehiclePanel vehiclePanel) {
         setBackground(UIStyles.backgroundColor);
         this.gameLogic = gameLogic;
         this.gamePanel = gamePanel;

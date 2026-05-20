@@ -37,7 +37,7 @@ public class GameUI extends JFrame {
         SettingsPanel settingsPanel = new SettingsPanel(this, settingsManager);
         cards.add(SETTINGS_MENU, settingsPanel);
 
-        GamePanel gamePanel = new GamePanel(commandInterpreter, gameLogic);
+        MainPanel gamePanel = new MainPanel(commandInterpreter, gameLogic);
         cards.add(GAME_PANEL, gamePanel);
 
         add(cards);
