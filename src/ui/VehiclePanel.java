@@ -48,6 +48,11 @@ public class VehiclePanel extends JPanel {
         add(nextTurnButton, BorderLayout.SOUTH);
 
         gameLogic.addGameStateChangeListener(this::update);
+        gameLogic.addRoundEndedListener(() -> {
+            selectedVehicle = null;
+            selectionChangeListeners.forEach(Runnable::run);
+            update();
+        });
         addSelectionChangeListener(this::update);
     }
 
@@ -60,7 +65,7 @@ public class VehiclePanel extends JPanel {
             return;
         } 
 
-        topLabel.setText("Járművek: ");
+        topLabel.setText(player.id + " járművei: " + gameLogic.getRound() + ". kör");
     
         vehicleLabels.forEach(vehicleListPanel::remove);
         vehicleLabels.clear();
@@ -109,6 +114,8 @@ public class VehiclePanel extends JPanel {
                 vehicleListPanel.add(label);
             }
         }
+        vehicleListPanel.revalidate();
+        vehicleListPanel.repaint();
     }
 
     public Vehicle getSelectedVehicle() {
@@ -117,5 +124,5 @@ public class VehiclePanel extends JPanel {
 
     public final void addSelectionChangeListener(Runnable listener) {
         selectionChangeListeners.add(listener);
-    }
+    } 
 }

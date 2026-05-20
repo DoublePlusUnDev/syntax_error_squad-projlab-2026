@@ -13,6 +13,7 @@ import utils.Logger;
 public class GameLogic {
     private final List<Runnable> gameStateChangeListeners = new ArrayList<>();
     private final List<Runnable> topologyChangedListeners = new ArrayList<>();
+    private final List<Runnable> roundEndedListeners = new ArrayList<>();
 
     private GameSettings gameSettings;
 
@@ -25,6 +26,7 @@ public class GameLogic {
     public static GameLogic instance;
 
     private Map<Vehicle, Boolean> hasMoved;
+    private int currentRound = 0;
     
 
     public GameLogic() {
@@ -49,6 +51,7 @@ public class GameLogic {
             return;
         }
 
+        currentRound = 1;
         switchPlayer(players.get(0));
         startTurn();
     }
@@ -60,14 +63,17 @@ public class GameLogic {
 
     public void endTurn() {
         Logger.logLine("PLAYER " + currentPlayer.id + " TURN ENDED");
-        int currentIndex = players.indexOf(currentPlayer);
+        int currentPlayerIndex = players.indexOf(currentPlayer);
         if (currentPlayer == players.get(players.size() - 1)) {
             Logger.logLine("ROUND ENDED");
+            currentRound++;
             snow();
             updateAll();
+            roundEndedListeners.forEach(Runnable::run);
         }
-        switchPlayer(players.get((currentIndex + 1) % players.size()));
+        switchPlayer(players.get((currentPlayerIndex + 1) % players.size()));
         gameStateChangeListeners.forEach(Runnable::run);
+        
         startTurn();
     }
 
@@ -87,6 +93,10 @@ public class GameLogic {
 
     public void addTopologyChangedListener(Runnable listener) {
         topologyChangedListeners.add(listener);
+    }
+
+    public void addRoundEndedListener(Runnable listener) {
+        roundEndedListeners.add(listener);
     }
 
     private void switchPlayer(Player player) {
@@ -173,5 +183,9 @@ public class GameLogic {
 
         if (roads != null) 
             roads.removeCar(car);
+    }
+
+    public int getRound() {
+        return currentRound;
     }
 }

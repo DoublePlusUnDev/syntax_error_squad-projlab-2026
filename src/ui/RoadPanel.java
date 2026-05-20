@@ -230,11 +230,13 @@ public class RoadPanel extends JPanel {
                 // Draw vehicle sprite based on type
                 if (vehicle instanceof gamelogic.SnowPlow) {
                     if (snowPlowImage != null) {
-                        g2.drawImage(vehiclePanel.getSelectedVehicle() == vehicle ? snowPlowSelectedImage : snowPlowImage, (int)(vehicleX - VEHICLE_OFFSET), (int)(vehicleY - VEHICLE_OFFSET), VEHICLE_SIZE, VEHICLE_SIZE, null);
+                        boolean selected = vehiclePanel.getSelectedVehicle() != null && vehiclePanel.getSelectedVehicle().id.equals(vehicle.id);
+                        g2.drawImage(selected ? snowPlowSelectedImage : snowPlowImage, (int)(vehicleX - VEHICLE_OFFSET), (int)(vehicleY - VEHICLE_OFFSET), VEHICLE_SIZE, VEHICLE_SIZE, null);
                     }
                 } else if (vehicle instanceof gamelogic.Bus) {
                     if (busImage != null) {
-                        g2.drawImage(vehiclePanel.getSelectedVehicle() == vehicle ? busSelectedImage : busImage, (int)(vehicleX - VEHICLE_OFFSET), (int)(vehicleY - VEHICLE_OFFSET), VEHICLE_SIZE, VEHICLE_SIZE, null);
+                        boolean selectedBus = vehiclePanel.getSelectedVehicle() != null && vehiclePanel.getSelectedVehicle().id.equals(vehicle.id);
+                        g2.drawImage(selectedBus ? busSelectedImage : busImage, (int)(vehicleX - VEHICLE_OFFSET), (int)(vehicleY - VEHICLE_OFFSET), VEHICLE_SIZE, VEHICLE_SIZE, null);
                     }
                 } else if (vehicle instanceof gamelogic.Car) {
                     if (carImage != null) {
