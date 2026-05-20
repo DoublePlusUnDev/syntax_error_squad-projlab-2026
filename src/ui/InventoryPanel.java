@@ -1,4 +1,5 @@
 package ui;
+
 import gamelogic.GameLogic;
 import gamelogic.Inventory;
 import gamelogic.SnowPlow;
@@ -9,8 +10,12 @@ import gamelogic.buyables.IceBreakerHead;
 import gamelogic.buyables.PlowHead;
 import gamelogic.buyables.SalterHead;
 import gamelogic.buyables.SweeperHead;
+import utils.CommandInterpreter;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BoxLayout;
@@ -21,6 +26,7 @@ public class InventoryPanel extends JPanel {
     private final GameLogic gameLogic;
     private final VehiclePanel vehiclePanel;
     private final StorePanel storePanel;
+    private final CommandInterpreter commandInterpreter;
     private Inventory inventory;
     private JLabel topLabel;
     private JLabel saltLabel;
@@ -29,10 +35,11 @@ public class InventoryPanel extends JPanel {
     private JLabel headLabel;
     private List<JLabel> plowHeads;
 
-    public InventoryPanel(GameLogic gameLogic, VehiclePanel vehiclePanel, StorePanel storePanel) {
+    public InventoryPanel(GameLogic gameLogic, VehiclePanel vehiclePanel, StorePanel storePanel, CommandInterpreter commandInterpreter) {
         this.gameLogic = gameLogic;
         this.vehiclePanel = vehiclePanel;
         this.storePanel = storePanel;
+        this.commandInterpreter = commandInterpreter;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(UIStyles.backgroundColor);
         setPreferredSize(new Dimension(getPreferredSize().width, 360));
@@ -86,6 +93,15 @@ public class InventoryPanel extends JPanel {
             JLabel headLabel = UIFactory.createLabel("- " + plowHeadName(head), 16f);
             headLabel.setHorizontalAlignment(JLabel.LEFT);
             add(headLabel, BorderLayout.CENTER);
+            headLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent e) {
+                    commandInterpreter.execute("equip -vehicle " + selectedPlow.id + " -head " + head.id);
+                    update();
+                    
+                }
+            });
+
             plowHeads.add(headLabel);
         }
     }

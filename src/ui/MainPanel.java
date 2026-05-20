@@ -32,7 +32,7 @@ public class MainPanel extends JPanel {
         
         storePanel = new StorePanel(gameLogic, vehiclePanel, commandInterpreter);
 
-        inventoryPanel = new InventoryPanel(gameLogic, vehiclePanel, storePanel);
+        inventoryPanel = new InventoryPanel(gameLogic, vehiclePanel, storePanel, commandInterpreter);
         
         consolePanel = new ConsolePanel(commandInterpreter);
 
