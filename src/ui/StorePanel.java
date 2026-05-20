@@ -18,11 +18,12 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputAdapter;
-import utils.Logger;
+import utils.CommandInterpreter;
 
 public class StorePanel extends JPanel {
     private final VehiclePanel vehiclePanel;
     private final GameLogic gameLogic;
+    private final CommandInterpreter commandInterpreter;
 
     private final JLabel storeLabel;
     private final JLabel moneyLabel;
@@ -36,9 +37,10 @@ public class StorePanel extends JPanel {
     private final JLabel gravelThrowerHeadBuyable;
     private final JLabel dragonHeadBuyable;
 
-    public StorePanel(GameLogic gameLogic, VehiclePanel vehiclePanel) {
+    public StorePanel(GameLogic gameLogic, VehiclePanel vehiclePanel, CommandInterpreter commandInterpreter) {
         this.vehiclePanel = vehiclePanel;
         this.gameLogic = gameLogic;
+        this.commandInterpreter = commandInterpreter;
 
         setBackground(UIStyles.backgroundColor);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -87,13 +89,35 @@ public class StorePanel extends JPanel {
         JLabel label = UIFactory.createLabel(modfiedTitle, 16);
         label.addMouseListener(new MouseInputAdapter() {
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {                
-                try {
-                    Buyable buyable = buyableClass.getConstructor(String.class, int.class, int.class).newInstance(title, amount, price);
-                    tryBuy(buyable);
-                } catch (Exception ex) {
-                    Logger.logError("Error creating buyable: " + ex.getMessage());
-                }
+            public void mouseClicked(java.awt.event.MouseEvent e) {                    
+                String buyableName;
+                    if (buyableClass == BioKerosene.class) {
+                        buyableName = "kerosene";
+                    } else if (buyableClass == Salt.class) {
+                        buyableName = "salt";
+                    } else if (buyableClass == Gravel.class) {
+                        buyableName = "gravel";
+                    } else if (buyableClass == SweeperHead.class) {
+                        buyableName = "sweeperhead";
+                    } else if (buyableClass == BlowerHead.class) {
+                        buyableName = "blowerhead";
+                    } else if (buyableClass == IceBreakerHead.class) {
+                        buyableName = "icebreakerhead";
+                    } else if (buyableClass == SalterHead.class) {
+                        buyableName = "salterhead";
+                    } else if (buyableClass == GravelThrowerHead.class) {
+                        buyableName = "gravelhead";
+                    } else if (buyableClass == DragonHead.class) {
+                        buyableName = "dragonhead";
+                    } else {
+                        throw new IllegalStateException("Unexpected value: " + buyableClass);
+                    }
+
+                    Vehicle selectedVehicle = vehiclePanel.getSelectedVehicle();
+                    if (selectedVehicle instanceof SnowPlow snowPlow){
+                        commandInterpreter.execute("/createBuyable -id " + buyableName + " -amount " + amount + " -price " + price + " -type " + buyableName);
+                        commandInterpreter.execute("buy -buyable " + buyableName + " -inventory " + snowPlow.getInventory().id + " -player " + gameLogic.getCurrentPlayer().id);
+                    }
             }
         });
         return label;
@@ -104,17 +128,5 @@ public class StorePanel extends JPanel {
         if (currentPlayer != null) {
             moneyLabel.setText("Rendelkezésre álló pénz: " + currentPlayer.getBank().getMoney());
         }
-    }
-    
-    private void tryBuy(Buyable buyable) {
-        Player currentPlayer = gameLogic.getCurrentPlayer();
-        if (currentPlayer == null)
-            return;
-
-        Vehicle selectedVehicle = vehiclePanel.getSelectedVehicle();
-        if (selectedVehicle instanceof SnowPlow snowPlow) {
-            buyable.buy(snowPlow.getInventory(), currentPlayer);
-        }
-        
     }
 }

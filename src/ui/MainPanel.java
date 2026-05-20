@@ -33,7 +33,7 @@ public class MainPanel extends JPanel {
         inventoryPanel = new InventoryPanel();
         infoPages.addTab("Készlet", inventoryPanel);
 
-        infoPages.addTab("Bolt", new StorePanel(gameLogic, vehiclePanel));
+        infoPages.addTab("Bolt", new StorePanel(gameLogic, vehiclePanel, commandInterpreter));
         
         consolePanel = new ConsolePanel(commandInterpreter);
         infoPages.addTab("Parancsok", consolePanel);
