@@ -18,7 +18,7 @@ public class MainPanel extends JPanel {
     private transient StorePanel storePanel;
     private transient InventoryPanel inventoryPanel;
     private transient ConsolePanel consolePanel;
-
+    private transient SavePanel savePanel;
     
 
     public MainPanel(CommandInterpreter commandInterpreter, GameLogic gameLogic) {
@@ -36,6 +36,8 @@ public class MainPanel extends JPanel {
         
         consolePanel = new ConsolePanel(commandInterpreter);
 
+        savePanel = new SavePanel();
+
         infoPages.setBackground(UIStyles.backgroundColor);
         infoPages.setForeground(UIStyles.textColor);
 
@@ -46,7 +48,7 @@ public class MainPanel extends JPanel {
         infoPages.addTab("Készlet", inventoryPanel);
         infoPages.addTab("Bolt", storePanel);
         infoPages.addTab("Parancsok", consolePanel);
-
+        infoPages.addTab("Mentés", savePanel);
 
         add(infoPages, BorderLayout.SOUTH);
 

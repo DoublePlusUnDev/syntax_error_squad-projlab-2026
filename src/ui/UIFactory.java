@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 public class UIFactory {
     private UIFactory() {
@@ -41,5 +42,13 @@ public class UIFactory {
         label.setForeground(textColor);
         label.setAlignmentX(alignmentX);
         return label;
+    }
+
+    public static JTextField createTextField(int columns) {
+        JTextField textField = new JTextField(columns);
+        textField.setBackground(UIStyles.buttonBackgroundColor);
+        textField.setForeground(UIStyles.textColor);
+        textField.setBorder(BorderFactory.createLineBorder(UIStyles.borderColor, 2));
+        return textField;
     }
 }
