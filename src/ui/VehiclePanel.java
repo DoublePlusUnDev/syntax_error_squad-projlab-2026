@@ -48,7 +48,7 @@ public class VehiclePanel extends JPanel {
         add(nextTurnButton, BorderLayout.SOUTH);
 
         gameLogic.addGameStateChangeListener(this::update);
-        gameLogic.addRoundEndedListener(() -> {
+        gameLogic.addTurnEndedListener(() -> {
             selectedVehicle = null;
             selectionChangeListeners.forEach(Runnable::run);
             update();

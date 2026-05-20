@@ -226,7 +226,7 @@ public class RoadPanel extends JPanel {
                 // Calculate vehicle position on the lane
                 float vehicleX = start.x + dirX * segmentLength * positionAlongLane + perpX * centerOffset;
                 float vehicleY = start.y + dirY * segmentLength * positionAlongLane + perpY * centerOffset;
-
+                
                 // Draw vehicle sprite based on type
                 if (vehicle instanceof gamelogic.SnowPlow) {
                     if (snowPlowImage != null) {

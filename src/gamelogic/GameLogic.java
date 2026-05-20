@@ -13,7 +13,7 @@ import utils.Logger;
 public class GameLogic {
     private final List<Runnable> gameStateChangeListeners = new ArrayList<>();
     private final List<Runnable> topologyChangedListeners = new ArrayList<>();
-    private final List<Runnable> roundEndedListeners = new ArrayList<>();
+    private final List<Runnable> turnEndedListeners = new ArrayList<>();
 
     private GameSettings gameSettings;
 
@@ -69,11 +69,10 @@ public class GameLogic {
             currentRound++;
             snow();
             updateAll();
-            roundEndedListeners.forEach(Runnable::run);
         }
         switchPlayer(players.get((currentPlayerIndex + 1) % players.size()));
         gameStateChangeListeners.forEach(Runnable::run);
-        
+        turnEndedListeners.forEach(Runnable::run);
         startTurn();
     }
 
@@ -95,8 +94,8 @@ public class GameLogic {
         topologyChangedListeners.add(listener);
     }
 
-    public void addRoundEndedListener(Runnable listener) {
-        roundEndedListeners.add(listener);
+    public void addTurnEndedListener(Runnable listener) {
+        turnEndedListeners.add(listener);
     }
 
     private void switchPlayer(Player player) {
