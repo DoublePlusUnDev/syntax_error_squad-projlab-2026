@@ -225,8 +225,8 @@ Opciók:
 -head [STRING]: Kotrófej id-ja
 
 buy
-Leírás: Megvásárol egy megvásárolható tárgyat egy adott inventory-ba helyezve, egy adott Moneybank-ból kivett pénz segítségével.
+Leírás: Megvásárol egy megvásárolható tárgyat egy adott inventory-ba helyezve, egy adott játékos pénzének segítségével.
 Opciók: 
 -buyable [STRING]: Megvásárolható tárgy id-ja
 -inventory [STRING]: Inventory id-ja
--bank [STRING]: Moneybank id-ja
+-player [STRING]: A vásárló játékos id-ja

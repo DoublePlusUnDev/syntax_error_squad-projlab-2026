@@ -10,6 +10,7 @@ Iced: no
 Vehicle Block: no
 Ice Debris: no
 Salted Timer: 0
+Vehicles on lane: 0
 Lane road2.lane2 details:
 Snow Height: 0.2
 Gravel Height: 0.0
@@ -18,3 +19,4 @@ Iced: no
 Vehicle Block: no
 Ice Debris: no
 Salted Timer: 0
+Vehicles on lane: 0

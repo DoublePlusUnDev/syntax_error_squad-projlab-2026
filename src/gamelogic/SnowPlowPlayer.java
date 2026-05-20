@@ -14,14 +14,7 @@ public class SnowPlowPlayer extends Player {
         super(id, roads);
         snowPlows = new ArrayList<>();
         addSnowPlow(new SnowPlow(id + ".snowPlow1"), startingLane);
-    }
-
-    @Override
-    public void takeTurn() {
-        if (!roads.tryMoveTowardsNode(snowPlows.get(0), null)) 
-            return;
-    }      
-    
+    }  
 
     public List<SnowPlow> getSnowPlows() {
         return snowPlows;

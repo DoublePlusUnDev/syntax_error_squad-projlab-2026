@@ -10,3 +10,5 @@ Iced: no
 Vehicle Block: no
 Ice Debris: yes
 Salted Timer: 0
+Vehicles on lane: 1
+- snowPlowPlayer.snowPlow1

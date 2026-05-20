@@ -14,8 +14,8 @@ public class Gravel extends Buyable {
     }
 
     @Override
-    public boolean buy(Inventory inventory, MoneyBank bank) {
-        if (!super.buy(inventory, bank))
+    public boolean buy(Inventory inventory, Player player) {
+        if (!super.buy(inventory, player))
             return false;
 
         inventory.addGravel(amount);

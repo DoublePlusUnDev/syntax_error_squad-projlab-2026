@@ -1,6 +1,6 @@
 /loadGame -path resources/init/Init3.txt
 equip -vehicle snowPlowPlayer.snowPlow1 -head salterHead
-buy -buyable salt -inventory snowPlowPlayer.snowPlow1.inventory -bank snowPlowPlayer.bank
+buy -buyable salt -inventory snowPlowPlayer.snowPlow1.inventory -player snowPlowPlayer
 /clean -head salterHead -target road1.lane1
 inspect -id road1.lane1
 inspect -id snowPlowPlayer.snowPlow1.inventory

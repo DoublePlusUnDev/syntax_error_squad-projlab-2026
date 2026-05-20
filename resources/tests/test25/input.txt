@@ -1,4 +1,4 @@
 /loadGame -path resources/init/Init3.txt
 /start
 /createBuyable -id expensiveSalt -amount 50 -price 99999 -type salt
-buy -buyable expensiveSalt -inventory snowPlowPlayer.snowPlow1.inventory -bank snowPlowPlayer.bank
+buy -buyable expensiveSalt -inventory snowPlowPlayer.snowPlow1.inventory -player snowPlowPlayer

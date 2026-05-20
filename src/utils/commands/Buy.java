@@ -1,10 +1,9 @@
 package utils.commands;
 
-import java.util.Map;
-
 import gamelogic.Buyable;
 import gamelogic.Inventory;
-import gamelogic.MoneyBank;
+import gamelogic.Player;
+import java.util.Map;
 import utils.CommandInterpreter;
 import utils.CommandInterpreter.Command;
 import utils.Logger;
@@ -14,8 +13,8 @@ public class Buy implements Command{
 
     @Override
     public void execute(Map<String, String> args, CommandInterpreter interpreter) {
-        if (!args.containsKey("-buyable") || !args.containsKey("-inventory") || !args.containsKey("-bank")) {
-            Logger.logError("Error: Missing arguments for buy command. Required: -buyable, -inventory, -bank.");
+        if (!args.containsKey("-buyable") || !args.containsKey("-inventory") || !args.containsKey("-player")) {
+            Logger.logError("Error: Missing arguments for buy command. Required: -buyable, -inventory, -player.");
             return;
         }
 
@@ -31,13 +30,13 @@ public class Buy implements Command{
             return;
         }
 
-        MoneyBank moneyBank = ObjectRegistry.get(args.get("-bank"), MoneyBank.class);
-        if (moneyBank == null) {
-            Logger.logError("Error: MoneyBank with id " + args.get("-bank") + " does not exist.");
+        Player player = ObjectRegistry.get(args.get("-player"), Player.class);
+        if (player == null) {
+            Logger.logError("Error: Player with id " + args.get("-player") + " does not exist.");
             return;
         }
 
-        buyable.buy(inventory, moneyBank);
+        buyable.buy(inventory, player);
     }
     
 }

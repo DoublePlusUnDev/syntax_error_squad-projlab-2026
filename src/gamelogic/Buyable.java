@@ -25,8 +25,8 @@ public abstract class Buyable implements Inspectable {
      * If the buyer has enough money, the price will be deducted from the money bank and the method will return true.
      * Otherwise, the method will return false and no money will be deducted.
      */
-    public boolean buy(Inventory inventory, MoneyBank bank){
-        if (bank.payMoney(price)) {
+    public boolean buy(Inventory inventory, Player player){
+        if (player.getBank().payMoney(price)) {
             Logger.logLine("BUYABLE [" + id + "] BOUGHT BY [" + inventory.id + "] FOR [" + price + "]");
             return true;
         }

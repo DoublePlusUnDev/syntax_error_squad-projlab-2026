@@ -7,3 +7,4 @@ Iced: no
 Vehicle Block: no
 Ice Debris: no
 Salted Timer: 0
+Vehicles on lane: 0

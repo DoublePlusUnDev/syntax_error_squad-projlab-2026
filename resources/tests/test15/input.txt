@@ -1,6 +1,6 @@
 /loadGame -path resources/init/Init3.txt
 equip -vehicle snowPlowPlayer.snowPlow1 -head gravelHead
-buy -buyable gravel -inventory snowPlowPlayer.snowPlow1.inventory -bank snowPlowPlayer.bank
+buy -buyable gravel -inventory snowPlowPlayer.snowPlow1.inventory -player snowPlowPlayer
 /clean -head gravelHead -target road1.lane1
 inspect -id road1.lane1
 inspect -id snowPlowPlayer.snowPlow1.inventory

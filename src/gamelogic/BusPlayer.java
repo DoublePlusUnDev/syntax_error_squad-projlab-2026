@@ -16,11 +16,6 @@ public class BusPlayer extends Player {
         roads.placeBus(bus);
     }
 
-    @Override
-    public void takeTurn() {
-        roads.tryMoveTowardsNode(bus, null);
-    }
-
     public Bus getBus() {
         return bus;
     }

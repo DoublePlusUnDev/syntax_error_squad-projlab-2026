@@ -20,14 +20,7 @@ public abstract class Player implements Inspectable {
         moneyBank = new MoneyBank(id + ".bank", 0);
     }
 
-    
-
-    public void takeTurn() {
-        
+    public MoneyBank getBank() {
+        return moneyBank;
     }
-
-    public void pay(int money) {
-        
-    }
-    
 }

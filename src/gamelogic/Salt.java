@@ -21,9 +21,9 @@ public class Salt extends Buyable {
      * @return true if the purchase is successful, false otherwise.
      */
     @Override
-    public boolean buy(Inventory inventory, MoneyBank bank) {
+    public boolean buy(Inventory inventory, Player player) {
         
-        if (!super.buy(inventory, bank))
+        if (!super.buy(inventory, player))
             return false;
         
 

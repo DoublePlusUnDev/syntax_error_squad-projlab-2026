@@ -1,6 +1,6 @@
 /loadGame -path resources/init/Init3.txt
 equip -vehicle snowPlowPlayer.snowPlow1 -head dragonHead
-buy -buyable kerosene -inventory snowPlowPlayer.snowPlow1.inventory -bank snowPlowPlayer.bank
+buy -buyable kerosene -inventory snowPlowPlayer.snowPlow1.inventory -player snowPlowPlayer
 /clean -head dragonHead -target road1.lane1
 inspect -id road1.lane1
 inspect -id snowPlowPlayer.snowPlow1.inventory

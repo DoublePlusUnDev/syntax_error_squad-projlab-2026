@@ -9,6 +9,8 @@ Iced: yes
 Vehicle Block: no
 Ice Debris: no
 Salted Timer: 0
+Vehicles on lane: 1
+- snowPlowPlayer.snowPlow1
 Lane road1.lane2 details:
 Snow Height: 0.1
 Gravel Height: 0.0
@@ -17,3 +19,4 @@ Iced: no
 Vehicle Block: no
 Ice Debris: no
 Salted Timer: 0
+Vehicles on lane: 0
