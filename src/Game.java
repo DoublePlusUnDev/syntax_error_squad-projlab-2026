@@ -1,5 +1,5 @@
 import gamelogic.GameLogic;
-import ui.GameUI;
+import ui.GameWindow;
 import ui.SettingsManager;
 import utils.CommandInterpreter;
 
@@ -9,6 +9,6 @@ public class Game {
         CommandInterpreter commandInterpreter = new CommandInterpreter();
         SettingsManager settingsManager = new SettingsManager();
 
-        GameUI gameUI = new GameUI(commandInterpreter, GameLogic.getInstance(), settingsManager);
+        GameWindow gameWindow = new GameWindow(commandInterpreter, GameLogic.getInstance(), settingsManager);
     }
 }

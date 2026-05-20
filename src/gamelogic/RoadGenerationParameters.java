@@ -31,7 +31,7 @@ public class RoadGenerationParameters {
         return settings.get(key);
     }
 
-    public static RoadGenerationParameters defaultParams = new RoadGenerationParameters() {{
+    public static final RoadGenerationParameters defaultParams = new RoadGenerationParameters() {{
         setParameter(NODE_MIN_KEY, 10);
         setParameter(NODE_MAX_KEY, 15);
         setParameter(MAIN_LANES_KEY, 2);

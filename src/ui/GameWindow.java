@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import utils.CommandInterpreter;
 
-public class GameUI extends JFrame {
+public class GameWindow extends JFrame {
 
     private final CardLayout cardLayout;
     private final JPanel cards;
@@ -18,7 +18,7 @@ public class GameUI extends JFrame {
     private final GameLogic gameLogic;
     private final SettingsManager settingsManager;
 
-    public GameUI(CommandInterpreter commandInterpreter, GameLogic gameLogic, SettingsManager settingsManager) {
+    public GameWindow(CommandInterpreter commandInterpreter, GameLogic gameLogic, SettingsManager settingsManager) {
         this.commandInterpreter = commandInterpreter;
         this.gameLogic = gameLogic;
         this.settingsManager = settingsManager;
@@ -61,9 +61,10 @@ public class GameUI extends JFrame {
     }
 
     public void startGame() {
-        commandInterpreter.execute(settingsManager.getRoadGenerator());
+        commandInterpreter.execute(settingsManager.getGeneratorCommand());
+        
         commandInterpreter.execute("/addPlayer -id player1 -type snowplow -net net -lane Mainroad0.lane1");
-        commandInterpreter.execute("/start");
+        commandInterpreter.execute(settingsManager.getStartCommand());
         showGamePanel();
     }
 }

@@ -14,6 +14,8 @@ public class GameLogic {
     private final List<Runnable> gameStateChangeListeners = new ArrayList<>();
     private final List<Runnable> topologyChangedListeners = new ArrayList<>();
 
+    private GameSettings gameSettings;
+
     private RoadNetwork roads;
     private final List<Car> cars;
     private final List<Player> players;
@@ -23,6 +25,7 @@ public class GameLogic {
     public static GameLogic instance;
 
     private Map<Vehicle, Boolean> hasMoved;
+    
 
     public GameLogic() {
         roads = null;
@@ -32,7 +35,8 @@ public class GameLogic {
         
     }
 
-    public void startGame() {
+    public void startGame(GameSettings gameSettings) {
+        this.gameSettings = gameSettings;
         if (players.isEmpty()) {
             Logger.logError("NO PLAYERS! FAILING TO START GAME.");
             return;
@@ -52,11 +56,22 @@ public class GameLogic {
         int currentIndex = players.indexOf(currentPlayer);
         if (currentPlayer == players.get(players.size() - 1)) {
             Logger.logLine("ROUND ENDED");
+            snow();
             updateAll();
         }
         switchPlayer(players.get((currentIndex + 1) % players.size()));
         gameStateChangeListeners.forEach(Runnable::run);
         startTurn();
+    }
+
+    private void snow() {
+        int snowChance = (Integer) gameSettings.getSetting(GameSettings.SNOW_CHANCE_KEY);
+        int snowNodes = (Integer) gameSettings.getSetting(GameSettings.SNOW_NODES_KEY);
+        
+        if (!utils.RandomGenerator.decide(snowChance / 100.0f))
+            return;
+
+        roads.snow(snowNodes);
     }
 
     public void addGameStateChangeListener(Runnable listener) {

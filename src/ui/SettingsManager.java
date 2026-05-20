@@ -1,8 +1,8 @@
 package ui;
+import gamelogic.GameSettings;
+import gamelogic.RoadGenerationParameters;
 import java.util.HashMap;
 import java.util.Map;
-
-import gamelogic.RoadGenerationParameters;
 
 public class SettingsManager  {
     Map<String, Object> settings = new HashMap<>();
@@ -11,7 +11,7 @@ public class SettingsManager  {
         settings.put(key, value);
     }
 
-    public String getRoadGenerator() {
+    public String getGeneratorCommand() {
         StringBuilder sb = new StringBuilder("/generate -id net");
 
         if (settings.containsKey(RoadGenerationParameters.NODE_MIN_KEY))
@@ -40,6 +40,17 @@ public class SettingsManager  {
             sb.append(" -" + RoadGenerationParameters.BUS_STOPS_MIN_KEY + " ").append(settings.get(RoadGenerationParameters.BUS_STOPS_MIN_KEY));
         if (settings.containsKey(RoadGenerationParameters.BUS_STOPS_MAX_KEY))
             sb.append(" -" + RoadGenerationParameters.BUS_STOPS_MAX_KEY + " ").append(settings.get(RoadGenerationParameters.BUS_STOPS_MAX_KEY));
+
+
+        return sb.toString();
+    }
+
+    public String getStartCommand() {
+        StringBuilder sb = new StringBuilder("/start");
+        if (settings.containsKey(GameSettings.SNOW_NODES_KEY))
+            sb.append(" -" + GameSettings.SNOW_NODES_KEY + " ").append(settings.get(GameSettings.SNOW_NODES_KEY));
+        if (settings.containsKey(GameSettings.SNOW_CHANCE_KEY))
+            sb.append(" -" + GameSettings.SNOW_CHANCE_KEY + " ").append(settings.get(GameSettings.SNOW_CHANCE_KEY));
 
         return sb.toString();
     }

@@ -110,7 +110,7 @@ public class RoadPanel extends JPanel {
                 xs[3] = (int) (start.x + perpX * rightOffset);
                 ys[3] = (int) (start.y + perpY * rightOffset);
 
-                g2.setColor(laneColor);
+                g2.setColor(getLaneFillColor(lanes.get(i)));
                 g2.fillPolygon(xs, ys, 4);
                 g2.setColor(laneBorderColor);
                 g2.drawPolygon(xs, ys, 4);
@@ -243,6 +243,25 @@ public class RoadPanel extends JPanel {
         }
     }
 
+    private Color getLaneFillColor(Lane lane) {
+        if (lane.isIced()) {
+            return icingColor;
+        }
+
+        float snow = lane.getSnow();
+        float gravel = lane.getGravel();
+
+        if (snow > gravel) {
+            return snowColor;
+        }
+
+        if (gravel > snow) {
+            return gravelColor;
+        }
+
+        return laneColor;
+    }
+
     private transient BufferedImage snowPlowImage;
     private transient BufferedImage snowPlowSelectedImage;
     private transient BufferedImage busImage;
@@ -265,7 +284,9 @@ public class RoadPanel extends JPanel {
     private Color laneColor = new Color(60, 60, 60);
     private Color separatorColor = Color.WHITE;
     private Color laneBorderColor = Color.BLACK;
-
+    private Color snowColor = new Color(245, 255, 255);
+    private Color gravelColor = new Color(172, 172, 172);
+    private Color icingColor = new Color(160, 255, 245);
 
 
     private transient List<DisplayNode> nodes = new ArrayList<>();

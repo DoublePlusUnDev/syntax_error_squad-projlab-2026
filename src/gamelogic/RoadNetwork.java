@@ -253,7 +253,27 @@ public class RoadNetwork implements Inspectable {
         }
     }
 
-    
+    public void snow(int nodes){
+        if (nodes <= 0 || this.nodes.isEmpty()) {
+            return;
+        }
+
+        List<Node> availableNodes = new ArrayList<>(this.nodes);
+        RandomGenerator.shuffleList(availableNodes);
+
+        List<Node> selectedNodes = availableNodes.subList(0, Math.min(nodes, availableNodes.size()));
+        Set<RoadSegment> affectedSegments = new HashSet<>();
+
+        for (Node node : selectedNodes) {
+            for (Neighbour neighbour : node.getNeighbours()) {
+                affectedSegments.add(neighbour.getRoadSegment());
+            }
+        }
+
+        for (RoadSegment segment : affectedSegments) {
+            segment.addSnow(0.05f);
+        }
+    }
 
     public void addNode(Node node){
         nodes.add(node);

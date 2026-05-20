@@ -17,7 +17,7 @@ public class MainMenuPanel extends JPanel {
 
     
 
-    public MainMenuPanel(GameUI gameUI) {
+    public MainMenuPanel(GameWindow gameWindow) {
         this.setBackground(UIStyles.backgroundColor);
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -33,7 +33,7 @@ public class MainMenuPanel extends JPanel {
 
         add(Box.createRigidArea(new Dimension(0, 40)));
 
-        newGameButton = UIFactory.createButton("Új játék", 18.0f, 240, 40, CENTER_ALIGNMENT, e -> gameUI.startGame());
+        newGameButton = UIFactory.createButton("Új játék", 18.0f, 240, 40, CENTER_ALIGNMENT, e -> gameWindow.startGame());
         add(newGameButton);
 
         add(Box.createRigidArea(new Dimension(0, 10)));
@@ -43,12 +43,12 @@ public class MainMenuPanel extends JPanel {
 
         add(Box.createRigidArea(new Dimension(0, 10)));
 
-        settingsButton = UIFactory.createButton("Beállítások", 18.0f, 240, 40, CENTER_ALIGNMENT, e -> gameUI.showSettingsMenu());
+        settingsButton = UIFactory.createButton("Beállítások", 18.0f, 240, 40, CENTER_ALIGNMENT, e -> gameWindow.showSettingsMenu());
         add(settingsButton);
 
         add(Box.createRigidArea(new Dimension(0, 10)));
 
-        exitButton = UIFactory.createButton("Kilépés", 18.0f, 240, 40, CENTER_ALIGNMENT, e -> gameUI.quitApplication());
+        exitButton = UIFactory.createButton("Kilépés", 18.0f, 240, 40, CENTER_ALIGNMENT, e -> gameWindow.quitApplication());
         add(exitButton);
 
         add(Box.createVerticalGlue());
