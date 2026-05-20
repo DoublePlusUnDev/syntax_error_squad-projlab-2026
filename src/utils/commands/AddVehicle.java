@@ -43,7 +43,7 @@ public class AddVehicle implements Command {
         String vehicleType = args.get("-type");
         switch (vehicleType) {
             case "car":
-                Car newCar = new Car(args.get("-id"));
+                Car newCar = new Car(args.get("-id"), null, null);
                 ObjectRegistry.register(args.get("-id"), newCar);
                 GameLogic.getInstance().addCar(newCar, ObjectRegistry.get(args.get("-lane"), Lane.class)); 
                 break;

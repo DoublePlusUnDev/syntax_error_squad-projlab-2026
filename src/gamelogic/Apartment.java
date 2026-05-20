@@ -45,7 +45,7 @@ public class Apartment extends Node implements Updatable {
      * Creates a new apartment car and hands it over to the game logic.
      */
     private void trySpawnCar() {
-        Car car = new Car(id + "_" + spawnedCars);
+        Car car = new Car(id + "_" + spawnedCars, this, GameLogic.getInstance().getRoads().getWorkplace());
         Lane freeLane = null;
         for (Neighbour neighbour : neighbours) {
             for (Lane lane : neighbour.getRoadSegment().getLanes()) {

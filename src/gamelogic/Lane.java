@@ -179,20 +179,30 @@ public class Lane implements Updatable, Inspectable {
     public float destroySnow() {
         float prevSnow = snowHeight;
         setSnowHeight(0);
-        Logger.logLine("LANE [" + id + "] SNOW DESTROYED");
-        return prevSnow * SNOW_CLEAR_PAYOUT;
+        if (prevSnow > 0) {
+            Logger.logLine("LANE [" + id + "] SNOW DESTROYED");
+            return prevSnow * SNOW_CLEAR_PAYOUT;
+        }
+        return 0;
     }
 
     public float destroyIceDebris() {
         boolean hadDebris = iceDebris;
         setIceDebris(false);
-        Logger.logLine("LANE [" + id + "] ICE DEBRIS DESTROYED");
-        return hadDebris ? ICE_CLEAR_PAYOUT : 0;
+        if (hadDebris) {
+            Logger.logLine("LANE [" + id + "] ICE DEBRIS DESTROYED");
+            return ICE_CLEAR_PAYOUT;
+        }
+        return 0;
     }
 
     public float destroyGravel() {
+        float prevGravel = gravelHeight;
         setGravelHeight(0);
-        Logger.logLine("LANE [" + id + "] GRAVEL DESTROYED");
+        if (prevGravel > 0) {
+            Logger.logLine("LANE [" + id + "] GRAVEL DESTROYED");
+            return 0;
+        }
         return 0;
     }
 
@@ -202,8 +212,11 @@ public class Lane implements Updatable, Inspectable {
     public float destroyIce() {
         boolean wasIced = iced;
         setIced(false);
-        Logger.logLine("LANE [" + id + "] ICE DESTROYED");
-        return wasIced ? ICE_CLEAR_PAYOUT : 0;
+        if (wasIced) {
+            Logger.logLine("LANE [" + id + "] ICE DESTROYED");
+            return ICE_CLEAR_PAYOUT;
+        }
+        return 0;
     }
 
     /**

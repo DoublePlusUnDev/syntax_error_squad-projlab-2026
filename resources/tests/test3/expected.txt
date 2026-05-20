@@ -1,7 +1,6 @@
 SNOWPLOW [snowPlowPlayer.snowPlow1] EQUIPPED [sweeperHead]
 LANE [road1.lane1] CHANGED [snowHeight] FROM [0.1] TO [0.0]
 LANE [road1.lane1] SNOW DESTROYED
-LANE [road1.lane1] GRAVEL DESTROYED
 LANE [road1.lane2] CHANGED [snowHeight] FROM [0.1] TO [0.2]
 Lane road1.lane1 details:
 Snow Height: 0.0

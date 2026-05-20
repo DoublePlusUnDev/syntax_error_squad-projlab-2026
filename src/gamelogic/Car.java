@@ -15,8 +15,10 @@ public class Car extends Vehicle {
     private boolean headedHome = false;
 
      
-    public Car(String id) {
+    public Car(String id, Apartment home, Workplace workplace) {
         super(id);
+        this.home = home;
+        this.workplace = workplace;
     }
 
     /**
@@ -122,5 +124,8 @@ public class Car extends Vehicle {
     public void inspect() {
         Logger.logLine("Car " + id + " details:");
         Logger.logLine("Location: " + (location != null ? location.id : "none"));
+        Logger.logLine("Home: " + (home != null ? home.id : "none"));
+        Logger.logLine("Workplace: " + (workplace != null ? workplace.id : "none"));
+        Logger.logLine("Headed Home: " + headedHome);
     }
 }

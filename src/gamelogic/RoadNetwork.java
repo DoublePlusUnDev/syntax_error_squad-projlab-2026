@@ -376,5 +376,20 @@ public class RoadNetwork implements Inspectable {
         for (Vehicle vehicle : vehicles) {
             Logger.logLine("-" + vehicle.id + " at lane " + vehicle.location.id);
         }
+    } 
+
+    public Workplace getWorkplace() {
+        List<Workplace> workplaces = new ArrayList<>();
+        for (Node node : nodes) {
+            if (node instanceof Workplace workplace) {
+                workplaces.add(workplace);
+            }
+        }
+
+        if (workplaces.isEmpty()) 
+            return null;
+
+        RandomGenerator.shuffleList(workplaces);
+        return workplaces.get(0);
     }
 }
