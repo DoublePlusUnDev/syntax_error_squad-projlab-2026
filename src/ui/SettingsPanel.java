@@ -42,10 +42,10 @@ public class SettingsPanel extends JPanel{
 
         contentPanel.add(new SettingsCardCheckBox("Várókép: ", false, 
             value -> booleanSetter("turnScreen", String.valueOf(value))));
-        contentPanel.add(new SettingsCardValueField("Hókotró játékosok: ", 2, 
-            value -> integerSetter("snowPlowPlayers", value)));
-        contentPanel.add(new SettingsCardValueField("Busz játékosok: ", 1, 
-            value -> integerSetter("busPlayers", value)));
+        contentPanel.add(new SettingsCardValueField("Hókotró játékosok: ", (Integer) GameSettings.defaultSettings.getSetting(GameSettings.SNOW_PLOW_PLAYERS_KEY), 
+            value -> integerSetter(GameSettings.SNOW_PLOW_PLAYERS_KEY, value)));
+        contentPanel.add(new SettingsCardValueField("Busz játékosok: ", (Integer) GameSettings.defaultSettings.getSetting(GameSettings.BUS_PLAYERS_KEY), 
+            value -> integerSetter(GameSettings.BUS_PLAYERS_KEY, value)));
         contentPanel.add(new SettingsCardValueField("Körök száma: ", 50, 
             value -> integerSetter("rounds", value)));
         contentPanel.add(new SettingsCardValueField("Havazás esélye: ", (Integer) GameSettings.defaultSettings.getSetting(GameSettings.SNOW_CHANCE_KEY), 

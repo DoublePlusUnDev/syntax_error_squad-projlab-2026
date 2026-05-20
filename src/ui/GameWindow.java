@@ -68,8 +68,8 @@ public class GameWindow extends JFrame {
         commandInterpreter.execute("/seed -seed " + seed.toString());
         commandInterpreter.execute(settingsManager.getGeneratorCommand());
 
-        String startLaneId = gameLogic.getRoads().getRoadSegments().get(0).getLane(0).id;
-        commandInterpreter.execute("/addPlayer -id player1 -type snowplow -net net -lane " + startLaneId);
+        //String startLaneId = gameLogic.getRoads().getRoadSegments().get(0).getLane(0).id;
+        //commandInterpreter.execute("/addPlayer -id player1 -type snowplow -net net -lane " + startLaneId);
         commandInterpreter.execute(settingsManager.getStartCommand());
         showGamePanel();
     }

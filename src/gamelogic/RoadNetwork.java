@@ -392,4 +392,21 @@ public class RoadNetwork implements Inspectable {
         RandomGenerator.shuffleList(workplaces);
         return workplaces.get(0);
     }
+
+    public Lane getFreeLane() {
+        List<Lane> freeLanes = new ArrayList<>();
+        for (RoadSegment segment : roadSegments) {
+            for (Lane lane : segment.lanes) {
+                if (lane.getVehicles().isEmpty()) {
+                    freeLanes.add(lane);
+                }
+            }
+        }
+
+        if (freeLanes.isEmpty()) 
+            return null;
+
+        RandomGenerator.shuffleList(freeLanes);
+        return freeLanes.get(0);
+    }
 }

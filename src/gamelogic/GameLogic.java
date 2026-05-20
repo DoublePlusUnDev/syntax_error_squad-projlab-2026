@@ -36,6 +36,13 @@ public class GameLogic {
     }
 
     public void startGame(GameSettings gameSettings) {
+        for (int i = 0; i < (Integer) gameSettings.getSetting(GameSettings.SNOW_PLOW_PLAYERS_KEY); i++) {
+            addPlayer(new SnowPlowPlayer("snowplow_player_" + (i + 1), roads, roads.getFreeLane()));
+        }
+        for (int i = 0; i < (Integer) gameSettings.getSetting(GameSettings.BUS_PLAYERS_KEY); i++) {
+            addPlayer(new BusPlayer("bus_player_" + (i + 1), roads, roads.getFreeLane()));
+        }
+
         this.gameSettings = gameSettings;
         if (players.isEmpty()) {
             Logger.logError("NO PLAYERS! FAILING TO START GAME.");

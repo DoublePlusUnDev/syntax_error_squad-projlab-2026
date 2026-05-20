@@ -66,6 +66,10 @@ public class SettingsManager  {
             sb.append(" -" + GameSettings.SNOW_NODES_KEY + " ").append(settings.get(GameSettings.SNOW_NODES_KEY));
         if (settings.containsKey(GameSettings.SNOW_CHANCE_KEY))
             sb.append(" -" + GameSettings.SNOW_CHANCE_KEY + " ").append(settings.get(GameSettings.SNOW_CHANCE_KEY));
+        if (settings.containsKey(GameSettings.SNOW_PLOW_PLAYERS_KEY))
+            sb.append(" -" + GameSettings.SNOW_PLOW_PLAYERS_KEY + " ").append(settings.get(GameSettings.SNOW_PLOW_PLAYERS_KEY));
+        if (settings.containsKey(GameSettings.BUS_PLAYERS_KEY))
+            sb.append(" -" + GameSettings.BUS_PLAYERS_KEY + " ").append(settings.get(GameSettings.BUS_PLAYERS_KEY));
 
         return sb.toString();
     }
