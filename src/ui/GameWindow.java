@@ -48,8 +48,15 @@ public class GameWindow extends JFrame {
         EndPanel endPanel = new EndPanel(this);
         cards.add("EndPanel", endPanel);
 
+        WaitPanel waitPanel = new WaitPanel(this, gameLogic);
+        cards.add("WaitPanel", waitPanel);
+
         add(cards);
         setVisible(true);
+    }
+
+    public void showWaitPanel() {
+        cardLayout.show(cards, "WaitPanel");
     }
 
     public void showMainMenu() {

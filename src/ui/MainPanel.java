@@ -58,7 +58,7 @@ public class MainPanel extends JPanel {
         add(roadPanel, BorderLayout.CENTER);
 
         
-
+        gameLogic.addTurnEndedListener(gameWindow::showWaitPanel);
         gameLogic.addGameEndedListener(gameWindow::showEndPanel);
     }
 

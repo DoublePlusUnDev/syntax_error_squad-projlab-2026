@@ -9,10 +9,10 @@ public class EndPanel extends JPanel {
     public EndPanel(GameWindow gameWindow) {
         setBackground(UIStyles.backgroundColor);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        JLabel endLabel = UIFactory.createLabel("Game Over!", 24);
+        JLabel endLabel = UIFactory.createLabel("Játék vége!", 24);
         endLabel.setAlignmentX(CENTER_ALIGNMENT);
         add(endLabel);
-        JButton backToMenuButton = UIFactory.createButton("Back to Menu", e -> gameWindow.showMainMenu());
+        JButton backToMenuButton = UIFactory.createButton("Vissza a főmenübe", e -> gameWindow.showMainMenu());
         backToMenuButton.setAlignmentX(CENTER_ALIGNMENT);
         add(backToMenuButton);
 
