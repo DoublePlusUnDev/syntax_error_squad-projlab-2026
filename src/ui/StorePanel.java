@@ -3,6 +3,7 @@ package ui;
 import gamelogic.GameLogic;
 import gamelogic.Player;
 import gamelogic.SnowPlow;
+import gamelogic.SnowPlowBuyable;
 import gamelogic.Vehicle;
 import gamelogic.buyables.BioKerosene;
 import gamelogic.buyables.BlowerHead;
@@ -40,6 +41,9 @@ public class StorePanel extends JPanel {
     private final JLabel salterHeadBuyable;
     private final JLabel gravelThrowerHeadBuyable;
     private final JLabel dragonHeadBuyable;
+    private final JLabel snowPlowBuyable;
+
+    private int counter = 0;
 
     public StorePanel(GameLogic gameLogic, VehiclePanel vehiclePanel, CommandInterpreter commandInterpreter) {
         this.vehiclePanel = vehiclePanel;
@@ -83,6 +87,9 @@ public class StorePanel extends JPanel {
         dragonHeadBuyable = createBuyableLabel("Dragon Head: ${price} - #{amount}", 100, 1, DragonHead.class);
         add(dragonHeadBuyable);
 
+        snowPlowBuyable = createBuyableLabel("Snow Plow: ${price} - #{amount}", 500, 1, SnowPlowBuyable.class);
+        add(snowPlowBuyable);
+
         gameLogic.addGameStateChangeListener(this::update);
         vehiclePanel.addSelectionChangeListener(this::update);
         
@@ -113,15 +120,18 @@ public class StorePanel extends JPanel {
                         buyableName = "gravelhead";
                     } else if (buyableClass == DragonHead.class) {
                         buyableName = "dragonhead";
+                    } else if (buyableClass == SnowPlowBuyable.class) {
+                        buyableName = "snowplow";
                     } else {
                         throw new IllegalStateException("Unexpected value: " + buyableClass);
                     }
 
                     Vehicle selectedVehicle = vehiclePanel.getSelectedVehicle();
                     if (selectedVehicle instanceof SnowPlow snowPlow){
-                        commandInterpreter.execute("/createBuyable -id " + buyableName + " -amount " + amount + " -price " + price + " -type " + buyableName);
-                        commandInterpreter.execute("buy -buyable " + buyableName + " -inventory " + snowPlow.getInventory().id + " -player " + gameLogic.getCurrentPlayer().id);
+                        commandInterpreter.execute("/createBuyable -id " + buyableName + counter + " -amount " + amount + " -price " + price + " -type " + buyableName);
+                        commandInterpreter.execute("buy -buyable " + buyableName + counter + " -inventory " + snowPlow.getInventory().id + " -player " + gameLogic.getCurrentPlayer().id);
                         itemBoughtListeners.forEach(Runnable::run);
+                        counter++;
                     }
             }
         });
