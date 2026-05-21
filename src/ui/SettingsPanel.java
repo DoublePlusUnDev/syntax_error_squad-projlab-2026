@@ -41,7 +41,7 @@ public class SettingsPanel extends JPanel{
         setBackground(UIStyles.backgroundColor);
 
         contentPanel.add(new SettingsCardCheckBox("Várókép: ", false, 
-            value -> booleanSetter("turnScreen", String.valueOf(value))));
+            value -> booleanSetter(SettingsManager.TURN_WINDOW_KEY, value.toString())));
         contentPanel.add(new SettingsCardValueField("Hókotró játékosok: ", (Integer) GameSettings.defaultSettings.getSetting(GameSettings.SNOW_PLOW_PLAYERS_KEY), 
             value -> integerSetter(GameSettings.SNOW_PLOW_PLAYERS_KEY, value)));
         contentPanel.add(new SettingsCardValueField("Busz játékosok: ", (Integer) GameSettings.defaultSettings.getSetting(GameSettings.BUS_PLAYERS_KEY), 

@@ -6,6 +6,15 @@ import java.util.Map;
 
 public class SettingsManager  {
     Map<String, Object> settings = new HashMap<>();
+    public static final String TURN_WINDOW_KEY = "turnScreen";
+
+    public SettingsManager() {
+        settings.put(TURN_WINDOW_KEY, false);
+    }
+
+    public Object getSetting(String key) {
+        return settings.get(key);
+    }
 
     public void setSetting(String key, Object value) {
         settings.put(key, value);

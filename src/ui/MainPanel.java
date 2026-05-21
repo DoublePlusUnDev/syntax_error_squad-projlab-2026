@@ -59,6 +59,7 @@ public class MainPanel extends JPanel {
 
         
         gameLogic.addTurnEndedListener(gameWindow::showWaitPanel);
+        
         gameLogic.addGameEndedListener(gameWindow::showEndPanel);
     }
 

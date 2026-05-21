@@ -48,7 +48,7 @@ public class GameWindow extends JFrame {
         EndPanel endPanel = new EndPanel(this);
         cards.add("EndPanel", endPanel);
 
-        WaitPanel waitPanel = new WaitPanel(this, gameLogic);
+        WaitPanel waitPanel = new WaitPanel(this, gameLogic, settingsManager);
         cards.add("WaitPanel", waitPanel);
 
         add(cards);
@@ -57,7 +57,7 @@ public class GameWindow extends JFrame {
 
     public void showWaitPanel() {
         cardLayout.show(cards, "WaitPanel");
-    }
+    } 
 
     public void showMainMenu() {
         cardLayout.show(cards, MAIN_MENU);
