@@ -140,6 +140,15 @@ public class GameLogic {
         roads.tryMoveTowardsNode(vehicle, targetNode);
     }
 
+    public void moveVehicle(Vehicle vehicle, Lane targetLane) {
+        if (hasMoved.getOrDefault(vehicle, false)) {
+            Logger.logError("Error: Vehicle with id " + vehicle.id + " has already moved this turn.");
+            return;
+        }
+        hasMoved.put(vehicle, true);
+        roads.moveVehicle(vehicle, targetLane);
+    }
+
     public void makeRoads(String id) {
         roads = new RoadNetwork(id);
         roads.addTopologyChangedListener(() -> topologyChangedListeners.forEach(Runnable::run));

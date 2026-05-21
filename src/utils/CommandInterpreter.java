@@ -39,7 +39,7 @@ public class CommandInterpreter {
         Map.entry("/addMoney", new utils.commands.AddMoney()),
         Map.entry("/setMoney", new utils.commands.SetMoney()),
         Map.entry("/clean", new utils.commands.Clean()),
-        Map.entry("/movevehicle", new utils.commands.MoveVehicle()),
+        Map.entry("/moveVehicle", new utils.commands.MoveVehicle()),
         Map.entry("/enter", new utils.commands.Enter()),
         Map.entry("/slip", new utils.commands.Slip()),
         Map.entry("listRoots", new utils.commands.ListRoots()),

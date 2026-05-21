@@ -233,6 +233,15 @@ public class RoadNetwork implements Inspectable {
         return true;
     }
 
+    public void moveVehicle(Vehicle vehicle, Lane lane) {
+        if (!vehicle.canEnter(lane)) {
+            Logger.logError("Error: Vehicle with id " + vehicle.id + " cannot enter lane " + lane.id + ".");
+            return;
+        }
+        Logger.logLine("VEHICLE [" + vehicle.id + "] MOVED TO LANE [" + lane.id + "]");
+        vehicle.enter(lane);
+    }
+
     public void addSnow(){
         List<Node> selectedNodes = new ArrayList<>();
         for (Node node : nodes){

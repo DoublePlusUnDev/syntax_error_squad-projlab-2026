@@ -2,6 +2,7 @@ package ui;
 
 import gamelogic.GameLogic;
 import gamelogic.Lane;
+import gamelogic.Neighbour;
 import gamelogic.Node;
 import gamelogic.Vehicle;
 import java.awt.BorderLayout;
@@ -72,6 +73,25 @@ public class MainPanel extends JPanel {
         //same road only lane change
         if (selectedVehicle.getLocation().getSegment() == lane.getSegment()) {
             commandInterpreter.execute("changeLane -vehicle " + selectedVehicle.id + " -lane " + (lane.getCount() + 1) + " -net net");
+        }
+
+        //neighbouring node
+        for (Neighbour neighbour : selectedVehicle.getLocation().getSegment().getStartPoint().getNeighbours()) {
+            for (Lane neighbourLane : neighbour.getRoadSegment().getLanes()) {
+                if (neighbourLane == lane) {
+                    commandInterpreter.execute("move -vehicle " + selectedVehicle.id + " -lane " + lane.id+ " -net net");
+                    return;
+                }
+            }
+        }
+
+        for (Neighbour neighbour : selectedVehicle.getLocation().getSegment().getEndPoint().getNeighbours()) {
+            for (Lane neighbourLane : neighbour.getRoadSegment().getLanes()) {
+                if (neighbourLane == lane) {
+                    commandInterpreter.execute("move -vehicle " + selectedVehicle.id + " -lane " + lane.id+ " -net net");
+                    return;
+                }
+            }
         }
     }
 
