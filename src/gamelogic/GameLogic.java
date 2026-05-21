@@ -1,5 +1,6 @@
 package gamelogic;
 
+import gamelogic.buyables.SweeperHead;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,11 @@ public class GameLogic {
     public void startGame(GameSettings gameSettings) {
         
         for (int i = 0; i < (Integer) gameSettings.getSetting(GameSettings.SNOW_PLOW_PLAYERS_KEY); i++) {
-            addPlayer(new SnowPlowPlayer("snowplow_player_" + (i + 1), roads, roads.getFreeLane()));
+            SnowPlowPlayer snowPlowPlayer = new SnowPlowPlayer("snowplow_player_" + (i + 1), roads, roads.getFreeLane());
+            SweeperHead sweeperHead = new SweeperHead("sweeper_head_" + (i + 1), 0);
+            sweeperHead.buy(snowPlowPlayer.getSnowPlows().get(0).getInventory(), snowPlowPlayer);
+            snowPlowPlayer.getSnowPlows().get(0).equip(sweeperHead);
+            addPlayer(snowPlowPlayer);
         }
         for (int i = 0; i < (Integer) gameSettings.getSetting(GameSettings.BUS_PLAYERS_KEY); i++) {
             addPlayer(new BusPlayer("bus_player_" + (i + 1), roads, roads.getFreeLane()));
