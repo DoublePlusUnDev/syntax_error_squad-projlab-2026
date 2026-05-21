@@ -1,4 +1,4 @@
 /loadGame -path resources/init/Init3.txt
-/start
+/start -snowPlowPlayers 0 -busPlayers 0
 /createBuyable -id expensiveSalt -amount 50 -price 99999 -type salt
 buy -buyable expensiveSalt -inventory snowPlowPlayer.snowPlow1.inventory -player snowPlowPlayer
