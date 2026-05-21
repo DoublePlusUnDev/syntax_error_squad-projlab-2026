@@ -9,6 +9,7 @@ public class GameSettings {
     public static final String SNOW_NODES_KEY = "snowNodes";
     public static final String SNOW_PLOW_PLAYERS_KEY = "snowPlowPlayers";
     public static final String BUS_PLAYERS_KEY = "busPlayers";
+    public static final String MAX_ROUNDS_KEY = "maxRounds";
 
     public void setSetting(String key, Object value) {
         settings.put(key, value);
@@ -23,5 +24,6 @@ public class GameSettings {
         setSetting(SNOW_NODES_KEY, 2);
         setSetting(SNOW_PLOW_PLAYERS_KEY, 2);
         setSetting(BUS_PLAYERS_KEY, 1);
+        setSetting(MAX_ROUNDS_KEY, 50);
      }};
 }

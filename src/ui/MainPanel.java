@@ -19,14 +19,16 @@ public class MainPanel extends JPanel {
     private transient InventoryPanel inventoryPanel;
     private transient ConsolePanel consolePanel;
     private transient SavePanel savePanel;
+    private transient GameWindow gameWindow;
     
 
-    public MainPanel(CommandInterpreter commandInterpreter, GameLogic gameLogic) {
+    public MainPanel(GameWindow gameWindow, CommandInterpreter commandInterpreter, GameLogic gameLogic) {
         setLayout(new BorderLayout());
         setBackground(UIStyles.backgroundColor);
         this.commandInterpreter = commandInterpreter;
         this.gameLogic = gameLogic;
-        
+        this.gameWindow = gameWindow;
+
         JTabbedPane infoPages = new JTabbedPane();
         vehiclePanel = new VehiclePanel(gameLogic, commandInterpreter);
         
@@ -57,7 +59,7 @@ public class MainPanel extends JPanel {
 
         
 
-        //gameLogic.addGameStateChangeListener(this::gameStateChanged);
+        gameLogic.addGameEndedListener(gameWindow::showEndPanel);
     }
 
     public void laneClicked(Lane lane) {

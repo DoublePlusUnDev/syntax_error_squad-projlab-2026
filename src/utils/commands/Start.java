@@ -24,6 +24,8 @@ public class Start implements Command {
                 settings.setSetting(GameSettings.SNOW_PLOW_PLAYERS_KEY, Integer.parseInt(args.get("-" + GameSettings.SNOW_PLOW_PLAYERS_KEY)));
             if (args.containsKey("-" + GameSettings.BUS_PLAYERS_KEY))
                 settings.setSetting(GameSettings.BUS_PLAYERS_KEY, Integer.parseInt(args.get("-" + GameSettings.BUS_PLAYERS_KEY)));  
+            if (args.containsKey("-" + GameSettings.MAX_ROUNDS_KEY))
+                settings.setSetting(GameSettings.MAX_ROUNDS_KEY, Integer.parseInt(args.get("-" + GameSettings.MAX_ROUNDS_KEY)));
         }
         catch (NumberFormatException e) {
             Logger.logError("Error: Invalid number format in generate command arguments. " + e.getMessage());

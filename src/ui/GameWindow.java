@@ -39,11 +39,14 @@ public class GameWindow extends JFrame {
         SettingsPanel settingsPanel = new SettingsPanel(this, settingsManager);
         cards.add(SETTINGS_MENU, settingsPanel);
 
-        MainPanel gamePanel = new MainPanel(commandInterpreter, gameLogic);
+        MainPanel gamePanel = new MainPanel(this,commandInterpreter, gameLogic);
         cards.add(GAME_PANEL, gamePanel);
 
         LoadGamePanel loadGamePanel = new LoadGamePanel(this, commandInterpreter);
         cards.add("LoadGamePanel", loadGamePanel);
+
+        EndPanel endPanel = new EndPanel(this);
+        cards.add("EndPanel", endPanel);
 
         add(cards);
         setVisible(true);
@@ -67,6 +70,10 @@ public class GameWindow extends JFrame {
 
     public void showLoadGamePanel() {
         cardLayout.show(cards, "LoadGamePanel");
+    }
+
+    public void showEndPanel() {
+        cardLayout.show(cards, "EndPanel");
     }
 
     public void startGame() {

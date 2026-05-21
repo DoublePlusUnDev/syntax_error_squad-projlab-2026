@@ -14,6 +14,7 @@ public class GameLogic {
     private final List<Runnable> gameStateChangeListeners = new ArrayList<>();
     private final List<Runnable> topologyChangedListeners = new ArrayList<>();
     private final List<Runnable> turnEndedListeners = new ArrayList<>();
+    private final List<Runnable> gameEndedListeners = new ArrayList<>();
 
     private GameSettings gameSettings;
 
@@ -38,6 +39,9 @@ public class GameLogic {
     }
 
     public void startGame(GameSettings gameSettings) {
+        players.clear();
+        cars.clear();
+        updatables.clear();
         for (int i = 0; i < (Integer) gameSettings.getSetting(GameSettings.SNOW_PLOW_PLAYERS_KEY); i++) {
             addPlayer(new SnowPlowPlayer("snowplow_player_" + (i + 1), roads, roads.getFreeLane()));
         }
@@ -69,6 +73,13 @@ public class GameLogic {
             currentRound++;
             snow();
             updateAll();
+
+            Logger.logLine(GameSettings.MAX_ROUNDS_KEY + " " + gameSettings.getSetting(GameSettings.MAX_ROUNDS_KEY));
+            if (currentRound > (Integer) gameSettings.getSetting(GameSettings.MAX_ROUNDS_KEY)) {
+                Logger.logLine("GAME ENDED");
+                gameEndedListeners.forEach(Runnable::run);
+                return;
+            }
         }
         switchPlayer(players.get((currentPlayerIndex + 1) % players.size()));
         gameStateChangeListeners.forEach(Runnable::run);
@@ -96,6 +107,10 @@ public class GameLogic {
 
     public void addTurnEndedListener(Runnable listener) {
         turnEndedListeners.add(listener);
+    }
+
+    public void addGameEndedListener(Runnable listener) {
+        gameEndedListeners.add(listener);
     }
 
     private void switchPlayer(Player player) {

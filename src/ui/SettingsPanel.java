@@ -46,8 +46,8 @@ public class SettingsPanel extends JPanel{
             value -> integerSetter(GameSettings.SNOW_PLOW_PLAYERS_KEY, value)));
         contentPanel.add(new SettingsCardValueField("Busz játékosok: ", (Integer) GameSettings.defaultSettings.getSetting(GameSettings.BUS_PLAYERS_KEY), 
             value -> integerSetter(GameSettings.BUS_PLAYERS_KEY, value)));
-        contentPanel.add(new SettingsCardValueField("Körök száma: ", 50, 
-            value -> integerSetter("rounds", value)));
+        contentPanel.add(new SettingsCardValueField("Körök száma: ", (Integer) GameSettings.defaultSettings.getSetting(GameSettings.MAX_ROUNDS_KEY), 
+            value -> integerSetter(GameSettings.MAX_ROUNDS_KEY, value)));
         contentPanel.add(new SettingsCardValueField("Havazás esélye: ", (Integer) GameSettings.defaultSettings.getSetting(GameSettings.SNOW_CHANCE_KEY), 
             value -> integerSetter(GameSettings.SNOW_CHANCE_KEY, value)));
         contentPanel.add(new SettingsCardValueField("Havazás csomópontok: ", (Integer) GameSettings.defaultSettings.getSetting(GameSettings.SNOW_NODES_KEY), 
