@@ -160,7 +160,13 @@ public class GameLogic {
     }
 
     public void registerUpdatable(Updatable updatable) {
-        updatables.add(updatable);
+        if (!updatables.contains(updatable)) {
+            updatables.add(updatable);
+        }
+    }
+
+    public void unregisterUpdatable(Updatable updatable) {
+        updatables.remove(updatable);
     }
 
     private void updateAll() {
@@ -191,6 +197,9 @@ public class GameLogic {
         cars.add(car);
         car.setLocation(lane);
 
+        // Register car as an updatable when it is actually added to the world
+        registerUpdatable(car);
+
         if (roads != null && lane != null) {
             roads.placeCar(car);
         }
@@ -203,6 +212,9 @@ public class GameLogic {
     public void removeCar(Car car) {
         cars.remove(car);
         car.setLocation(null);
+
+        // Stop updating removed cars
+        unregisterUpdatable(car);
 
         if (roads != null) 
             roads.removeCar(car);

@@ -9,7 +9,7 @@ import utils.Logger;
  * Cannot enter blocked, snowy or debris filled roads.
  * Can slip, on crash it'll be destroyed and will block the lane. 
  */
-public class Car extends Vehicle {
+public class Car extends Vehicle implements Updatable {
     private Apartment home;
     private Workplace workplace;
     private boolean headedHome = false;
@@ -21,11 +21,15 @@ public class Car extends Vehicle {
         this.workplace = workplace;
     }
 
+    
+
     /**
      * Moves the car towards its current target (workplace or home) using the provided road network.
      * @param road
      */
     public void move(RoadNetwork road) {
+
+        if (road == null) return;
 
         Node target = headedHome ? home : workplace;
 
@@ -127,5 +131,12 @@ public class Car extends Vehicle {
         Logger.logLine("Home: " + (home != null ? home.id : "none"));
         Logger.logLine("Workplace: " + (workplace != null ? workplace.id : "none"));
         Logger.logLine("Headed Home: " + headedHome);
+    }
+
+
+
+    @Override
+    public void update() {
+        move(GameLogic.getInstance().getRoads());
     }
 }

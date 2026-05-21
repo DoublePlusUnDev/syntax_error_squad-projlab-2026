@@ -107,6 +107,13 @@ public class RoadNetwork implements Inspectable {
     Lane findNextLaneInPath(Vehicle vehicle, Node destination){
         Node startNode = vehicle.location.getSegment().startPoint;
         Node endNode = vehicle.location.getSegment().endPoint;
+
+        // If the destination is one of the endpoints of the current segment,
+        // the next lane is simply one of the lanes on the current segment
+        // (vehicle should move along its current segment into the adjacent node).
+        if (destination == startNode || destination == endNode) {
+            return getClearestLane(vehicle.location.getSegment(), vehicle);
+        }
         // Standard Dijkstra with a visited set and safe path reconstruction
         final float INF = Float.MAX_VALUE;
         Map<Node, Float> distances = new HashMap<>();
