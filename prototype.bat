@@ -9,7 +9,7 @@ REM Compile everything together
 javac -d out @sources.txt
 
 REM Run the program
-java -cp out Game
+java -cp out Prototype
 
 REM Cleanup
 del sources.txt
