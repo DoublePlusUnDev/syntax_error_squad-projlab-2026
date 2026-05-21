@@ -1,5 +1,6 @@
 package utils.commands;
 
+import gamelogic.SnowPlowBuyable;
 import gamelogic.buyables.BioKerosene;
 import gamelogic.buyables.BlowerHead;
 import gamelogic.buyables.Buyable;
@@ -53,6 +54,7 @@ public class CreateBuyable implements Command {
             case "dragonhead" -> buyable = new DragonHead(args.get("-id"), price);
             case "gravelhead" -> buyable = new GravelThrowerHead(args.get("-id"), price);
             case "icebreakerhead" -> buyable = new IceBreakerHead(args.get("-id"), price);
+            case "snowplow" -> buyable = new SnowPlowBuyable(args.get("-id"), price);
             default -> Logger.logError("Error: Invalid buyable type.");
         }
     }
