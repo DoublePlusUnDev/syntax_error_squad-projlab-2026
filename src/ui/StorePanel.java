@@ -16,11 +16,13 @@ import gamelogic.buyables.IceBreakerHead;
 import gamelogic.buyables.Salt;
 import gamelogic.buyables.SalterHead;
 import gamelogic.buyables.SweeperHead;
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.event.MouseInputAdapter;
 import utils.CommandInterpreter;
 
@@ -46,50 +48,60 @@ public class StorePanel extends JPanel {
 
     private int counter = 0;
 
+    private final JPanel contentPanel;
+
     public StorePanel(GameLogic gameLogic, VehiclePanel vehiclePanel, CommandInterpreter commandInterpreter) {
         this.vehiclePanel = vehiclePanel;
         this.gameLogic = gameLogic;
         this.commandInterpreter = commandInterpreter;
-
         setBackground(UIStyles.backgroundColor);
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new BorderLayout());
+
+        contentPanel = new JPanel();
+        contentPanel.setBackground(UIStyles.backgroundColor);
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
         storeLabel = UIFactory.createLabel("Bolt", 20);
-        add(storeLabel);
+        contentPanel.add(storeLabel);
         moneyLabel = UIFactory.createLabel("Rendelkezésre álló pénz: ", 16);
-        add(moneyLabel);
+        contentPanel.add(moneyLabel);
 
 
 
         keroseneBuyable = createBuyableLabel("Kerosene - ${price} - #{amount}", 30, 10, BioKerosene.class);
-        add(keroseneBuyable);
+        contentPanel.add(keroseneBuyable);
 
         saltBuyable = createBuyableLabel("Salt: ${price} - #{amount}", 30, 10, Salt.class);
-        add(saltBuyable);
+        contentPanel.add(saltBuyable);
         
         gravelBuyable = createBuyableLabel("Gravel: ${price} - #{amount}", 20, 10, Gravel.class);
-        add(gravelBuyable);
+        contentPanel.add(gravelBuyable);
 
         sweeperHeadBuyable = createBuyableLabel("Sweeper Head: ${price} - #{amount}", 100, 1, SweeperHead.class);
-        add(sweeperHeadBuyable);
+        contentPanel.add(sweeperHeadBuyable);
 
         blowerHeadBuyable = createBuyableLabel("Blower Head: ${price} - #{amount}", 100, 1, BlowerHead.class);
-        add(blowerHeadBuyable);
+        contentPanel.add(blowerHeadBuyable);
 
         iceBreakerHeadBuyable = createBuyableLabel("Ice Breaker Head: ${price} - #{amount}", 100, 1, IceBreakerHead.class);
-        add(iceBreakerHeadBuyable);
+        contentPanel.add(iceBreakerHeadBuyable);
 
         salterHeadBuyable = createBuyableLabel("Salter Head: ${price} - #{amount}", 100, 1, SalterHead.class);
-        add(salterHeadBuyable);
+        contentPanel.add(salterHeadBuyable);
 
         gravelThrowerHeadBuyable = createBuyableLabel("Gravel Thrower Head: ${price} - #{amount}", 100, 1, GravelThrowerHead.class);
-        add(gravelThrowerHeadBuyable);
+        contentPanel.add(gravelThrowerHeadBuyable);
 
         dragonHeadBuyable = createBuyableLabel("Dragon Head: ${price} - #{amount}", 100, 1, DragonHead.class);
-        add(dragonHeadBuyable);
+        contentPanel.add(dragonHeadBuyable);
 
         snowPlowBuyable = createBuyableLabel("Snow Plow: ${price} - #{amount}", 500, 1, SnowPlowBuyable.class);
-        add(snowPlowBuyable);
+        contentPanel.add(snowPlowBuyable);
+
+        JScrollPane sp = new JScrollPane(contentPanel);
+        sp.setBorder(null);
+        sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        add(sp, BorderLayout.CENTER);
 
         gameLogic.addGameStateChangeListener(this::update);
         vehiclePanel.addSelectionChangeListener(this::update);
