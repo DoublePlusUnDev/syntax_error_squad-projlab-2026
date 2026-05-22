@@ -594,8 +594,8 @@ public class RoadPanel extends JPanel {
                     node.y += (dy / disp) * limited;
                 }
 
-                node.x = Math.clamp(node.x, minX, maxX);
-                node.y = Math.clamp(node.y, minY, maxY);
+                node.x = Math.max(minX, Math.min(node.x, maxX));
+                node.y = Math.max(minY, Math.min(node.y, maxY));
             }
 
             temperature *= 0.95f;
