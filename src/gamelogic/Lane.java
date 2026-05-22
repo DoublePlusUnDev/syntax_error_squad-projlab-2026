@@ -48,8 +48,8 @@ public class Lane implements Updatable, Inspectable {
     private static final float GRAVEL_OVER_SNOW_BUFFER = 0.1f;
 
     //money constant
-    private static final float SNOW_CLEAR_PAYOUT = 100f;
-    private static final float ICE_CLEAR_PAYOUT = 25f;
+    private static final float SNOW_CLEAR_PAYOUT = 500f;
+    private static final float ICE_CLEAR_PAYOUT = 150f;
 
     // ==================== Initialization ====================
 

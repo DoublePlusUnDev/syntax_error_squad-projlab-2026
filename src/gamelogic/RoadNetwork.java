@@ -192,6 +192,21 @@ public class RoadNetwork implements Inspectable {
         return roadSegments;
     }
 
+    public List<BusStop> getBusStopPair() {
+        List<BusStop> busStops = new ArrayList<>();
+        for (Node node : nodes) {
+            if (node instanceof BusStop busStop) {
+                busStops.add(busStop);
+            }
+        }
+
+        if (busStops.size() < 2) 
+            return null;
+
+        RandomGenerator.shuffleList(busStops);
+        return busStops.subList(0, 2);
+    }
+
     private Lane getClearestLane(RoadSegment segment, Vehicle vehicle) {
         float clearest = Float.MAX_VALUE;
         Lane bestLane = null;
@@ -247,6 +262,8 @@ public class RoadNetwork implements Inspectable {
         }
         Logger.logLine("VEHICLE [" + vehicle.id + "] MOVED TO LANE [" + lane.id + "]");
         vehicle.enter(lane);
+        lane.getSegment().startPoint.accept(vehicle);
+        lane.getSegment().endPoint.accept(vehicle);
     }
 
     public void addSnow(){

@@ -49,7 +49,12 @@ public class GameLogic {
             addPlayer(snowPlowPlayer);
         }
         for (int i = 0; i < (Integer) gameSettings.getSetting(GameSettings.BUS_PLAYERS_KEY); i++) {
-            addPlayer(new BusPlayer("bus_player_" + (i + 1), roads, roads.getFreeLane()));
+            BusPlayer busPlayer = new BusPlayer("bus_player_" + (i + 1), roads, roads.getFreeLane());
+            addPlayer(busPlayer);
+            List<BusStop> busStops = roads.getBusStopPair();
+            if (busStops.size() >= 2) {
+                busPlayer.getBus().setStops(busStops.get(0), busStops.get(1));
+            }
         }
 
         this.gameSettings = gameSettings;

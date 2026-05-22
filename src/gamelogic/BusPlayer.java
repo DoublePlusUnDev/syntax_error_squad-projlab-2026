@@ -11,8 +11,8 @@ public class BusPlayer extends Player {
 
     public BusPlayer(String id, RoadNetwork roads, Lane startingLane) {
         super(id, roads);
-        bus = new Bus(id + ".bus");
-        bus.location = startingLane;
+        bus = new Bus(id + ".bus", this);
+        bus.setLocation(startingLane);
         roads.placeBus(bus);
     }
 

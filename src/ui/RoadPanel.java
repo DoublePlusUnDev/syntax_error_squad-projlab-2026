@@ -1,6 +1,8 @@
 package ui;
 import gamelogic.Apartment;
 import gamelogic.Bridge;
+import gamelogic.Bus;
+import gamelogic.BusPlayer;
 import gamelogic.BusStop;
 import gamelogic.GameLogic;
 import gamelogic.Lane;
@@ -41,6 +43,24 @@ public class RoadPanel extends JPanel {
             this.node = node;
         }
         public void render(java.awt.Graphics2D g2) {
+            // If current player is a BusPlayer and this node is the bus' end stop, draw a highlight behind it
+            try {
+                gamelogic.Player curr = gameLogic.getCurrentPlayer();
+                if (curr instanceof BusPlayer && node instanceof BusStop) {
+                    BusPlayer bp = (BusPlayer) curr;
+                    Bus bus = bp.getBus();
+                    if (bus != null && bus.getEndStop() == node) {
+                        java.awt.Color old = g2.getColor();
+                        g2.setColor(UIStyles.selectedColor);
+                        int pad = 6;
+                        g2.fillOval((int) (x - NODE_OFFSET - pad), (int) (y - NODE_OFFSET - pad), NODE_SIZE + pad * 2, NODE_SIZE + pad * 2);
+                        g2.setColor(old);
+                    }
+                }
+            } catch (Exception ex) {
+                // ignore UI highlight errors
+            }
+
             if (node instanceof Apartment) {
                 g2.drawImage(apartmentImage, (int)(x - NODE_OFFSET), (int)(y - NODE_OFFSET), NODE_SIZE, NODE_SIZE, null);
             } else if (node instanceof Workplace) {

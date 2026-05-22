@@ -4,6 +4,7 @@ import gamelogic.GameLogic;
 import gamelogic.Player;
 import gamelogic.SnowPlow;
 import gamelogic.SnowPlowBuyable;
+import gamelogic.SnowPlowPlayer;
 import gamelogic.Vehicle;
 import gamelogic.buyables.BioKerosene;
 import gamelogic.buyables.BlowerHead;
@@ -142,6 +143,31 @@ public class StorePanel extends JPanel {
         Player currentPlayer = gameLogic.getCurrentPlayer();
         if (currentPlayer != null) {
             moneyLabel.setText("Rendelkezésre álló pénz: " + currentPlayer.getBank().getMoney());
+        }
+
+        if (currentPlayer instanceof SnowPlowPlayer){
+            keroseneBuyable.setVisible(true);
+            saltBuyable.setVisible(true);
+            gravelBuyable.setVisible(true);
+            sweeperHeadBuyable.setVisible(true);
+            blowerHeadBuyable.setVisible(true);
+            iceBreakerHeadBuyable.setVisible(true);
+            salterHeadBuyable.setVisible(true);
+            gravelThrowerHeadBuyable.setVisible(true);
+            dragonHeadBuyable.setVisible(true);
+            snowPlowBuyable.setVisible(true);
+        }
+        else{
+            keroseneBuyable.setVisible(false);
+            saltBuyable.setVisible(false);
+            gravelBuyable.setVisible(false);
+            sweeperHeadBuyable.setVisible(false);
+            blowerHeadBuyable.setVisible(false);
+            iceBreakerHeadBuyable.setVisible(false);
+            salterHeadBuyable.setVisible(false);
+            gravelThrowerHeadBuyable.setVisible(false);
+            dragonHeadBuyable.setVisible(false);
+            snowPlowBuyable.setVisible(false);
         }
     }
 

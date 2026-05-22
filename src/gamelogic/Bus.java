@@ -13,9 +13,11 @@ public class Bus extends Vehicle implements Updatable {
     private BusStop startStop;
     private BusStop endStop;
     private int inactiveTimer;
+    private Player owner;
 
-    public Bus(String id) {
+    public Bus(String id, Player owner) {
         super(id);
+        this.owner = owner;
     }
 
     // Getters
@@ -61,6 +63,15 @@ public class Bus extends Vehicle implements Updatable {
     }
 
     /**
+     * Gets the current end stop target for this bus.
+     *
+     * @return the end stop, or null if not set
+     */
+    public BusStop getEndStop() {
+        return endStop;
+    }
+
+    /**
      * Sets the inactive timer duration.
      *
      * @param time the timer duration in update cycles
@@ -86,6 +97,7 @@ public class Bus extends Vehicle implements Updatable {
             BusStop temp = startStop;
             startStop = endStop;
             endStop = temp;
+            owner.moneyBank.addMoney(100);
         }
     }
 
