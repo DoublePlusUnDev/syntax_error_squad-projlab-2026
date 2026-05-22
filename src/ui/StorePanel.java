@@ -140,9 +140,20 @@ public class StorePanel extends JPanel {
                     }
 
                     Vehicle selectedVehicle = vehiclePanel.getSelectedVehicle();
-                    if (selectedVehicle instanceof SnowPlow snowPlow){
+                    String targetInventoryId = null;
+
+                    if (selectedVehicle instanceof SnowPlow selectedSnowPlow) {
+                        targetInventoryId = selectedSnowPlow.getInventory().id;
+                    } else if (buyableClass == SnowPlowBuyable.class && gameLogic.getCurrentPlayer() instanceof SnowPlowPlayer) {
+                        SnowPlowPlayer pl = (SnowPlowPlayer) gameLogic.getCurrentPlayer();
+                        if (!pl.getSnowPlows().isEmpty()) {
+                            targetInventoryId = pl.getSnowPlows().get(0).getInventory().id;
+                        }
+                    }
+
+                    if (targetInventoryId != null) {
                         commandInterpreter.execute("/createBuyable -id " + buyableName + counter + " -amount " + amount + " -price " + price + " -type " + buyableName);
-                        commandInterpreter.execute("buy -buyable " + buyableName + counter + " -inventory " + snowPlow.getInventory().id + " -player " + gameLogic.getCurrentPlayer().id);
+                        commandInterpreter.execute("buy -buyable " + buyableName + counter + " -inventory " + targetInventoryId + " -player " + gameLogic.getCurrentPlayer().id);
                         itemBoughtListeners.forEach(Runnable::run);
                         counter++;
                     }
