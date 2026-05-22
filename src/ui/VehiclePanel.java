@@ -70,49 +70,47 @@ public class VehiclePanel extends JPanel {
         vehicleLabels.forEach(vehicleListPanel::remove);
         vehicleLabels.clear();
 
-        switch (player) {
-            case SnowPlowPlayer snowPlowPlayer -> {
-                for (SnowPlow snowPlow : snowPlowPlayer.getSnowPlows()) {
-                    JLabel label = UIFactory.createLabel("- Hókotró " + snowPlow.id, 16.0f);
-                    
-                    if (snowPlow == selectedVehicle)
-                        label.setForeground(UIStyles.selectedColor);
-                    
-                    vehicleLabels.add(label);
-                    vehicleListPanel.add(label);
-                    label.addMouseListener(new java.awt.event.MouseAdapter() {
-                        @Override
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                            selectedVehicle = snowPlow;
-                            topLabel.setText("Kiválasztott jármű: Hókotró " + snowPlow.id);
-                            selectionChangeListeners.forEach(Runnable::run);     
-                        }
-                    });
-                }
-            }
-            case BusPlayer busPlayer -> {
-                Bus bus = busPlayer.getBus();
-                JLabel label = UIFactory.createLabel("- Busz " + bus.id, 16.0f);
+        if (player instanceof SnowPlowPlayer) {
+            SnowPlowPlayer snowPlowPlayer = (SnowPlowPlayer) player;
+            for (SnowPlow snowPlow : snowPlowPlayer.getSnowPlows()) {
+                JLabel label = UIFactory.createLabel("- Hókotró " + snowPlow.id, 16.0f);
 
-                if (bus == selectedVehicle)
-                        label.setForeground(UIStyles.selectedColor);
+                if (snowPlow == selectedVehicle)
+                    label.setForeground(UIStyles.selectedColor);
 
                 vehicleLabels.add(label);
                 vehicleListPanel.add(label);
                 label.addMouseListener(new java.awt.event.MouseAdapter() {
                     @Override
                     public void mouseClicked(java.awt.event.MouseEvent evt) {
-                        selectedVehicle = bus;
-                        topLabel.setText("Kiválasztott jármű: Busz " + bus.id);
+                        selectedVehicle = snowPlow;
+                        topLabel.setText("Kiválasztott jármű: Hókotró " + snowPlow.id);
                         selectionChangeListeners.forEach(Runnable::run);
                     }
                 });
             }
-            default -> {
-                JLabel label = UIFactory.createLabel("- Nincs játékos kiválasztva.", 16.0f);
-                vehicleLabels.add(label);
-                vehicleListPanel.add(label);
-            }
+        } else if (player instanceof BusPlayer) {
+            BusPlayer busPlayer = (BusPlayer) player;
+            Bus bus = busPlayer.getBus();
+            JLabel label = UIFactory.createLabel("- Busz " + bus.id, 16.0f);
+
+            if (bus == selectedVehicle)
+                label.setForeground(UIStyles.selectedColor);
+
+            vehicleLabels.add(label);
+            vehicleListPanel.add(label);
+            label.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    selectedVehicle = bus;
+                    topLabel.setText("Kiválasztott jármű: Busz " + bus.id);
+                    selectionChangeListeners.forEach(Runnable::run);
+                }
+            });
+        } else {
+            JLabel label = UIFactory.createLabel("- Nincs játékos kiválasztva.", 16.0f);
+            vehicleLabels.add(label);
+            vehicleListPanel.add(label);
         }
         vehicleListPanel.revalidate();
         vehicleListPanel.repaint();
