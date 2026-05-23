@@ -82,7 +82,7 @@ public class RoadPanel extends JPanel {
             this.end = to;
             this.segment = segment;
         }
-        public void render(java.awt.Graphics2D g2) {
+        public void renderLanes(java.awt.Graphics2D g2) {
             List<Lane> lanes = segment.getLanes();
 
             // Vector from start to end
@@ -158,8 +158,37 @@ public class RoadPanel extends JPanel {
 
                 g2.fillPolygon(xs, ys, 4);
             }
+        }
 
-            // Draw vehicles on top of lanes after all lanes and separators are rendered
+        public void renderVehicles(java.awt.Graphics2D g2) {
+            List<Lane> lanes = segment.getLanes();
+
+            float dx = end.x - start.x;
+            float dy = end.y - start.y;
+            float dist = (float) Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < 0.01f) return;
+
+            float perpX = -dy / dist;
+            float perpY = dx / dist;
+
+            float laneSpacing = laneWidth + separatorWidth;
+            float totalCenterSpan = (lanes.size() - 1) * laneSpacing;
+            float startOffset = -totalCenterSpan / 2f;
+
+            float[] centerOffsets = new float[lanes.size()];
+            if (!lanes.isEmpty()) {
+                if (perpY >= 0f) {
+                    for (int i = 0; i < lanes.size(); i++) {
+                        centerOffsets[i] = startOffset + i * laneSpacing;
+                    }
+                } else {
+                    for (int i = 0; i < lanes.size(); i++) {
+                        centerOffsets[i] = startOffset + (lanes.size() - 1 - i) * laneSpacing;
+                    }
+                }
+            }
+
             for (int i = 0; i < lanes.size(); i++) {
                 Lane lane = lanes.get(i);
                 float centerOffset = centerOffsets[i];
@@ -629,7 +658,10 @@ public class RoadPanel extends JPanel {
         java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;
         g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
         for (DisplayEdge edge : edges) {
-            edge.render(g2);
+            edge.renderLanes(g2);
+        }
+        for (DisplayEdge edge : edges) {
+            edge.renderVehicles(g2);
         }
                 
 
