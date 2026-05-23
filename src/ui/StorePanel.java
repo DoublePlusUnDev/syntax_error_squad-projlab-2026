@@ -156,6 +156,7 @@ public class StorePanel extends JPanel {
                         commandInterpreter.execute("buy -buyable " + buyableName + counter + " -inventory " + targetInventoryId + " -player " + gameLogic.getCurrentPlayer().id);
                         itemBoughtListeners.forEach(Runnable::run);
                         counter++;
+                        update();
                     }
             }
         });
