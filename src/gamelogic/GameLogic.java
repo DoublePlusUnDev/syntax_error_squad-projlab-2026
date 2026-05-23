@@ -180,7 +180,8 @@ public class GameLogic {
     }
 
     private void updateAll() {
-        updatables.forEach(Updatable::update);
+        // Updatables may unregister themselves while updating, so iterate over a snapshot.
+        new ArrayList<>(updatables).forEach(Updatable::update);
     }
 
     public static GameLogic getInstance(){
